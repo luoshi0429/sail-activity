@@ -1,0 +1,81 @@
+<template>
+  <view @tap="handleTap">
+    <FormIdButton>
+      <view slot="common" class="record-item-wrapper">
+        <image class="logo" src="{{item.courseBanner}}" mode="aspectFill" />
+        <view class="info">
+          <view>
+            <view class="title">{{ item.courseName }}</view>
+            <view class="desc">{{ item.courseDesc || item.teacherProfile }}</view>
+          </view>
+          <view class="bottom">
+            <slot name="other"></slot>
+          </view>
+        </view>
+      </view>
+    </FormIdButton>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import FormIdButton from './form-id-button'
+
+  export default class extends wepy.component {
+    props = {
+      item: {
+        type: Object,
+        default: {}
+      }
+    }
+    components = {
+      FormIdButton
+    }
+    methods = {
+      handleTap () {
+        this.$emit('onItemTap', this.item)
+      }
+    }
+  }
+</script>
+
+
+<style lang="less" scoped>
+  .record-item-wrapper {
+    display: flex;
+    padding: 43rpx 43rpx 0 34rpx;
+  }
+  .logo {
+    width: 260rpx;
+    height: 156rpx;
+    border-radius: 8rpx;
+    margin-right: 15rpx;
+  }
+  .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .title {
+      font-size: 28rpx;
+      color: #000;
+      font-weight: bold;
+      line-height: 40rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break:break-all;
+    }
+    .desc {
+      font-size: 26rpx;
+      color: #666;
+      line-height: 36rpx;
+      width: 400rpx;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+</style>

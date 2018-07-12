@@ -1,0 +1,40 @@
+<style lang="less" scoped>
+.container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+.mask {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.69);
+}
+
+.body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+
+<template>
+  <view class='container'>
+    <view class='mask'></view>
+    <view class='body'>
+      <slot></slot>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class extends wepy.component {
+}
+</script>

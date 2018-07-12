@@ -1,0 +1,87 @@
+<style lang="less" scoped>
+.action-sheet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 6666;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.action-sheet-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+.action-sheet-empty {
+    flex: 1;
+}
+.action-sheet-box {
+  background: #e4e5e7;
+}
+.action-sheet-box > .action-sheet-item:last-child{
+    margin: 10rpx 0 0 0;
+}
+</style>
+
+<template>
+  <view class='action-sheet {{actionSheetWrapperClassName}}' wx:if='{{visible}}'>
+      <view class='action-sheet-wrapper'>
+          <view class='action-sheet-empty' @tap='hideActionSheet'></view>
+            <view class='action-sheet-box {{actionSheetBoxClassName}}'>
+                <slot></slot>
+                <ActionSheetItem>
+                    <view @tap='hideActionSheet'>
+                        取消
+                    </view>
+                </ActionSheetItem>
+            </view>
+      </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+import ActionSheetItem from '@/components/action-sheet-item'
+export default class extends wepy.component {
+  data = {
+    visible: false,
+    actionSheetWrapperClassName: '',
+    actionSheetBoxClassName: ''
+  };
+  components = {
+    ActionSheetItem
+  };
+  events = {
+    showActionSheet () {
+      this.visible = true
+      this.actionSheetWrapperClassName = 'fadeIn'
+      this.actionSheetBoxClassName = 'fadeInUp'
+      this.$apply()
+    },
+    hideActionSheet () {
+      this.actionSheetWrapperClassName = 'fadeOut'
+      this.actionSheetBoxClassName = 'fadeOutDown'
+      setTimeout(() => {
+        this.visible = false
+        this.$apply()
+      }, 300)
+      this.$apply()
+    }
+  };
+  methods = {
+    hideActionSheet () {
+      this.actionSheetWrapperClassName = 'fadeOut'
+      this.actionSheetBoxClassName = 'fadeOutDown'
+      setTimeout(() => {
+        this.visible = false
+        this.$apply()
+      }, 400)
+      this.$apply()
+    }
+  };
+}
+</script>

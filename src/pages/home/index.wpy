@@ -1,0 +1,51 @@
+<template>
+  <view class="home-page">
+    home page
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+
+@connect({
+  app (state) {
+    return state.app
+  },
+  user (state) {
+    return state.user
+  }
+})
+
+export default class Index extends wepy.page {
+  config = {
+    enablePullDownRefresh: true,
+    navigationBarTitleText: '小象运动'
+  }
+  data = {}
+
+  mixins = []
+
+  components = {}
+
+  methods = {}
+
+  onRoute () {}
+
+  onLoad () {}
+
+  onShareAppMessage () {
+    let params = {
+      path: `/pages/home/index`
+    }
+    return params
+  }
+
+  onPullDownRefresh () {
+    wepy.stopPullDownRefresh()
+    this.getAllData(true)
+  }
+}
+</script>
+<style lang="less" scoped>
+</style>

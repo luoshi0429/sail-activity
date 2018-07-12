@@ -1,0 +1,5 @@
+dist/*
+mocks/*
+build/*
+node_modules/*
+src/helper/*

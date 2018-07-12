@@ -1,0 +1,14 @@
+{
+  "restartable": "rs",
+  "watch": [
+    "mocks/"
+  ],
+  "ignore": [
+    ".git",
+    ".idea",
+    "node_modules",
+    "src",
+    "dist"
+  ],
+  "ext": "js json"
+}

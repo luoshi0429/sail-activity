@@ -1,0 +1,67 @@
+<style lang="less" scoped>
+  .backhome{
+    position: fixed;
+    bottom: 200rpx;
+    right: 20rpx;
+    z-index: 100;
+  }
+  .backhome.main{
+    height:92rpx;
+    width:92rpx;
+    background: url('https://static.sunlands.com/wechat-management/prod/openCourse/assets/v3/icon-back-home-2.svg') no-repeat;
+    background-size:100% 100%;
+    color:#fff;
+    font-size:20rpx;
+    letter-spacing:.59px;
+    text-align:center;
+    padding:45rpx 0 0 0;
+    border-radius: 16rpx;
+    box-shadow:0 4px 7px 0 rgba(206,0,0,0.38);
+  }
+</style>
+
+<template>
+  <view class='backhome {{module}}' @tap='goHome' wx:if='{{isNeedBackHome || isDefaultShow || showBack}}' >
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class extends wepy.component {
+  props = {
+    hasTab: {
+      type: Boolean,
+      default: false
+    },
+    module: {
+      type: String,
+      default: 'main' // 8th,teacher
+    },
+    showBack: {
+      type: Boolean,
+      default: false
+    },
+    defaultShow: {
+      type: Boolean,
+      default: false // 默认显示
+    }
+  }
+  computed = {
+    isNeedBackHome () {
+      let pages = this.getCurrentPages()
+      return pages.length === 1
+    },
+    isDefaultShow () {
+      return this.defaultShow
+    }
+  }
+  methods = {
+    goHome () {
+      if (this.module === 'main') {
+        wepy.switchTab({
+          url: '/pages/home/index'
+        })
+      }
+    }
+  }
+}
+</script>

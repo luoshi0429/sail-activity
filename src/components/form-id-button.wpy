@@ -1,0 +1,197 @@
+<style lang="less">
+.form {
+  display: block;
+  width: 100%;
+}
+.form .button{
+  text-align: left;
+}
+.button {
+  border: 0 none;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0;
+  height: auto;
+  line-height: inherit;
+  border-radius: 0;
+}
+
+.button-hover {
+  color: inherit;
+  background: transparent;
+}
+
+.button:after {
+  border: 0 none;
+}
+</style>
+<template>
+  <form @submit='formSubmit' report-submit class="form">
+    <button formType='submit'
+            class="button">
+      <slot name='common'></slot>
+    </button>
+    <button formType='submit'
+            open-type='getPhoneNumber'
+            @getphonenumber='getPhoneNumber'
+            class="button">
+      <slot name='phone'></slot>
+    </button>
+    <button formType='submit'
+            open-type='getUserInfo'
+            @getuserinfo='getUserInfo'
+            class="button">
+      <slot name='userinfo'></slot>
+    </button>
+    <button formType='submit'
+            open-type='share'
+            data-type='{{shareType}}'
+            class="button">
+      <slot name='share'></slot>
+    </button>
+  </form>
+</template>
+<script>
+import wepy from 'wepy'
+import Api from '@/helper/api.js'
+import store from '@/store/index.js'
+import { UpdateUserInfoSuccess } from '@/store/actions'
+import { connect } from 'wepy-redux'
+import dot from '@/helper/report_analysis/index'
+
+@connect({
+  app (state) {
+    return state.app
+  }
+})
+
+export default class extends wepy.component {
+  props = {
+    business: {
+      type: String,
+      default: 'syllabus_reserve'
+    },
+    businessId: {
+      type: Number,
+      default: -1
+    },
+    businessMode: {
+      type: String,
+      default: 'common'
+    },
+    businessType: {
+      type: String,
+      default: 'common'
+    },
+    businessItem: {
+      type: Object,
+      default: {}
+    },
+    shareType: {
+      type: String,
+      default: ''
+    },
+    extra: {
+      type: Object,
+      default: {}
+    }
+  };
+  data = {
+    eventBusinessId: -1
+  }
+  events = {
+    authorizePhone (businessId) {
+      this.eventBusinessId = businessId
+    }
+  }
+  methods = {
+    formSubmit (e) {
+      const { formId } = e.detail
+      if (
+        formId &&
+        formId !== 'the formId is a mock one' &&
+        this.businessType === 'common'
+      ) {
+        let params = {
+          formId,
+          businessType: (this.businessType || '').toUpperCase()
+        }
+        if (this.businessTypeId) {
+          params.businessTypeId = this.businessTypeId
+        }
+        Api.post('common/commitFormId', params)
+      }
+      this.$emit('saveFormId', formId)
+    },
+    getPhoneNumber (e) {
+      const { encryptedData, iv } = e.detail
+      if (encryptedData) {
+        wepy.showLoading({
+          title: '正在确认授权',
+          mask: true
+        })
+        this.$apply()
+        this.decryptCustomerData(encryptedData, iv)
+      } else {
+        this.$emit('cancelSavePhoneNumber')
+      }
+    },
+    getUserInfo (e) {
+      if (e.detail.userInfo) {
+        dot.userInfo(e.detail.userInfo)
+        this.$emit('saveUserInfo', e.detail)
+      } else {
+        this.$emit('cancelSaveUserInfo')
+      }
+    }
+  };
+  decryptCustomerData (encryptedData, iv) {
+    const cb = function () {
+      wepy.hideLoading()
+    }
+    Api.getOpenIdPromise().then(({ openid, session_key }) => {
+      return Api.post('customer/decryptCustomerData', {
+        encryptedData,
+        iv,
+        sessionKey: session_key
+      }).then(data => {
+        cb()
+        const result = JSON.parse(data.decryptedData)
+        const { phoneNumber } = result
+        if (this.business === 'profileEvent') {
+          this.$emit('profileEvent', phoneNumber, this.app.recommendOpenId, this.businessType)
+        } else {
+          let realBusinessId = this.businessItem[this.businessId] || (this.businessId > 0 ? this.businessId : this.eventBusinessId)
+          let realBusinessMode = this.businessMode || 'common'
+          let realBusiness = this.business
+          // mk分享获取grant需要具体到分享的类别
+          if (realBusinessMode === 'mk_pull_new' && this.app.mkSecId && this.app.shareTicket) {
+            realBusiness = realBusiness + '_from_mk_share'
+          }
+
+          Api.post('customer/authPhone', Object.assign({
+            phoneNumber,
+            business: realBusiness,
+            businessId: realBusinessId,
+            businessMode: realBusinessMode,
+            shareTicket: this.app.shareTicket,
+            rOpenId: this.app.recommendOpenId
+          }, this.extra))
+            .then((data) => {
+              store.dispatch({
+                type: UpdateUserInfoSuccess,
+                payload: {
+                  ...data,
+                  phoneNumber
+                }
+              })
+              this.$emit('savePhoneNumber', phoneNumber, this.businessItem)
+            })
+        }
+      }, cb)
+    }, cb)
+  }
+}
+</script>

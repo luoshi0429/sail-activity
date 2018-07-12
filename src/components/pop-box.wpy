@@ -1,0 +1,425 @@
+<template>
+  <view>
+    <view class="toast" wx:if="{{isToast}}">
+      <image wx:if="{{item.icon ==='fail'}}" src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/icon_fail.png' />
+      <view>{{ item.title }}</view>
+    </view>
+    <view class="alert confirm" wx:if="{{isConfirm || isAlert}}">
+      <view class="box">
+        <view class='content {{item.theme}}'>
+          <view class='title' wx:if="{{item.title}}">{{ item.title }}</view>
+          <view class='image' wx:if="{{item.image}}">
+            <image src="{{item.image}}" />
+          </view>
+          <view class='subTitle' style="{{ item.subtitleStyle }}"  wx:if="{{item.subTitle}}"><text decode>{{ item.subTitle }}</text></view>
+        </view>
+        <block wx:if='{{item.extra && item.extra.length}}'>
+          <view class='extra' style='{{item.extra.wrapperStyle}}' wx:for='{{item.extra}}' wx:for-item='extra' wx:key='extraIndex'>
+            <view class='bg {{extra.theme}}'>
+              <block wx:for="{{ extra.list }}" wx:for-item='extraItem' wx:key='extraItemIndex'>
+                <text wx:if="{{extraItem.type ==='text'}}" style="{{extraItem.style}}">{{extraItem.text}}</text>
+                <image wx:if="{{extraItem.type ==='image'}}" src="{{extraItem.src}}" style="{{extraItem.style}}" />
+              </block>
+            </view>
+          </view>
+        </block>
+        <view class='buttons' wx:if="{{item.cancel || item.confirm}}">
+            <view class='cancel-button {{item.cancel.theme}}' @tap='cancelConfirm' wx:if='{{item.cancel && isConfirm}}'>
+              <CancelConfirmFormIdButton>
+                <view class='btn-inner' slot='common'>{{item.cancel.text ||'取消'}}</view>
+              </CancelConfirmFormIdButton>
+            </view>
+            <view class='confirm-button'>
+              <block wx:if="{{item.confirm.type === 'userinfo' && item.confirm.type !=='share'}}">
+                <OkConfirmFormIdButton :type='userinfo' @saveUserInfo.user='onSave' @cancelSaveUserInfo.user='onCancelSave'>
+                  <view class='btn-inner' slot='userinfo'>{{item.confirm.text || '确认'}}</view>
+                </OkConfirmFormIdButton>
+              </block>
+              <block wx:if="{{item.confirm.type !== 'userinfo' && item.confirm.type === 'share'}}">
+                <view @tap="onConfirm">
+                  <block wx:if="{{item.confirm.shareType === 'unlock'}}">
+                    <shareConfirmFormIdButton shareType='unlock' :type='share'>
+                      <view class='btn-inner' slot='share'>{{item.confirm.text || '确认'}}</view>
+                    </shareConfirmFormIdButton>
+                  </block>
+                  <block wx:else>
+                    <shareConfirmFormIdButton :type='share'>
+                      <view class='btn-inner' slot='share'>{{item.confirm.text || '确认'}}</view>
+                    </shareConfirmFormIdButton>
+                  </block>
+                </view>
+              </block>
+              <block wx:if="{{item.confirm.type !== 'userinfo' && item.confirm.type !== 'share'}}">
+                  <view class='btn-inner' slot='userinfo' @tap='onConfirm'>{{item.confirm.text || '确认'}}</view>
+              </block>
+            </view>
+        </view>
+        <view class='close-btn' wx:if="{{item.close}}" @tap='onClose'>
+          <image src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/v3/icon-close1.svg' />
+        </view>
+      </view>
+    </view>
+    <view class="notification {{ notificationStyle }}" wx:if="{{ isNotification }}">{{ item.title }}</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import FormIdButton from '@/components/form-id-button'
+export default class extends wepy.component {
+  data = {
+    isToast: false,
+    isAlert: false,
+    isConfirm: false,
+    isNotification: false,
+    timer: null,
+    item: {
+      // title: '温馨提示',
+      // theme: '', 设置相应的整体样式，可选:userInfo
+      // subTitle: '提示内容',
+      // duration: 3000, toast持续时间
+      // icon: '', 当前可填项为 fail。
+      // image:'',alert confirm 图片, 优先显示为icon 然后是 image
+      // onClose:'', toast关闭触发事件
+      // cancel: {
+      //   text: '',
+      //   onTap: function () {} // 点击的时候调用
+      // },
+      // confirm: {
+      //   text: '',
+      //   type: '', // phone , userinfo, common, share
+      //   onSave: function (data, closeCallback) {}, // phone userinfo的时候调用
+      //   onCancelSave: function (closeCallback) {}, // phone userinfo的时候调用
+      //   onTap: function (closeCallback) {} // share, common的时候调用
+      // }
+    },
+    notificationStyle: ''
+  };
+  components = {
+    CancelConfirmFormIdButton: FormIdButton,
+    OkConfirmFormIdButton: FormIdButton,
+    shareConfirmFormIdButton: FormIdButton
+  };
+  events = {
+    toast (item) {
+      clearTimeout(this.timer)
+      this.resetOtherPop('isToast')
+      this.item = item
+      this.showToast()
+    },
+    alert (item) {
+      clearTimeout(this.timer)
+      this.item = item
+      this.resetOtherPop('isAlert')
+    },
+    confirm (item) {
+      clearTimeout(this.timer)
+      this.item = item
+      this.resetOtherPop('isConfirm')
+    },
+    notification (item) {
+      clearTimeout(this.timer)
+      this.item = item
+      this.notificationStyle = 'showAnim'
+      this.resetOtherPop('isNotification')
+      this.showNotification()
+    }
+  };
+  methods = {
+    cancelConfirm (data) {
+      if (this.item.cancel && this.item.cancel.onTap) {
+        this.item.cancel.onTap(this.close)
+      } else {
+        this.close()
+      }
+    },
+    // confirm弹框点击取消
+    onConfirmCancel () {
+      if (this.item.cancel && this.item.cancel.onTap) {
+        this.item.cancel.onTap(this.close)
+      } else {
+        this.close()
+      }
+    },
+    // alert/confirm弹框点击确认后同意用户信息授权
+    onSave (data) {
+      if (this.item.confirm && this.item.confirm.onSave) {
+        this.item.confirm.onSave(data, this.close)
+      } else {
+        this.close()
+      }
+    },
+    onConfirm () {
+      if (this.item.confirm && this.item.confirm.onTap) {
+        this.item.confirm.onTap(this.close)
+      } else {
+        this.close()
+      }
+    },
+    onClose () {
+      this.close()
+    },
+    // alert/confirm弹框点击确认后拒绝用户信息授权
+    onCancelSave () {
+      if (this.item.confirm && this.item.confirm.onCancelSave) {
+        this.item.confirm.onCancelSave(this.close)
+      } else {
+        this.close()
+      }
+    }
+  }
+  close = () => {
+    this.isToast = false
+    this.isAlert = false
+    this.isConfirm = false
+    this.isNotification = false
+    this.$apply()
+  }
+  resetOtherPop (current) {
+    this.close()
+    this[current] = true
+    this.$apply()
+  }
+  showToast () {
+    const { duration = 3000, onClose } = this.item
+    this.timer = setTimeout(() => {
+      this.isToast = false
+      this.$apply()
+      onClose && onClose()
+    }, duration)
+  }
+  showNotification () {
+    const { duration = 3000 } = this.item
+    this.timer = setTimeout(() => {
+      this.notificationStyle = 'hideAnim'
+      this.$apply()
+    }, duration)
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.toast {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8rpx;
+  width: 290rpx;
+  padding: 26rpx 30rpx;
+  color: #fff;
+  font-size: 28rpx;
+  text-align: center;
+  top: 40%;
+  left: 50%;
+  z-index: 1999;
+  transform: translateX(-50%);
+  image{
+    width: 64rpx;
+    height: 64rpx;
+    display: block;
+    margin: 0 auto 20rpx auto;
+  }
+}
+
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  // overflow: hidden;
+  .extra{
+    .bg{
+      padding: 16rpx 10px;
+      line-height: 40rpx;
+      text-align: center;
+      background: #ffffff;
+    }
+    .gray{
+      background: #EFEFF4;
+    }
+    .inline{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    margin-top: 15rpx;
+    image{
+      display: inline-block;
+      background: #F1C61B;
+      border: 1px solid #E7A711;
+      border-radius: 7rpx;
+      color: #fff;
+      margin-left: 8rpx;
+      width: 28rpx;
+      height: 28rpx;
+      line-height: 28rpx;
+      text-align: center;
+      font-size: 18rpx;
+    }
+  }
+  .image{
+    image{
+      display: block;
+      width: 260rpx;
+      height: 260rpx;
+      margin: 0 auto;
+    }
+  }
+  .mask {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    // background: rgba(0, 0, 0, 0.5);
+  }
+  .title {
+    font-size: 40rpx;
+    line-height: 56rpx;
+    margin: 14rpx 0 25rpx 0;
+  }
+  .subTitle {
+    font-size: 28rpx;
+    color: #333;
+    line-height: 40rpx;
+    text-align: center;
+  }
+
+  .buttons {
+    margin-top: 50rpx;
+    padding: 0 50rpx;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    .cancel-button {
+      flex: 4;
+      margin-right: 30rpx;
+      border-radius: 80rpx;
+      .btn-inner {
+        background: #FFFFFF;
+        border: 2rpx solid #CE0000;
+        color: #CE0000;
+        font-size: 32rpx;
+      }
+    }
+    .cancel-button.red{
+      .btn-inner {
+        color: #CE0000;
+        border: 1px solid #CE0000;
+      }
+    }
+    .confirm-button {
+      flex: 4;
+      border-radius: 80rpx;
+      box-shadow: 0 10rpx 14px 0 rgba(206,0,0,0.20);
+      .btn-inner {
+        background: #CE0000;
+        color: #fff;
+        font-size: 32rpx;
+      }
+    }
+    .btn-inner {
+      height: 80rpx;
+      border-radius: 80rpx;
+      text-align: center;
+      line-height: 80rpx;
+    }
+  }
+  .box{
+    background: #fff;
+    width: 620rpx;
+    border-radius: 20rpx;
+    padding: 36rpx 0 50rpx 0;
+    border-radius: 15rpx;
+    font-size: 28rpx;
+    color: #333;
+    overflow: visible;
+    position: relative;
+  }
+  .content {
+    background: #fff;
+    width: 620rpx;
+    border-radius: 20rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 50rpx;
+    border-radius: 15rpx;
+    font-size: 28rpx;
+    color: #333;
+    overflow: visible;
+  }
+  .close-btn {
+    position: absolute;
+    bottom: -100rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48rpx;
+    height: 48rpx;
+    image {
+      width: 48rpx;
+      height: 48rpx;
+    }
+  }
+}
+.notification {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  top: -100%;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  line-height: 100rpx;
+  // padding: 30rpx;
+  text-align: center;
+  font-size: 28rpx;
+  z-index: 999;
+}
+.hideAnim {
+  animation: slideUp 1.5s linear forwards;
+}
+.showAnim {
+  animation: slideDown 1.5s linear forwards;
+}
+
+@keyframes slideUp {
+  0% {
+    top: 0;
+  }
+  to {
+    top: -100%;
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    top: -100%;
+  }
+
+  to {
+    top: 0;
+  }
+}
+// 主题样式
+.userInfo {
+  .image image{
+      width: 115rpx;
+      height: 115rpx;
+      border-radius: 100%;
+      background: pink;
+  }
+  .subTitle{
+    font-size: 28rpx;
+    color: #060606;
+    margin-top: 16rpx;
+  }
+}
+</style>
