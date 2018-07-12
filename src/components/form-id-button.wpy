@@ -59,7 +59,6 @@ import Api from '@/helper/api.js'
 import store from '@/store/index.js'
 import { UpdateUserInfoSuccess } from '@/store/actions'
 import { connect } from 'wepy-redux'
-import dot from '@/helper/report_analysis/index'
 
 @connect({
   app (state) {
@@ -140,7 +139,6 @@ export default class extends wepy.component {
     },
     getUserInfo (e) {
       if (e.detail.userInfo) {
-        dot.userInfo(e.detail.userInfo)
         this.$emit('saveUserInfo', e.detail)
       } else {
         this.$emit('cancelSaveUserInfo')

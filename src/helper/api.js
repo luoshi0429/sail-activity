@@ -3,7 +3,6 @@ import store from '@/store/index'
 import { UpdateUserInfoSuccess } from '@/store/actions'
 
 import config from '@/helper/config';
-import dot from '@/helper/report_analysis/index'
 
 const path = config.path
 const codeVersion = config.codeVersion
@@ -232,11 +231,6 @@ function setGetCustomerPromise() {
         projectId,
         openId: openid
       }).then((data) => {
-        dot.registerApp({
-            unionId: data.unionId,
-            openId: data.openId,
-        });
-        dot.start() 
         dot.userInfo(data)
         store.dispatch({
           type: UpdateUserInfoSuccess,

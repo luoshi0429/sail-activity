@@ -1,0 +1,141 @@
+<template>
+  <view class="city-page">
+    <view class='header'>
+
+    </view>
+    <view class='content'>
+        <view class='detail'>
+            <view  class='city-item'>
+            <repeat for='{{city}}' key="index" item="list">
+                <view class='title'>
+                <view class='left-line'></view><text>{{list.area}}</text>
+                </view>
+                <view class='area'>
+                    <repeat for='{{list.block}}' key="itemIndex" index="itemIndex" item="item">
+                        <view class='area-block'>
+                            <image src="{{item.image}}"></image>
+                        </view> 
+                    </repeat>
+                </view>
+            </repeat>
+            
+            </view>
+        </view>
+        
+    </view>
+    
+    <view class='footer'>
+        <button>确定</button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class Index extends wepy.page {
+  config = {
+    enablePullDownRefresh: true,
+    navigationBarTitleText: '小象运动'
+  }
+    data = {
+        city: [
+            {
+                area: '天河区',
+                block: [
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
+                ]
+            },
+            {
+                area: '黄浦区',
+                block: [
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
+                ]
+            },
+            {
+                area: '萝岗区',
+                block: [
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
+                ]
+            }
+        ]
+    }
+
+  mixins = []
+
+  components = {}
+
+  methods = {}
+
+  onRoute () {}
+
+  onLoad () {}
+}
+</script>
+<style lang="less" scoped>
+.city-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .header {
+        height: 150rpx;
+        background: #000;
+    }
+    .content {
+        background: pink;
+        padding: 0 15px;
+        flex: 1;
+        overflow-y: scroll;
+        .detail {
+            .city-item {
+                .title {
+                    display: flex;
+                    align-items: center;
+                    margin: 14px 0;
+                    .left-line {
+                        width: 8rpx;
+                        height: 36rpx;
+                        display: inline-block;
+                        background: #FF8F1E;
+                        margin-right: 10rpx;
+                    }
+                    text {
+                        color: #000000;
+                        font-size: 36rpx;
+                        line-height: 1;
+                    }
+                }
+                .area {
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    .area-block {
+                        width: 336rpx;
+                        height: 168rpx;
+                        margin-bottom: 20rpx;
+                        image {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+                
+
+            }
+
+        }
+    }
+    .footer {
+        height: 100rpx;
+        background: purple;
+    }
+
+}
+
+</style>

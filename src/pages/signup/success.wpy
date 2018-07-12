@@ -1,7 +1,6 @@
 <template>
-  <view class="home-page">
-    home page
-    <navigator url="/pages/place/city" >city page</navigator>
+  <view class="signup-success-page">
+    signup success page
   </view>
 </template>
 

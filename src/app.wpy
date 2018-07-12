@@ -462,7 +462,11 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/home/index'
+      'pages/home/index',
+      'pages/place/city',
+      'pages/place/province',
+      'pages/signup/index',
+      'pages/signup/success'
     ],
     window: {
       backgroundTextStyle: 'dark',
@@ -502,8 +506,8 @@ export default class extends wepy.app {
 
   constructor () {
     super()
-    this.use('requestfix')
-    this.use('promisify')
+    // this.use('requestfix')
+    // this.use('promisify')
   }
   onLaunch (options) {}
   onShow (options) {}

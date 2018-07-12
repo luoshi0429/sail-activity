@@ -1,6 +1,5 @@
 import wepy from 'wepy'
 import Util from '@/helper/util'
-import mta from '@/helper/mta_analysis'
 import store from '@/store'
 import Api from '@/helper/api'
 import { UpdateUserInfoSuccess } from '@/store/actions'
@@ -24,7 +23,6 @@ export default class extends wepy.mixin {
     } else {
       // wepy.setStorageSync('LAST_PAGE', {})
     }
-    mta.Page.init()
   }
   data = {
     ASSETS_PREFIX: 'https://static.sunlands.com/wechat-management/prod/openCourse'
