@@ -169,14 +169,18 @@ export default class Index extends wepy.page {
 <style lang="less" scoped>
 .province-page {
   background: #fff;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+  // display: flex;
+  // flex-direction: column;
+  // height: 100%;
+  // overflow: hidden;
   .header {
     // background: #373737;
     height: 476rpx;
-    position: relative;
+    position: fixed;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    right: 0;
     // overflow: hidden;
     &:after {
       content: '123123';
@@ -214,6 +218,7 @@ export default class Index extends wepy.page {
     }
     .activity-subtitle {
       font-size: 26rpx;
+      line-height: 1;
       color: #B2B2B2;
       margin: 20rpx 0;
     }
@@ -233,9 +238,10 @@ export default class Index extends wepy.page {
     }
   }
   .province-list {
-    flex: 1;
-    overflow-y: scroll;
-    padding: 0 30rpx; 
+    // flex: 1;
+    // overflow-y: scroll;
+    // -webkit-overflow-scrolling: touch;
+    padding: 476rpx 30rpx 0; 
   }
   .province-name {
     font-size: 36rpx;
@@ -251,9 +257,11 @@ export default class Index extends wepy.page {
   .city-item {
     width: 216rpx;
     height: 68rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-right: 20rpx;
     margin-top: 20rpx;
-    line-height: 68rpx;
     border: 2rpx solid #CACACA;
     border-radius: 14rpx;
     font-size: 32rpx;

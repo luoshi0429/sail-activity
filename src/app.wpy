@@ -13,130 +13,22 @@ page {
   font-size: 32rpx;
   background: #fff;
   height: 100%;
+  color: #000;
 }
 
 .page {
   height: 100%;
 }
-/*带下划线的垂直列表*/
-.list {
-  background: #fff;
-}
-.font-blod{
-  font-weight:600;
-}
 
-.list-item {
-  margin: 0 30rpx;
-  border-bottom: 1px solid #eee;
-}
-
-.list-item:last-child {
-  border-bottom: 0 none;
-}
-/*垂直列表的内容通用样式*/
-.custom-list-item {
-  padding: 36rpx 0;
-  display: flex;
-  image {
-    width: 260rpx;
-    height: 156rpx;
-    border-radius: 20rpx;
-    margin-right: 30rpx;
-  }
-  .detail {
-    flex: 1;
-    min-width: 0;
-  }
-  .name {
-    font-size: 32rpx;
-    color: #000;
-    letter-spacing: 2.5rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    word-break:break-all;
-  }
-  .desc {
-    margin: 12rpx 0 9rpx 0;
-    color: #666;
-    letter-spacing: 0.5px;
-    font-size: 26rpx;
-    line-height: 38rpx;
-    height: 38rpx;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
-  .time {
-    display: flex;
-    flex-direction: row;
-    font-size: 26rpx;
-    align-items: center;
-    color: #999;
-    .flex {
-      flex: 1;
-    }
-    .label {
-      font-size: 24rpx;
-    }
-    image {
-      width: 22rpx;
-      height: 22rpx;
-      margin: 0 10rpx 0 24rpx;
-    }
-  }
-}
-/*两个一列的列表*/
-.recommend-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.recommend-list-item {
-  width: 330rpx;
-  margin-top: 30rpx;
-}
-.recommend-list-item-inner {
-  image {
-    width: 100%;
-    margin-bottom: 15rpx;
-    height: 198rpx;
-    border-radius: 20rpx;
-  }
-  .recommend-name {
-    font-size: 28rpx;
-    letter-spacing: 2.5rpx;
-    line-height: 40rpx;
-    font-weight: bold;
-    width: 100%;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    word-break:break-all;
-  }
-  .recommend-position {
-    font-size: 26rpx;
-    color: #666;
-    letter-spacing: 0.5rpx;
-    line-height: 38rpx;
-    white-space: nowrap;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
 /*按钮*/
 .btn-yellow {
   background: #ff8414;
-  box-shadow: 0 10px 13px 0 rgba(219, 144, 23, 0.2);
-  border-radius: 100px;
+  line-height: 100rpx;
+  border-radius: 50px;
   margin: 0 auto;
+  color: #fff;
+  font-size: 36rpx;
+  text-align: center;
   .btn-yellow-inner {
     display: flex;
     align-items: center;
@@ -242,157 +134,6 @@ page {
   }
 }
 
-// 分类选择
-.category-header {
-  position: fixed;
-  z-index: 9;
-  top: 0;
-  left: 0;
-  width: 100%;
-  font-size: 28rpx;
-  color: #B19A6A;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #EEEEEE;
-  height: 88rpx;
-  image {
-    margin-left: 26rpx;
-    width: 18rpx;
-    height: 10rpx;
-  }
-}
-.category-panel {
-  position: fixed;
-  top: 88rpx;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.50);
-  .bg {
-    position: absolute;
-    left: 0;
-    top: 624rpx;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
-  .content {
-    overflow: hidden;
-    height: 624rpx;
-    display: flex;
-    & > view {
-      height: 100%;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
-      flex: 1;
-      .first-category-content {
-        font-size: 28rpx;
-        color: #414141;
-      }
-      .second-category-content {
-        text-align: center;
-        font-size: 28rpx;
-        color: #414141;
-      }
-      .selected {
-        .first-category-content {
-          background: #fff;
-        }
-      }
-      view {
-        line-height: 88rpx;
-      }
-      &:first-child {
-        background: #eee;
-        .first-category-content {
-          padding-left: 80rpx;
-        }
-      }
-      &:last-child {
-        background: #fff;
-        &.first {
-          background: #eee;
-        }
-        .selected {
-          .second-category-content {
-            // background: #eee;
-            color: #B19A6A;
-          }
-        }
-      }
-    }
-  }
-}
-
-// 课程详情
-.black_mask{
-  position: absolute;
-  top: 0;
-  left:0;
-  width: inherit;
-  height: inherit;
-  z-index: 9;
-  background-color: rgba(0,0,0,0.4);
-}
-
-.teacher-panel {
-  display: flex;
-  padding: 18rpx 26rpx 0 48rpx;
-  .teacher-info {
-    flex: 1;
-    font-size: 24rpx;
-    color: #666;
-    overflow: visible;
-  }
-  .teacher-name {
-    color: #000;
-    font-weight: 500;
-    margin-bottom: 8rpx;
-  }
-  .teacher-profile {
-    width: 120rpx;
-    height: 120rpx;
-    border-radius: 8rpx;
-  }
-}
-.left-line-title {
-  font-size: 32rpx;
-  color: #000;
-  position: relative;
-  line-height: 44rpx;
-  margin-bottom: 12rpx;
-  overflow: visible;
-  &:before {
-    content: ' ';
-    position: absolute;
-    display: inline-block;
-    left: -16rpx;
-    top: 8rpx;
-    width: 6rpx;
-    height: 28rpx;
-    background: #B19A6A;
-  }
-}
-.unfold-course-btn {
-  font-size: 26rpx;
-  color: #B19A6A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 54rpx;
-  margin-bottom: 20rpx;
-  image {
-    width: 18rpx;
-    height: 10rpx;
-    margin-right: 10rpx;
-  }
-  &.unfold {
-    image {
-      transform: rotate(180deg);
-    }
-  }
-}
 
 @keyframes fadeIn {
   0% {
@@ -463,7 +204,7 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/home/index',
-      'pages/place/city',
+      'pages/place/index',
       'pages/place/province',
       'pages/signup/index',
       'pages/signup/success'
@@ -506,10 +247,21 @@ export default class extends wepy.app {
 
   constructor () {
     super()
-    // this.use('requestfix')
-    // this.use('promisify')
+    this.use('requestfix')
+    this.use('promisify')
   }
-  onLaunch (options) {}
+  onLaunch (options) {
+    this.handleAuthUserInfo()
+  }
   onShow (options) {}
+
+  // 首次进入授权
+  handleAuthUserInfo () {
+    wepy.getUserInfo().then(r => {
+      console.log('user info: ', r)
+    }).catch(err => {
+      console.log('err user info: ', err)
+    })
+  }
 }
 </script>

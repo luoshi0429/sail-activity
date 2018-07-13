@@ -1,7 +1,13 @@
 <template>
   <view class="home-page">
     home page
-    <navigator url="/pages/place/city" >city page</navigator>
+    <view class="footer">
+      <button open-type="share" class="share-btn">
+        <image src="/assets/icon_share.png" />
+      </button>
+      <view wx:if="{{ hasJoined }}" class="btn-yellow check-btn">已报名，点击查看</view>
+      <view wx:else class="btn-yellow join-in-btn" @tap="handlePushToJoinIn">立即参加</view>
+    </view>
   </view>
 </template>
 
@@ -10,38 +16,66 @@ import wepy from 'wepy'
 
 export default class Index extends wepy.page {
   config = {
-    enablePullDownRefresh: true,
-    navigationBarTitleText: '小象运动'
+    navigationBarTitleText: '小象运动报名'
   }
-  data = {}
+  data = {
+    hasJoined: false
+  }
 
   mixins = []
 
   components = {}
 
-  methods = {}
+  methods = {
+    handlePushToJoinIn () {
+      this.$navigate('/pages/place/index')
+    }
+  }
 
   onRoute () {}
 
-  onLoad () {}
+  onLoad () {
+  }
+
+  onShareAppMessage () {
+    const params = {}
+    if (this.hasJoined) {
+      params.title = '我已报名参加了xxx，你也一起来参加吧'
+    } else {
+      params.title = '我正在报名参加了xxx，你也一起来参加吧'
+    }
+    return params
+  }
 }
 </script>
 <style lang="less" scoped>
 .home-page {
-  height: 100%;
+}
+
+.footer {
+  background: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 108rpx;
   display: flex;
-  flex-direction: column;
-}
-.div1 {
-  height: 200rpx;
-  background: red;
-}
-.div2 {
-  flex: 1;
-  background: green;
-}
-.div3 {
-  height: 100rpx;
-  background: blue;
+  align-items: center;
+  padding: 0 30rpx;
+  .share-btn {
+    margin-right: 10rpx;
+    background: none;
+    padding: 0;
+    image {
+      width: 96rpx;
+      height: 96rpx;
+    }
+    &:after {
+      border: none;
+    }
+  }
+  .btn-yellow {
+    flex: 1;
+  }
 }
 </style>
