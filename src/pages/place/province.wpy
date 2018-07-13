@@ -1,6 +1,27 @@
 <template>
   <view class="province-page">
-    province page
+    <view class="header">
+      <view class="activity-card">
+        <image src="http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg" />
+        <view class="activity-title">全民健身 益童奔跑</view>
+        <view class="activity-subtitle">活动时间：04-12 至 08-09</view>
+        <view class="current-city">广州 >
+          <!-- <image src="" /> -->
+        </view>
+      </view>
+    </view>
+    <view class="province-list">
+      <repeat for="{{ provinces }}" key="index" index="index" item="province">
+        <view class="province-item">
+          <view class="province-name">{{ province.provice }}</view>
+          <view class="city-list">
+            <repeat for="{{ province.citys }}" key="subIndex" index="subIndex" item="city">
+              <view class="city-item {{ city.selected ? 'selected' : '' }}">{{ city.name }}</view>
+            </repeat>
+          </view>
+        </view>
+      </repeat>
+    </view>
   </view>
 </template>
 
@@ -9,10 +30,130 @@ import wepy from 'wepy'
 
 export default class Index extends wepy.page {
   config = {
-    enablePullDownRefresh: true,
-    navigationBarTitleText: '小象运动'
+    navigationBarTitleText: '场地选择'
   }
-  data = {}
+  data = {
+    provinces: [
+      {
+        provice: '北京',
+        citys: [
+          {
+            name: '房山区',
+            selected: false
+          },
+          {
+            name: '海淀区区',
+            selected: false
+          }
+        ]
+      },
+      {
+        provice: '广东省',
+        citys: [
+          {
+            name: '广州',
+            selected: true
+          },
+          {
+            name: '深圳',
+            selected: false
+          },
+          {
+            name: '佛山',
+            selected: false
+          }
+        ]
+      },
+      {
+        provice: '浙江省',
+        citys: [
+          {
+            name: '杭州',
+            selected: false
+          },
+          {
+            name: '台州',
+            selected: false
+          },
+          {
+            name: '宁波',
+            selected: false
+          },
+          {
+            name: '绍兴',
+            selected: false
+          },
+          {
+            name: '嘉兴',
+            selected: false
+          },
+          {
+            name: '温州',
+            selected: false
+          }
+        ]
+      },
+      {
+        provice: '江苏省',
+        citys: [
+          {
+            name: '南京',
+            selected: false
+          },
+          {
+            name: '苏州',
+            selected: false
+          },
+          {
+            name: '扬州',
+            selected: false
+          },
+          {
+            name: '无锡',
+            selected: false
+          },
+          {
+            name: '徐州',
+            selected: false
+          }
+        ]
+      },
+      {
+        provice: '湖北省',
+        citys: [
+          {
+            name: '武汉',
+            selected: false
+          },
+          {
+            name: '赤壁',
+            selected: false
+          }
+        ]
+      },
+      {
+        provice: '湖南省',
+        citys: [
+          {
+            name: '长沙',
+            selected: false
+          },
+          {
+            name: '株洲',
+            selected: false
+          },
+          {
+            name: '湘潭',
+            selected: false
+          },
+          {
+            name: '岳阳',
+            selected: false
+          }
+        ]
+      }
+    ]
+  }
 
   mixins = []
 
@@ -26,4 +167,104 @@ export default class Index extends wepy.page {
 }
 </script>
 <style lang="less" scoped>
+.province-page {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  .header {
+    // background: #373737;
+    height: 476rpx;
+    position: relative;
+    // overflow: hidden;
+    &:after {
+      content: '123123';
+      width: 140%;
+      height: 416rpx;
+      position: absolute;
+      left: -20%;
+      top:0;
+      z-index: 0;
+      border-radius: 0 0 50% 50%;
+      // // background:linear-gradient(#2CBAF9,#04A9F4);
+      background: #373737;
+    }
+  }
+  .activity-card {
+    position: relative;
+    z-index: 1;
+    margin: 60rpx 30rpx 0;
+    background: #FFFFFF;
+    box-shadow: 0 4rpx 8rpx 0 rgba(0,0,0,0.04);
+    border-radius: 16rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    image {
+      margin-top: 46rpx;
+      margin-bottom: 20rpx;
+      width: 160rpx;
+      height: 160rpx;
+      border-radius: 50%;
+    }
+    .activity-title {
+      font-size: 32rpx;
+      line-height: 1;
+    }
+    .activity-subtitle {
+      font-size: 26rpx;
+      color: #B2B2B2;
+      margin: 20rpx 0;
+    }
+    .current-city {
+      height: 58rpx;
+      margin-bottom: 36rpx;
+      padding: 0 36rpx;
+      border: 2rpx solid #CACACA;
+      border-radius: 29rpx;
+      display: flex;
+      align-items: center;
+      image {
+        width: 14rpx;
+        height: 20rpx;
+        margin-left: 11rpx;
+      }
+    }
+  }
+  .province-list {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 0 30rpx; 
+  }
+  .province-name {
+    font-size: 36rpx;
+    line-height: 1;
+    font-weight: 500;
+    padding-top: 40rpx;
+    padding-bottom: 10rpx; 
+  }
+  .city-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .city-item {
+    width: 216rpx;
+    height: 68rpx;
+    margin-right: 20rpx;
+    margin-top: 20rpx;
+    line-height: 68rpx;
+    border: 2rpx solid #CACACA;
+    border-radius: 14rpx;
+    font-size: 32rpx;
+    color: #000000;
+    text-align: center;
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+    &.selected {
+      background: #F6F6F6;
+    }
+  }
+}
 </style>

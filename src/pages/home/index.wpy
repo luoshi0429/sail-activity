@@ -27,4 +27,21 @@ export default class Index extends wepy.page {
 }
 </script>
 <style lang="less" scoped>
+.home-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.div1 {
+  height: 200rpx;
+  background: red;
+}
+.div2 {
+  flex: 1;
+  background: green;
+}
+.div3 {
+  height: 100rpx;
+  background: blue;
+}
 </style>
