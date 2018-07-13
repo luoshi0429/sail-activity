@@ -1,7 +1,14 @@
 <template>
   <view class="city-page">
     <view class='header'>
-
+        <view class="activity-card">
+            <image src="http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg" />
+            <view class="activity-title">全民健身 益童奔跑</view>
+            <view class="activity-subtitle">活动时间：04-12 至 08-09</view>
+            <view class="current-city">广州 >
+              <!-- <image src="" /> -->
+            </view>
+        </view>
     </view>
     <view class='content'>
         <view class='detail'>
@@ -77,17 +84,72 @@ export default class Index extends wepy.page {
 </script>
 <style lang="less" scoped>
 .city-page {
-    display: flex;
-    flex-direction: column;
     height: 100%;
+    background: #fff;
     .header {
-        height: 150rpx;
-        background: #000;
+        height: 476rpx;
+        position: fixed;
+        z-index: 9;
+        top: 0;
+        left: 0;
+        right: 0;
+        &:after {
+          content: '123123';
+          width: 140%;
+          height: 416rpx;
+          position: absolute;
+          left: -20%;
+          top:0;
+          z-index: 0;
+          border-radius: 0 0 50% 50%;
+          // // background:linear-gradient(#2CBAF9,#04A9F4);
+          background: #373737;
+        }
+    .activity-card {
+        position: relative;
+        z-index: 1;
+        margin: 60rpx 30rpx 0;
+        background: #FFFFFF;
+        box-shadow: 0 4rpx 8rpx 0 rgba(0,0,0,0.04);
+        border-radius: 16rpx;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        image {
+          margin-top: 46rpx;
+          margin-bottom: 20rpx;
+          width: 160rpx;
+          height: 160rpx;
+          border-radius: 50%;
+        }
+        .activity-title {
+          font-size: 32rpx;
+          line-height: 1;
+        }
+        .activity-subtitle {
+          font-size: 26rpx;
+          line-height: 1;
+          color: #B2B2B2;
+          margin: 20rpx 0;
+        }
+        .current-city {
+          height: 58rpx;
+          margin-bottom: 36rpx;
+          padding: 0 36rpx;
+          border: 2rpx solid #CACACA;
+          border-radius: 29rpx;
+          display: flex;
+          align-items: center;
+          image {
+            width: 14rpx;
+            height: 20rpx;
+            margin-left: 11rpx;
+          }
+        }
+      }
     }
     .content {
-        padding: 0 15px;
-        flex: 1;
-        overflow-y: scroll;
+        padding: 476rpx 30rpx 166rpx;
         .detail {
             .city-item {
                 .title {
@@ -118,6 +180,7 @@ export default class Index extends wepy.page {
                         image {
                             width: 100%;
                             height: 100%;
+                            border-radius: 10rpx;
                         }
                     }
                 }
@@ -128,14 +191,18 @@ export default class Index extends wepy.page {
         }
     }
     .footer {
-        background: purple;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
         .button {
             margin: 0 22px;
+            padding: 0;
             height: 102rpx;
-            width: 100%;
-            border-radius: 25rpx;
+            border-radius: 50px;
+            font-size: 36rpx;
+            color: #fff;
+            background: pink;
         }
-        .
     }
 
 }
