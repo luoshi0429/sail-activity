@@ -2,13 +2,13 @@ import wepy from 'wepy'
 import store from '@/store/index'
 import { UpdateUserInfoSuccess } from '@/store/actions'
 
-import config from '@/helper/config';
+import config from '@/helper/config'
 
 const path = config.path
 const codeVersion = config.codeVersion
 
-function _fetch(url, params, config = {}) {
-  console.log("fetch请求发起", url, params);
+function _fetch (url, params, config = {}) {
+  console.log('fetch请求发起', url, params)
   return new Promise((resolve, reject) => {
     wepy.request({
       url: `${path}/${url}`,
@@ -30,14 +30,15 @@ function _fetch(url, params, config = {}) {
   })
 }
 
-function _post(url, params, config = {}) {
-  console.log("post请求发起", url, params);
+function _post (url, params, config = {}) {
+  console.log('post请求发起', url, params)
   return new Promise((resolve, reject) => {
     wepy.request({
       url: `${path}/${url}`,
-      data: {
-        data: JSON.stringify(params)
-      },
+      // data: {
+      //   data: JSON.stringify(params)
+      // },
+      data: params,
       method: 'POST',
       header: {
         'X-Requested-With': 'XMLHttpRequest',
@@ -54,7 +55,7 @@ function _post(url, params, config = {}) {
   })
 }
 
-function fetch(url, params, config) {
+function fetch (url, params, config) {
   return Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
     const [projectId, { openid }] = result
     return getGetCustomerPromise().then(() => {
@@ -68,7 +69,7 @@ function fetch(url, params, config) {
   })
 }
 
-function post(url, params, config) {
+function post (url, params, config) {
   return Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
     const [projectId, { openid }] = result
     return getGetCustomerPromise().then(() => {
@@ -82,8 +83,8 @@ function post(url, params, config) {
   })
 }
 
-let sessionPromise = null;
-function getSessionByLogin() {
+let sessionPromise = null
+function getSessionByLogin () {
   if (!sessionPromise) {
     sessionPromise = new Promise((resolve, reject) => {
       getProjectIdPromise().then((projectId) => {
@@ -105,12 +106,12 @@ function getSessionByLogin() {
           })
         })
       })
-    });
+    })
   }
   return sessionPromise
 }
 
-function getConfig() {
+function getConfig () {
   return getProjectIdPromise().then((projectId) => {
     return _post('common/getConfig', {
       codeVersion,
@@ -119,7 +120,7 @@ function getConfig() {
   })
 }
 
-function saveCustomer(data) {
+function saveCustomer (data) {
   return post('customer/saveCustomer', {
     ...data
   }).then(() => {
@@ -130,7 +131,7 @@ function saveCustomer(data) {
 // parseQrCodeScene
 let parseQrcodePromise = null
 let lastSceneId = null
-function setParseQrcodePromise(sceneId, query) {
+function setParseQrcodePromise (sceneId, query) {
   parseQrcodePromise = new Promise((resolve, reject) => {
     if (sceneId) {
       _post('common/getQrcodeParameter', {
@@ -143,7 +144,7 @@ function setParseQrcodePromise(sceneId, query) {
           ...JSON.parse(data.parameter)
         })
       }, () => {
-        reject();
+        reject()
       })
     } else {
       lastSceneId = sceneId
@@ -152,13 +153,13 @@ function setParseQrcodePromise(sceneId, query) {
   })
   return parseQrcodePromise
 }
-function getParseQrcodePromise() {
+function getParseQrcodePromise () {
   return parseQrcodePromise
 }
 
 // 获取projectId
 let projectIdPromise = null
-function setProjectIdPromise(projectId) {
+function setProjectIdPromise (projectId) {
   projectIdPromise = new Promise((resolve, reject) => {
     if (!projectId) {
       projectId = '10'
@@ -167,7 +168,7 @@ function setProjectIdPromise(projectId) {
   })
   return projectIdPromise
 }
-function getProjectIdPromise() {
+function getProjectIdPromise () {
   if (projectIdPromise) {
     return projectIdPromise
   } else {
@@ -178,7 +179,7 @@ function getProjectIdPromise() {
 }
 // opendid promise
 let openIdPromise = null
-function setOpenIdPromise() {
+function setOpenIdPromise () {
   openIdPromise = getSessionByLogin().then(({ openid, session_key }) => {
     store.dispatch({
       type: UpdateUserInfoSuccess,
@@ -197,21 +198,20 @@ function setOpenIdPromise() {
   return openIdPromise
 }
 
-function getOpenIdOnlyPromise() {
-  const openid = wepy.getStorageSync('openid');
+function getOpenIdOnlyPromise () {
+  const openid = wepy.getStorageSync('openid')
   if (openid) {
     // 即时有openid在缓存也先进行Login防止解析出错
-    getOpenIdPromise();
+    getOpenIdPromise()
     return Promise.resolve({
       openid
     })
   } else {
-    return getOpenIdPromise();
+    return getOpenIdPromise()
   }
 }
 
-
-function getOpenIdPromise() {
+function getOpenIdPromise () {
   if (openIdPromise) {
     return openIdPromise
   } else {
@@ -222,7 +222,7 @@ function getOpenIdPromise() {
 }
 
 let getCustomerPromise = null
-function setGetCustomerPromise() {
+function setGetCustomerPromise () {
   getCustomerPromise = new Promise((resolve, reject) => {
     Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
       const [projectId, { openid, session_key }] = result
@@ -231,7 +231,6 @@ function setGetCustomerPromise() {
         projectId,
         openId: openid
       }).then((data) => {
-        dot.userInfo(data)
         store.dispatch({
           type: UpdateUserInfoSuccess,
           payload: data
@@ -243,7 +242,7 @@ function setGetCustomerPromise() {
   return getCustomerPromise
 }
 
-function getGetCustomerPromise() {
+function getGetCustomerPromise () {
   if (getCustomerPromise) {
     return getCustomerPromise
   } else {
@@ -252,7 +251,7 @@ function getGetCustomerPromise() {
     })
   }
 }
-function getQrConfig(data) {
+function getQrConfig (data) {
   return post('common/getQrConfig', {
     ...data
   })
@@ -269,5 +268,6 @@ export default {
   fetch,
   post,
   path,
-  getQrConfig
+  getQrConfig,
+  _post
 }
