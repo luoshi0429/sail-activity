@@ -193,6 +193,7 @@ import wepy from 'wepy'
 import 'wepy-async-function'
 import { setStore, connect } from 'wepy-redux'
 import store from '@/store'
+import Api from '@/helper/api'
 
 setStore(store)
 @connect({
@@ -252,6 +253,11 @@ export default class extends wepy.app {
   }
   onLaunch (options) {
     this.handleAuthUserInfo()
+    wepy.login().then(({ code }) => {
+      Api._post('api/user/authcation', { code: code }).then(r => {
+        console.log(r)
+      })
+    })
   }
   onShow (options) {}
 
