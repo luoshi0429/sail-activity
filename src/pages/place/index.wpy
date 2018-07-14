@@ -105,7 +105,7 @@ export default class Index extends wepy.page {
     left: 0;
     right: 0;
     &:after {
-      content: "123123";
+      content: "";
       width: 140%;
       height: 416rpx;
       position: absolute;
