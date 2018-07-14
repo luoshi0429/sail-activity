@@ -1,5 +1,4 @@
 const formatTime = (date, fmt) => {
- 
   if (!date) return ''
   if (typeof date === 'number') {
     date = new Date(date)
@@ -14,7 +13,9 @@ const formatTime = (date, fmt) => {
     'S': date.getMilliseconds() // 毫秒
   }
   if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
-  for (var k in o) { if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length))); }
+  for (var k in o) {
+    if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+  }
 
   return fmt
 }
@@ -23,31 +24,22 @@ const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
-/**
- * 验证wechat号码
- */
 
-const validateWechat = n => {
-  // var wxreg = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/;
-  // return wxreg.test(n);
-  return true
-}
-
-/*获取当前页url */
-function getCurrentPageUrl() {
-  var pages = getCurrentPages()    // 获取加载的页面
+/* 获取当前页url */
+function getCurrentPageUrl () {
+  var pages = getCurrentPages() // 获取加载的页面
   var currentPage = pages[pages.length - 1]    // 获取当前页面的对象
   var url = currentPage.route    // 当前页面url
   return url
 }
 
 /*获取当前页带参数的url */
-function getCurrentPageUrlWithArgs() {
+function getCurrentPageUrlWithArgs () {
   var app = getApp()
-  var pages = getCurrentPages()    // 获取加载的页面
-  var currentPage = pages[pages.length - 1]    // 获取当前页面的对象
-  var url = currentPage.route    // 当前页面url
-  var options = currentPage.options    // 如果要获取url中所带的参数可以查看options
+  var pages = getCurrentPages() // 获取加载的页面
+  var currentPage = pages[pages.length - 1] // 获取当前页面的对象
+  var url = currentPage.route // 当前页面url
+  var options = currentPage.options // 如果要获取url中所带的参数可以查看options
 
   if (!options.siteId) {
     options.siteId = app.globalData.siteId
@@ -70,30 +62,30 @@ function removeCharacter(str) {
   return str.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\？|\，|\！|\。]/g, '')
 }
 
-function parseUrlToArgs(url) {
-  var args = {};
-  if(url){
-    url = decodeURIComponent(url);
-    var qs = url.substring(url.lastIndexOf("?") + 1);
-    var items = qs.length > 0 ? qs.split('&') : [];
-    var item = null;
-    var name = null;
-    var value = null;
+function parseUrlToArgs (url) {
+  var args = {}
+  if (url) {
+    url = decodeURIComponent(url)
+    var qs = url.substring(url.lastIndexOf('?') + 1)
+    var items = qs.length > 0 ? qs.split('&') : []
+    var item = null
+    var name = null
+    var value = null
     for (var i = 0; i < items.length; i++) {
-      item = items[i].split("=");
-      //用decodeURIComponent()分别解码name 和value（因为查询字符串应该是被编码过的）。
-      name = decodeURIComponent(item[0]);
+      item = items[i].split('=')
+      // 用decodeURIComponent()分别解码name 和value（因为查询字符串应该是被编码过的）。
+      name = decodeURIComponent(item[0])
       value = name === 'paramSkynet' ? item[1] : decodeURIComponent(item[1]);
       if (name.length) {
-        args[name] = value;
+        args[name] = value
       }
     }
   }
 
-  return args;
+  return args
 }
 
-function createComparionFun(propertyName) {
+function createComparionFun (propertyName) {
   return function (object1, object2) {
     var value1 = object1[propertyName]
     var value2 = object2[propertyName]

@@ -251,6 +251,7 @@ export default class extends wepy.app {
     this.use('requestfix')
     this.use('promisify')
   }
+
   onLaunch (options) {
     this.handleAuthUserInfo()
     wepy.login().then(({ code }) => {

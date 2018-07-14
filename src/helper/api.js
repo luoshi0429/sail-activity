@@ -21,10 +21,10 @@ function _fetch (url, params, config = {}) {
       }
     }).then(({ data }) => {
       console.log('fetch请求返回', url, params, data)
-      if (data.result === 10000) {
+      if (data.result === 2000) {
         resolve(data.data)
       } else {
-        reject()
+        reject(data)
       }
     })
   })
@@ -42,11 +42,12 @@ function _post (url, params, config = {}) {
       method: 'POST',
       header: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8'
       }
     }).then(({ data }) => {
       console.log('post请求返回', url, params, data)
-      if (data.result === 10000) {
+      if (data.result === 2000) {
         resolve(data.data)
       } else {
         reject(data)
@@ -143,8 +144,8 @@ function setParseQrcodePromise (sceneId, query) {
           ...query,
           ...JSON.parse(data.parameter)
         })
-      }, () => {
-        reject()
+      }, (err) => {
+        reject(err)
       })
     } else {
       lastSceneId = sceneId
@@ -269,5 +270,6 @@ export default {
   post,
   path,
   getQrConfig,
-  _post
+  _post,
+  _fetch
 }

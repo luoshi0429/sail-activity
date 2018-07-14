@@ -49,8 +49,7 @@ export default class Index extends wepy.page {
 }
 </script>
 <style lang="less" scoped>
-.home-page {
-}
+.home-page {}
 
 .footer {
   background: #fff;
