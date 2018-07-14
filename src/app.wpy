@@ -193,12 +193,13 @@ import wepy from 'wepy'
 import 'wepy-async-function'
 import { setStore, connect } from 'wepy-redux'
 import store from '@/store'
-import Api from '@/helper/api'
+// import Api from '@/helper/api'
+import { SaveLocation } from '@/store/actions'
 
 setStore(store)
 @connect({
-  user (state) {
-    return state.user
+  app (state) {
+    return state.app
   }
 })
 export default class extends wepy.app {
@@ -255,11 +256,6 @@ export default class extends wepy.app {
   onLaunch (options) {
     this.handleAuthUserInfo()
     this.handleGetLocation()
-    // wepy.login().then(({ code }) => {
-    //   Api._post('api/user/authcation', { code: code }).then(r => {
-    //     console.log(r)
-    //   })
-    // })
   }
   onShow (options) {}
 
@@ -274,17 +270,36 @@ export default class extends wepy.app {
 
   // 获取用户信息
   handleGetLocation () {
-    wepy.getSetting().then(res => {
-      console.log(res.authSetting['scope.userLocation'])
-      const locationAuth = res.authSetting['scope.userLocation']
-      if (locationAuth === undefined) {
-        wepy.getLocation().then(r => {
-          console.log(r)
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+    wepy.getLocation().then(r => {
+      console.log(r)
+      store.dispatch({
+        type: SaveLocation,
+        payload: {
+          lat: r.latitude,
+          lng: r.longitude
+        }
+      })
+    }).catch(err => {
+      console.log(err)
     })
+    // wepy.getSetting().then(res => {
+      // console.log(res.authSetting['scope.userLocation'])
+      // const locationAuth = res.authSetting['scope.userLocation']
+      // if (locationAuth === undefined) {
+        // wepy.getLocation().then(r => {
+          // console.log(r)
+          // store.dispatch({
+            // type: SaveLocation,
+            // payload: {
+              // lat: r.latitude,
+              // lng: r.longitude
+            // }
+          // })
+        // }).catch(err => {
+          // console.log(err)
+        // })
+      // }
+    // })
     // wepy.getLocation().then(r => {
     //   console.log(r)
     // }).catch(err => {
