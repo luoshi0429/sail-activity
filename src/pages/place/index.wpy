@@ -13,15 +13,15 @@
     <view class='content'>
         <view class='detail'>
             <view  class='city-item'>
-            <repeat for='{{city}}' key="index" item="list">
+            <repeat for='{{gymList}}' key="index" item="list">
                 <view class='title'>
-                    <view class='left-line'></view><text>{{list.area}}</text>
+                    <view class='left-line'></view><text>{{list.regionName}}</text>
                 </view>
                 <view class='area'>
-                    <repeat for='{{list.block}}' key="itemIndex" index="itemIndex" item="item">
+                    <repeat for='{{list.infos}}' key="itemIndex" index="itemIndex" item="item">
                         <view class='area-block'>
-                            <image src="{{item.image}}" mode="aspectFill" />
-                            <view class="name">{{ item.name }}</view>
+                        <image src="{{item.smallIcon || '/assets/liangbing.png'}}" mode="aspectFill" />
+                            <view class="name">{{ item.gymName }}</view>
                         </view> 
                     </repeat>
                 </view>
@@ -38,6 +38,13 @@
 <script>
 import wepy from 'wepy'
 import Api from '@/helper/api'
+import { connect } from 'wepy-redux'
+
+@connect({
+  app (state) {
+    return state.app
+  }
+})
 
 export default class Index extends wepy.page {
   config = {
@@ -47,61 +54,78 @@ export default class Index extends wepy.page {
   data = {
     city: [
       {
-        area: '天河区',
-        block: [
+        regionName: '天河区',
+        infos: [
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           },
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           },
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           }
         ]
       },
       {
-        area: '黄浦区',
+        regionName: '黄浦区',
         block: [
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           },
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
-          },
-          {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           }
         ]
       },
       {
-        area: '萝岗区',
+        regionName: '萝岗区',
         block: [
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           },
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           },
           {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
-          },
-          {
-            image: '/assets/liangbing.png',
-            name: '保利城花园'
+            gymId: '1',
+            gymName: '保利城花园',
+            isSpecialGym: 0,
+            normalIcon: '',
+            smallIcon: '/assets/liangbing.png'
           }
         ]
       }
-    ]
+    ],
+    gymList: []
   };
 
   mixins = [];
@@ -113,13 +137,18 @@ export default class Index extends wepy.page {
   onRoute () {}
 
   onLoad () {
-    let defaultCityId = 0
-    let userLocatio = {
-      lat: 0,
-      lng: 0
+    const defaultCityId = {
+      cityId: 440100
     }
-    Api._post('api/info/about/gym', { cityId: defaultCityId }).then(r => {
-      console.log(r)
+    const location = this.app.location.lat || null
+    const data = location || defaultCityId
+    Api.post('api/info/about/gym', data).then(r => {
+      console.log(r, 'gym')
+      this.gymList = r
+      this.$apply()
+      console.log(this.gymList, '-----')
+    }).catch(() => {
+
     })
   }
 }

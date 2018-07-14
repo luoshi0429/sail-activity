@@ -22,7 +22,7 @@ function _fetch (url, params, config = {}) {
       }
     }).then(({ data }) => {
       console.log('fetch请求返回', url, params, data)
-      if (data.result === 2000) {
+      if (data.code === 2000) {
         resolve(data.data)
       } else {
         reject(data)
@@ -44,11 +44,12 @@ function _post (url, params, config = {}) {
       header: {
         'X-Requested-With': 'XMLHttpRequest',
         // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8',
+        ...config
       }
     }).then(({ data }) => {
       console.log('post请求返回', url, params, data)
-      if (data.result === 2000) {
+      if (data.code === 2000) {
         resolve(data.data)
       } else {
         reject(data)
@@ -59,34 +60,13 @@ function _post (url, params, config = {}) {
 
 function fetch (url, params, config) {
   return getAccessToken().then(accessToken => {
-    return _fetch(url, {
-      ...params
-    }, { accessToken: accessToken, ...config })
+    return _fetch(url, params, { accessToken: accessToken, ...config })
   })
-  // return Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
-  //   const [projectId, { openid }] = result
-  //   return getGetCustomerPromise().then(() => {
-  //     return _fetch(url, {
-  //       ...params,
-  //       projectId,
-  //       openId: openid,
-  //       codeVersion
-  //     }, config)
-  //   })
-  // })
 }
 
 function post (url, params, config) {
-  return Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
-    const [projectId, { openid }] = result
-    return getGetCustomerPromise().then(() => {
-      return _post(url, {
-        ...params,
-        projectId,
-        openId: openid,
-        codeVersion
-      }, config)
-    })
+  return getAccessToken().then(accessToken => {
+    return _post(url, params, { accessToken: accessToken, ...config })
   })
 }
 
@@ -96,9 +76,11 @@ const getAccessToken = () => {
     if (accessToken) {
       resolve(accessToken)
     } else {
-      _fetch('').then(r => {
-        accessToken = r.accessToken
-        resolve(accessToken)
+      wepy.login().then(({ code }) => {
+        _post('api/user/authcation', { code: code }).then(r => {
+          accessToken = r.accessToken
+          resolve(accessToken)
+        })
       })
     }
   })
