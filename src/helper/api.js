@@ -17,7 +17,8 @@ function _fetch (url, params, config = {}) {
       },
       method: 'GET',
       header: {
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        ...config
       }
     }).then(({ data }) => {
       console.log('fetch请求返回', url, params, data)
@@ -57,17 +58,22 @@ function _post (url, params, config = {}) {
 }
 
 function fetch (url, params, config) {
-  return Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
-    const [projectId, { openid }] = result
-    return getGetCustomerPromise().then(() => {
-      return _fetch(url, {
-        ...params,
-        projectId,
-        openId: openid,
-        codeVersion
-      }, config)
-    })
+  return getAccessToken().then(accessToken => {
+    return _fetch(url, {
+      ...params
+    }, { accessToken: accessToken, ...config })
   })
+  // return Promise.all([getProjectIdPromise(), getOpenIdOnlyPromise()]).then((result) => {
+  //   const [projectId, { openid }] = result
+  //   return getGetCustomerPromise().then(() => {
+  //     return _fetch(url, {
+  //       ...params,
+  //       projectId,
+  //       openId: openid,
+  //       codeVersion
+  //     }, config)
+  //   })
+  // })
 }
 
 function post (url, params, config) {
@@ -81,6 +87,20 @@ function post (url, params, config) {
         codeVersion
       }, config)
     })
+  })
+}
+
+let accessToken = ''
+const getAccessToken = () => {
+  return new Promise((resolve, reject) => {
+    if (accessToken) {
+      resolve(accessToken)
+    } else {
+      _fetch('').then(r => {
+        accessToken = r.accessToken
+        resolve(accessToken)
+      })
+    }
   })
 }
 

@@ -21,7 +21,7 @@
                     <repeat for='{{list.block}}' key="itemIndex" index="itemIndex" item="item">
                         <view class='area-block'>
                             <image src="{{item.image}}" mode="aspectFill" />
-                            <view>{{ item.name }}</view>
+                            <view class="name">{{ item.name }}</view>
                         </view> 
                     </repeat>
                 </view>
@@ -49,25 +49,56 @@ export default class Index extends wepy.page {
       {
         area: '天河区',
         block: [
-          { image: '/assets/liangbing.png' },
-          { image: '/assets/liangbing.png' },
-          { image: '/assets/liangbing.png' }
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          }
         ]
       },
       {
         area: '黄浦区',
         block: [
-          { image: '/assets/liangbing.png' },
-          { image: '/assets/liangbing.png' },
-          { image: '/assets/liangbing.png' }
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          }
         ]
       },
       {
         area: '萝岗区',
         block: [
-          { image: '/assets/liangbing.png' },
-          { image: '/assets/liangbing.png' },
-          { image: '/assets/liangbing.png' }
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          },
+          {
+            image: '/assets/liangbing.png',
+            name: '保利城花园'
+          }
         ]
       }
     ]
@@ -196,10 +227,17 @@ export default class Index extends wepy.page {
             width: 336rpx;
             height: 168rpx;
             margin-bottom: 20rpx;
+            position: relative;
             image {
               width: 100%;
               height: 100%;
               border-radius: 10rpx;
+            }
+            .name {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              background-image: linear-gradient(82deg, rgba(145, 85,147, 0.7) 0%, rgba(251,227,159,0.00) 100%);
             }
           }
         }
