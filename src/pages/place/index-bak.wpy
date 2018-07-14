@@ -87,9 +87,9 @@ export default class Index extends wepy.page {
       lat: 0,
       lng: 0
     }
-    Api._post('api/info/about/gym', { cityId: defaultCityId }).then(r => {
-      console.log(r)
-    })
+    // Api._post('api/info/about/gym', { cityId: defaultCityId }).then(r => {
+    // console.log(r)
+    // })
   }
 }
 </script>
@@ -105,7 +105,7 @@ export default class Index extends wepy.page {
     left: 0;
     right: 0;
     &:after {
-      content: "";
+      content: "123123";
       width: 140%;
       height: 416rpx;
       position: absolute;

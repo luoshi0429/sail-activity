@@ -32,7 +32,8 @@ export default class Index extends wepy.page {
     }
   }
 
-  onRoute () {}
+  onRoute () {
+  }
 
   onLoad () {
   }
