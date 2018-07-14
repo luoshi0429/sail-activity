@@ -1,6 +1,8 @@
 <template>
   <view class="signup-page">
-    signup page
+    <view class="">
+      
+    </view>
   </view>
 </template>
 
