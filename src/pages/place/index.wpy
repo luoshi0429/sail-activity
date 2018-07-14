@@ -36,40 +36,41 @@
 
 <script>
 import wepy from 'wepy'
+import Api from '@/helper/api'
 
 export default class Index extends wepy.page {
   config = {
     enablePullDownRefresh: true,
     navigationBarTitleText: '小象运动'
   }
-    data = {
-        city: [
-            {
-                area: '天河区',
-                block: [
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
-                ]
-            },
-            {
-                area: '黄浦区',
-                block: [
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
-                ]
-            },
-            {
-                area: '萝岗区',
-                block: [
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
-                    {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
-                ]
-            }
+  data = {
+    city: [
+      {
+        area: '天河区',
+        block: [
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
         ]
-    }
+      },
+      {
+        area: '黄浦区',
+        block: [
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
+        ]
+      },
+      {
+        area: '萝岗区',
+        block: [
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'},
+          {image: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'}
+        ]
+      }
+    ]
+  }
 
   mixins = []
 
@@ -79,7 +80,16 @@ export default class Index extends wepy.page {
 
   onRoute () {}
 
-  onLoad () {}
+  onLoad () {
+    let defaultCityId = 0
+    let userLocatio = {
+      lat: 0,
+      lng: 0
+    }
+    // Api._post('api/info/about/gym', { cityId: defaultCityId }).then(r => {
+      // console.log(r)
+    // })
+  }
 }
 </script>
 <style lang="less" scoped>
