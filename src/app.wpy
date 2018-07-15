@@ -231,7 +231,8 @@ export default class extends wepy.app {
       'pages/place/index',
       'pages/place/province',
       'pages/signup/index',
-      'pages/signup/success'
+      'pages/signup/success',
+      'pages/signup/disclaimer'
     ],
     window: {
       backgroundTextStyle: 'dark',
