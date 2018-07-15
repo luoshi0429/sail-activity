@@ -9,7 +9,7 @@
       <view class="lineHeight title">个人信息</view>
       <view class="input-wrapper">
         <view class="left">姓名</view>
-        <input value="{{ name }}" class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" @input="handleNameChange" />
+        <input value="{{ user.nickName }}" class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" @input="handleNameChange" />
         <image wx:if="{{ nameDisabled }}" src="/assets/icon_input.svg" @tap="handleNameFocus" />
       </view>
       <view class="input-wrapper">
@@ -21,7 +21,7 @@
       </view>
       <view class="input-wrapper">
         <view class="left">手机号码</view>
-        <input value="{{ phone }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
+        <input value="{{ user.mobile }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
         <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
       </view>
     </view>
@@ -45,6 +45,15 @@
 <script>
 import wepy from 'wepy'
 import Api from '@/helper/api'
+import { connect } from 'wepy-redux'
+@connect({
+  app (state) {
+    return state.app
+  },
+  user (state) {
+    return state.user
+  }
+})
 
 export default class Index extends wepy.page {
   config = {
@@ -133,12 +142,17 @@ export default class Index extends wepy.page {
   onRoute () {}
 
   onLoad (options) {
-    console.log(options, 'options')
-    Api.post('api/info/about/user/join/info', {userJoinId: options.id}).then(r => {
-      console.log(r, 'gym detail')
-    }).catch(err => {
-      console.log(err, 'get gym detail err')
-    })
+    console.log(options)
+    this.genderIndex = Number(this.user.gender) === 1 ? 0 : 1
+    if (Number(options.isSpecialGym) === 1) {
+      this.showGift = true
+    }
+    // console.log(options, 'options')
+    // Api.post('api/info/about/user/join/info', {userJoinId: options.id}).then(r => {
+      // console.log(r, 'gym detail')
+    // }).catch(err => {
+      // console.log(err, 'get gym detail err')
+    // })
   }
 }
 </script>
