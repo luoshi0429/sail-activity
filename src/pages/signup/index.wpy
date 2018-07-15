@@ -1,7 +1,40 @@
 <template>
   <view class="signup-page">
-    <view class="">
-      
+    <view class="change-info" @tap="handleBackToChangeInfo">
+      <text>修改场馆信息</text>
+      <image src="/assets/icon_green_arrow.png" />
+    </view>
+    <view class="panel">
+      <view class="lineHeight title">个人信息</view>
+      <view class="input-wrapper">
+        <view class="left">姓名</view>
+        <input class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" />
+        <image wx:if="{{ nameDisabled }}" src="/assets/icon_input.svg" @tap="handleNameFocus" />
+      </view>
+      <view class="input-wrapper">
+        <view class="left">性别</view>
+        <view class="flex-1">女</view>
+        <image class="arrow-image" src="/assets/icon_arrow.svg" />
+      </view>
+      <view class="input-wrapper">
+        <view class="left">手机号码</view>
+        <input class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" />
+        <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
+      </view>
+    </view>
+    <view class="default-btn" @tap="handleSignup">报名</view>
+    <view class="disclaimer">
+      <image class="check-box" src="{{ checked ? '/assets/icon_checkbox_checked.png' : '/assets/icon_checkbox.png' }}" @tap="handleCheckBox" />
+      我已阅读并同意<navigator>免责声明</navigator>
+    </view>
+    <view class="gift-alert" wx:if="{{ showGift }}">
+      <view class="alert-content">
+        <image src="/assets/icon_alert.png" />
+        <view class="lineHeight title">恭喜您获得发布会大礼包</view>
+        <view class="subtitle">8月8日活动当天参与 10:00 社区线下跑公益活动，即可领取发布会大礼包</view>
+        <view class="default-btn recieve-btn" @tap="handleRecieveGift">立即领取</view>
+        <view class="deny-btn" @tap="handleDenyGift">不好意思，10:00没空</view>
+      </view>
     </view>
   </view>
 </template>
@@ -11,16 +44,60 @@ import wepy from 'wepy'
 
 export default class Index extends wepy.page {
   config = {
-    enablePullDownRefresh: true,
-    navigationBarTitleText: '小象运动'
+    navigationBarTitleText: '小象运动报名'
   }
-  data = {}
+  data = {
+    checked: true,
+    nameDisabled: true,
+    genderDisabled: true,
+    phoneDisabled: true,
+    showGift: false
+  }
 
   mixins = []
 
   components = {}
 
-  methods = {}
+  methods = {
+    // 修改场馆信息
+    handleBackToChangeInfo () {
+      wepy.navigateBack()
+    },
+    handleCheckBox () {
+      this.checked = !this.checked
+      this.$apply()
+    },
+    // 报名
+    handleSignup () {
+
+    },
+    handleNameFocus () {
+      this.nameDisabled = false
+      this.$apply()
+    },
+    handlePhoneFocus () {
+      this.phoneDisabled = false
+      this.$apply()
+    },
+    handleNameBlur () {
+      this.nameDisabled = true
+      this.$apply()
+    },
+    handlePhoneBlur () {
+      this.phoneDisabled = true
+      this.$apply()
+    },
+    // 立即领取
+    handleRecieveGift () {
+      this.showGift = false
+      this.$apply()
+    },
+    // 没空
+    handleDenyGift () {
+      this.showGift = false
+      this.$apply()
+    }
+  }
 
   onRoute () {}
 
@@ -28,4 +105,135 @@ export default class Index extends wepy.page {
 }
 </script>
 <style lang="less" scoped>
+.change-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20rpx 0 40rpx;
+  image {
+    width: 26rpx;
+    height: 26rpx;
+    margin-left: 12rpx;
+  }
+  text {
+    font-size: 32rpx;
+    color: #4BC337;
+    text-decoration: underline;
+  }
+}
+.signup-page {
+  background: #fafafa;
+  padding: 20rpx 30rpx 0;
+  height: 100%;
+}
+.panel {
+  width: 690rpx;
+  height: 464rpx;
+  background: #fff;
+  box-shadow: 0 4rpx 8rpx 0 rgba(0,0,0,0.04);
+  border-radius: 8rpx;
+  padding-left: 30rpx;
+  margin-bottom: 80rpx;
+  .title {
+    font-size: 28rpx;
+    color: #999999;
+    height: 86rpx;
+    line-height: 86rpx;
+  }
+}
+.input-wrapper {
+  height: 116rpx;
+  border-top: 2rpx solid #E5E5E5;
+  display: flex;
+  align-items: center;
+  padding-right: 30rpx;
+  font-size: 32rpx;
+  .left {
+    width: 180rpx;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  input {
+    caret-color: #4BC337;
+  }
+  image {
+    width: 24rpx;
+    height: 24rpx;
+  }
+  .arrow-image {
+    width: 16rpx;
+    height: 26rpx;
+  }
+}
+
+.disclaimer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 28rpx;
+  .check-box {
+    width: 24rpx;
+    height: 24rpx;
+    margin-right: 14rpx;
+  }
+  navigator {
+    color: #516B99;
+    margin-left: 14rpx;
+  }
+}
+.gift-alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.alert-content {
+  background: #fff;
+  border-radius: 16rpx;
+  width: 560rpx;
+  height: 620rpx;
+  padding: 190rpx 30rpx 0;
+  position: relative;
+  image {
+    width: 380rpx;
+    height: 338rpx;
+    position: absolute;
+    top: -190rpx;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .title {
+    font-size: 36rpx;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 12rpx;
+  }
+  .subtitle {
+    font-size: 26rpx;
+    color: #939A99;
+    text-align: center;
+    margin-bottom: 36rpx;
+  }
+}
+.deny-btn {
+  background: #F8F8F8;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  color: #939A99;
+  font-size: 36rpx;
+  border: 2rpx solid rgba(5, 5, 5, 0.1);
+  border-radius: 88rpx;
+  margin-top: 20rpx;
+}
 </style>

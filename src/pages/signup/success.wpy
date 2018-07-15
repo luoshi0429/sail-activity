@@ -1,29 +1,172 @@
 <template>
   <view class="signup-success-page">
-    signup success page
+    <PopBox />
+    <view class="lineHeight success-title">报名成功！</view>
+    <view class="lineHeight game-countdown">距离比赛还有x天x时x分</view>
+    <view class="game-banner"></view>
+    <view class="btn-wrapper">
+      <view class="activity-btn" @tap="handleCheckGameDetail">
+        <image src="/assets/icon_check_info.png" />
+        <view class="lineHeight">查看赛事详情</view>
+      </view>
+      <view class="activity-btn" @tap="handleShareToTimeline">
+        <image src="/assets/icon_share_timeline.png" />
+        <view class="lineHeight">分享至朋友圈</view>
+      </view>
+      <button open-type="share" class="activity-btn share-btn">
+        <image src="/assets/icon_share_moment.png" />
+        <view class="lineHeight">分享给微信好友</view>
+      </button>
+    </view>
+    <view class="footer">
+      <view class="lineHeight microdistrict">XX小区社群</view>
+      <view class="lineHeight tip">扫描二维码入群，获得更多活动信息</view>
+      <image src="/assets/icon_qrcode.png" />
+    </view>
+    <!-- <image mode="aspectFit" class="preview" src="{{ previewUrl }}" wx:if="{{showPreview}}" /> -->
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
+import PopBox from '@/components/pop-box'
 
 export default class Index extends wepy.page {
   config = {
     enablePullDownRefresh: true,
     navigationBarTitleText: '小象运动'
   }
-  data = {}
+  data = {
+    previewUrl: '',
+    showPreview: false
+  }
 
   mixins = []
 
-  components = {}
+  components = { PopBox }
 
-  methods = {}
+  methods = {
+    handleCheckGameDetail () {
+      this.$redirect('/pages/home/index')
+    },
+    handleShareToTimeline () {
+      wepy.showLoading({
+        title: '正在生成门票'
+      })
+      wepy.downloadFile({
+        url: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'
+      }).then(res => {
+        wepy.hideLoading()
+        const tmpPath = res.tempFilePath
+        // wepy.previewImage({
+        //   content: tmpPath,
+        //   urls: [tmpPath]
+        // })
+        this.previewUrl = tmpPath
+        this.showPreview = true
+        this.$apply()
+        // wepy.saveImageToPhotosAlbum({
+        //   filePath: tmpPath
+        // }).then(() => {
+        //   // wepy.showToast({
+        //   //   title: '门票已保存至系统相册'
+        //   // })
+        //   this.$broadcast('toast', {
+        //     title: '门票已保存至系统相册'
+        //   })
+        // }).catch(() => {
+        //   // wepy.showToast({
+        //   //   title: '保存失败'
+        //   // })
+        //   this.$broadcast('toast', {
+        //     title: '保存失败'
+        //   })
+        // })
+      }).catch(() => {
+        wepy.hideLoading()
+      })
+    }
+  }
 
   onRoute () {}
 
   onLoad () {}
+
+  onShareAppMessage () {
+    const params = {
+      title: '我已报名参加了 XXX ，你也一起来参加吧',
+      imageUrl: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg',
+      path: '/pages/home/index'
+    }
+    return params
+  }
 }
 </script>
 <style lang="less" scoped>
+.signup-success-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.success-title {
+  padding-top: 48rpx;
+  font-weight: 500;
+  font-size: 40rpx;
+}
+.game-countdown {
+  font-size: 28rpx;
+  margin: 20rpx 0 36rpx;
+}
+.game-banner {
+  width: 680rpx;
+  height: 206rpx;
+
+}
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .microdistrict {
+    font-size: 36rpx;
+    margin-bottom: 20rpx;
+  }
+  .tip {
+    font-size: 26rpx;
+    color: #999;
+    margin-bottom: 48rpx;
+  }
+  image {
+    width: 258rpx;
+    height: 258rpx;
+  }
+}
+.btn-wrapper {
+  width: 100%;
+  display: flex;
+  margin-bottom: 72rpx;
+  .activity-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    image {
+      width: 136rpx;
+      height: 136rpx;
+    }
+    view {
+      font-size: 24rpx;
+      margin-top: 10rpx;
+    }
+  }
+}
+.preview {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
 </style>

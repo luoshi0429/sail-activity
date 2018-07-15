@@ -212,7 +212,7 @@ export default class extends wepy.component {
   left: 50%;
   z-index: 1999;
   transform: translateX(-50%);
-  image{
+  image {
     width: 64rpx;
     height: 64rpx;
     display: block;

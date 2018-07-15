@@ -1,8 +1,8 @@
 <template>
   <view class="city-page">
     <view class='header'>
-        <view class="activity-card" mode="aspectFill">
-            <image src="/assets/liangbing.png" />
+        <view class="activity-card">
+            <image src="/assets/liangbing.png" mode="aspectFill" />
             <view class="activity-title">全民健身 益童奔跑</view>
             <view class="activity-subtitle">活动时间：04-12 至 08-09</view>
             <view class="current-city">广州 >
@@ -52,7 +52,7 @@ export default class Index extends wepy.page {
     navigationBarTitleText: '小象运动'
   };
   data = {
-    city: [
+    gymList: [
       {
         regionName: '天河区',
         infos: [
@@ -81,7 +81,7 @@ export default class Index extends wepy.page {
       },
       {
         regionName: '黄浦区',
-        block: [
+        infos: [
           {
             gymId: '1',
             gymName: '保利城花园',
@@ -100,7 +100,7 @@ export default class Index extends wepy.page {
       },
       {
         regionName: '萝岗区',
-        block: [
+        infos: [
           {
             gymId: '1',
             gymName: '保利城花园',
@@ -124,8 +124,7 @@ export default class Index extends wepy.page {
           }
         ]
       }
-    ],
-    gymList: []
+    ]
   };
 
   mixins = [];
@@ -142,14 +141,14 @@ export default class Index extends wepy.page {
     }
     const location = this.app.location.lat || null
     const data = location || defaultCityId
-    Api.post('api/info/about/gym', data).then(r => {
-      console.log(r, 'gym')
-      this.gymList = r
-      this.$apply()
-      console.log(this.gymList, '-----')
-    }).catch(() => {
+    // Api.post('api/info/about/gym', data).then(r => {
+    //   console.log(r, 'gym')
+    //   this.gymList = r
+    //   this.$apply()
+    //   console.log(this.gymList, '-----')
+    // }).catch(() => {
 
-    })
+    // })
   }
 }
 </script>
