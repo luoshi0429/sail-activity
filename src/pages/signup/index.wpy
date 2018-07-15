@@ -41,6 +41,7 @@
 
 <script>
 import wepy from 'wepy'
+import Api from '@/helper/api'
 
 export default class Index extends wepy.page {
   config = {
@@ -71,6 +72,7 @@ export default class Index extends wepy.page {
     handleSignup () {
 
     },
+
     handleNameFocus () {
       this.nameDisabled = false
       this.$apply()
@@ -101,7 +103,14 @@ export default class Index extends wepy.page {
 
   onRoute () {}
 
-  onLoad () {}
+  onLoad (options) {
+    console.log(options, 'options')
+    Api.post('api/info/about/user/join/info', {userJoinId: options.id}).then(r => {
+      console.log(r, 'gym detail')
+    }).catch(err => {
+      console.log(err, 'get gym detail err')
+    })
+  }
 }
 </script>
 <style lang="less" scoped>
