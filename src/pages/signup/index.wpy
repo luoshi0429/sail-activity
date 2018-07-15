@@ -8,17 +8,19 @@
       <view class="lineHeight title">个人信息</view>
       <view class="input-wrapper">
         <view class="left">姓名</view>
-        <input class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" />
+        <input value="{{ name }}" class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" @input="handleNameChange" />
         <image wx:if="{{ nameDisabled }}" src="/assets/icon_input.svg" @tap="handleNameFocus" />
       </view>
       <view class="input-wrapper">
         <view class="left">性别</view>
-        <view class="flex-1">女</view>
-        <image class="arrow-image" src="/assets/icon_arrow.svg" />
+        <view class="flex-1">{{ genders[genderIndex].title }}</view>
+        <picker range="{{ genders }}" range-key="title" value="{{ genderIndex }}" @change="handleGenderChange">
+          <image class="arrow-image" src="/assets/icon_arrow.svg" />
+        </picker>
       </view>
       <view class="input-wrapper">
         <view class="left">手机号码</view>
-        <input class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" />
+        <input value="{{ phone }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
         <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
       </view>
     </view>
@@ -52,7 +54,11 @@ export default class Index extends wepy.page {
     nameDisabled: true,
     genderDisabled: true,
     phoneDisabled: true,
-    showGift: false
+    showGift: false,
+    genders: [{ title: '男', id: 1 }, { title: '女', id: 2 }],
+    genderIndex: 0,
+    name: '',
+    phone: ''
   }
 
   mixins = []
@@ -68,11 +74,6 @@ export default class Index extends wepy.page {
       this.checked = !this.checked
       this.$apply()
     },
-    // 报名
-    handleSignup () {
-
-    },
-
     handleNameFocus () {
       this.nameDisabled = false
       this.$apply()
@@ -89,6 +90,18 @@ export default class Index extends wepy.page {
       this.phoneDisabled = true
       this.$apply()
     },
+    handleNameChange (e) {
+      this.name = e.detail.value
+      this.$apply()
+    },
+    handlePhoneChange (e) {
+      this.phone = e.detail.value
+      this.$apply()
+    },
+    // 选择性别
+    handleGenderChange (e) {
+      this.genderIndex = e.detail.value
+    },
     // 立即领取
     handleRecieveGift () {
       this.showGift = false
@@ -98,6 +111,21 @@ export default class Index extends wepy.page {
     handleDenyGift () {
       this.showGift = false
       this.$apply()
+    },
+    // 报名
+    handleSignup () {
+      const params = {
+        gender: this.genders[this.genderIndex].id,
+        gymId: '',
+        mobile: this.phone,
+        userName: this.name
+      }
+      console.log(params)
+      // Api.post('api/info/user/jion', params).then(r => {
+      //   console.log(r)
+      // }).catch(err => {
+      //   console.log(err)
+      // })
     }
   }
 
