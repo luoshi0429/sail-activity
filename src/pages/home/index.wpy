@@ -1,18 +1,25 @@
 <template>
   <view class="home-page">
     home page
+    
     <view class="footer">
       <button open-type="share" class="share-btn">
         <image src="/assets/icon_share.png" />
       </button>
-      <view wx:if="{{ hasJoined }}" class="btn-yellow check-btn">已报名，点击查看</view>
-      <view wx:else class="btn-yellow join-in-btn" @tap="handlePushToJoinIn">立即参加</view>
+      
+      
+      <view wx:if="{{ hasJoined }}" class="btn-yellow check-btn" @tap="handlePushToDetail">已报名，点击查看</view>
+      <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
+        <view slot="userinfo" class="btn-yellow join-in-btn">立即参加</view>
+      </FormIdButton>
     </view>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
+import FormIdButton from '@/components/form-id-button'
+import Api from '@/helper/api'
 
 export default class Index extends wepy.page {
   config = {
@@ -24,12 +31,27 @@ export default class Index extends wepy.page {
 
   mixins = []
 
-  components = {}
+  components = {
+    FormIdButton
+  }
 
   methods = {
-    handlePushToJoinIn () {
-      this.$navigate('/pages/place/index')
+    saveUserInfo (res) {
+      console.log(res, 'userInfo')
+      let data = {
+        iv: res.iv,
+        encryptedData: res.encryptedData,
+        ...res.userInfo
+      }
+      Api.post('api/user/save/info', data).then(r => {
+        console.log(r, 'userinfo')
+        this.$navigate('/pages/place/index')
+      })
+    },
+    cancelSaveUserInfo () {
+      console.log('用户拒绝')
     }
+
   }
 
   onRoute () {

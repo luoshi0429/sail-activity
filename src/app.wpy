@@ -193,8 +193,8 @@ import wepy from 'wepy'
 import 'wepy-async-function'
 import { setStore, connect } from 'wepy-redux'
 import store from '@/store'
-// import Api from '@/helper/api'
-import { SaveLocation } from '@/store/actions'
+import Api from '@/helper/api'
+import { SaveLocation, UpdateUserInfoSuccess } from '@/store/actions'
 
 setStore(store)
 @connect({
@@ -254,57 +254,52 @@ export default class extends wepy.app {
   }
 
   onLaunch (options) {
-    this.handleAuthUserInfo()
+    // this.handleAuthUserInfo()
+    this.getUserInfo()
+  }
+  onShow (options) {
     this.handleGetLocation()
   }
-  onShow (options) {}
 
   // 首次进入授权
   handleAuthUserInfo () {
     wepy.getUserInfo().then(r => {
       console.log('user info: ', r)
+      // Api.post('api/user/save/info').then(r => {
+        // console.log(r, 'userinfo')
+      // })
     }).catch(err => {
       console.log('err user info: ', err)
+    })
+  }
+  // 从后端获取用户信息
+  getUserInfo () {
+    Api.fetch('api/user/info').then(r => {
+      console.log(r, 'fetch userinfo')
+      store.dispatch({
+        type: UpdateUserInfoSuccess,
+        payload: r
+      })
+    }).catch(err => {
+      console.log(err, 'getUserInfo err')
     })
   }
 
   // 获取用户信息
   handleGetLocation () {
     wepy.getLocation().then(r => {
-      console.log(r)
       store.dispatch({
         type: SaveLocation,
         payload: {
-          lat: r.latitude,
-          lng: r.longitude
+          location: {
+            lat: r.latitude,
+            lng: r.longitude
+          }
         }
       })
     }).catch(err => {
       console.log(err)
     })
-    // wepy.getSetting().then(res => {
-      // console.log(res.authSetting['scope.userLocation'])
-      // const locationAuth = res.authSetting['scope.userLocation']
-      // if (locationAuth === undefined) {
-        // wepy.getLocation().then(r => {
-          // console.log(r)
-          // store.dispatch({
-            // type: SaveLocation,
-            // payload: {
-              // lat: r.latitude,
-              // lng: r.longitude
-            // }
-          // })
-        // }).catch(err => {
-          // console.log(err)
-        // })
-      // }
-    // })
-    // wepy.getLocation().then(r => {
-    //   console.log(r)
-    // }).catch(err => {
-    //   console.log(err)
-    // })
   }
 }
 </script>

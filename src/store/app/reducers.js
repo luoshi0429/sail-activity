@@ -6,12 +6,14 @@ export default handleActions({
     const optionsPayLoad = actions.payload
     return {
       ...state,
-      location: optionsPayLoad
+      ...optionsPayLoad
     }
   }
 }, {
   location: {
     lat: '',
     lng: ''
-  }
+  },
+  cityId: '440100',
+  cityName: '广州'
 })

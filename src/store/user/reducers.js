@@ -21,7 +21,7 @@ export default handleActions({
     }
   }
 }, {
-  avatarUrl: '',
+  headIcon: '',
   city: '',
   counselor: '',
   country: '',
@@ -31,7 +31,7 @@ export default handleActions({
   legionId: '',
   nickname: '',
   openId: '',
-  phoneNumber: '',
+  mobile: null,
   province: '',
   unionId: '',
   wechatName: '',

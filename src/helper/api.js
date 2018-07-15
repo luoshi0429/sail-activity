@@ -8,20 +8,18 @@ const path = config.path
 const codeVersion = config.codeVersion
 
 function _fetch (url, params, config = {}) {
-  console.log('fetch请求发起', url, params)
+  // console.log('fetch请求发起', url, params)
   return new Promise((resolve, reject) => {
     wepy.request({
       url: `${path}/${url}`,
-      data: {
-        data: params
-      },
+      data: params,
       method: 'GET',
       header: {
         'X-Requested-With': 'XMLHttpRequest',
         ...config
       }
     }).then(({ data }) => {
-      console.log('fetch请求返回', url, params, data)
+      // console.log('fetch请求返回', url, params, data)
       if (data.code === 2000) {
         resolve(data.data)
       } else {
@@ -48,7 +46,7 @@ function _post (url, params, config = {}) {
         ...config
       }
     }).then(({ data }) => {
-      console.log('post请求返回', url, params, data)
+      // console.log('post请求返回', url, params, data)
       if (data.code === 2000) {
         resolve(data.data)
       } else {
@@ -76,8 +74,9 @@ const getAccessToken = () => {
     if (accessToken) {
       resolve(accessToken)
     } else {
-      wepy.login().then(({ code }) => {
-        _post('api/user/authcation', { code: code }).then(r => {
+      wepy.login().then((res) => {
+        console.log(res, 'res')
+        _post('api/user/authcation', { code: res.code }).then(r => {
           accessToken = r.accessToken
           resolve(accessToken)
         })
