@@ -3,7 +3,7 @@
     home page
     
     <view class="footer">
-      <button open-type="share" class="share-btn">
+      <button open-type="share" class="clean-btn">
         <image src="/assets/icon_share.png" />
       </button>
       
@@ -84,7 +84,7 @@ export default class Index extends wepy.page {
   display: flex;
   align-items: center;
   padding: 0 30rpx;
-  .share-btn {
+  .clean-btn {
     margin-right: 10rpx;
     background: none;
     padding: 0;

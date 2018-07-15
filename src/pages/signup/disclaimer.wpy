@@ -60,9 +60,12 @@ export default class extends wepy.page {
 
 <style lang="less" scoped>
 .disclaimer-page {
-  
+  padding: 40rpx;
+  font-size: 28rpx;
 }
 .title {
   text-align: center;
+  font-weight: 500;
+  font-size: 36rpx;
 }
 </style>
