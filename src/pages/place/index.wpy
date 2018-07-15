@@ -2,10 +2,10 @@
   <view class="city-page">
     <view class='header'>
         <view class="activity-card">
-            <image src="/assets/liangbing.png" mode="aspectFill" />
+            <image src="{{user.headIcon}}" mode="aspectFill" />
             <view class="activity-title">全民健身 益童奔跑</view>
             <view class="activity-subtitle">活动时间：04-12 至 08-09</view>
-            <view class="current-city">广州 >
+            <view class="current-city" @tap="handlePushToCity">{{app.cityName}} >
               <!-- <image src="" /> -->
             </view>
         </view>
@@ -30,7 +30,8 @@
         </view>
     </view>
     <view class='footer'>
-        <button class='button'>确定</button>
+        <button wx:if="{{user.mobile !== null}}" class='button' @tap="handlePushToSignup" >确定1</button>
+        <button wx:else open-type="getPhoneNumber" class='button' @getphonenumber="handleGetPhoneNum" >确定</button>
     </view>
   </view>
 </template>
@@ -38,11 +39,16 @@
 <script>
 import wepy from 'wepy'
 import Api from '@/helper/api'
+import store from '@/store'
 import { connect } from 'wepy-redux'
+import { SaveLocation } from '@/store/actions'
 
 @connect({
   app (state) {
     return state.app
+  },
+  user (state) {
+    return state.user
   }
 })
 
@@ -124,28 +130,68 @@ export default class Index extends wepy.page {
           }
         ]
       }
-    ]
+    ],
+    isLoading: false
   };
 
   mixins = [];
 
   components = {};
 
-  methods = {};
-
-  onRoute () {}
-
-  onLoad () {
-    const defaultCityId = {
-      cityId: 440100
+  methods = {
+    handlePushToSignup () {
+      this.$navigate('/pages/signup/index')
+    },
+    handlePushToCity () {
+      console.log('tap')
+      this.$navigate('/pages/place/province')
+    },
+    handleGetPhoneNum (e) {
+      console.log('get phone number', e)
+      this.handlePushToSignup()
     }
-    const location = this.app.location.lat || null
-    const data = location || defaultCityId
+  }
+  onRoute () {
+    if (!this.isLoading) {
+      this.handleGetLocation({
+        cityId: this.app.cityId
+      })
+    }
+  }
+  handleInitLocation () {
+    let data = {
+      cityId: this.app.cityId
+    }
+    if (this.app.location.lat) {
+      data = this.app.location
+    }
+    this.handleGetLocation(data)
+  }
+  handleGetLocation (data) {
+    this.isLoading = true
+    Api.post('api/info/about/gym', data).then(r => {
+      console.log(r, 'gym')
+      this.gymList = r
+      this.$apply()
+      this.isLoading = false
+      console.log(this.gymList, '-----')
+    }).catch(() => {
+      this.isLoading = false
+    })
+  }
+  onLoad () {
+    this.handleInitLocation()
+    console.log(this.user, '-0000000000')
+    // const defaultCityId = {
+      // cityId: 440100
+    // }
+    // const location = this.app.location.lat || null
+    // const data = location || defaultCityId
     // Api.post('api/info/about/gym', data).then(r => {
-    //   console.log(r, 'gym')
-    //   this.gymList = r
-    //   this.$apply()
-    //   console.log(this.gymList, '-----')
+      // console.log(r, 'gym')
+      // this.gymList = r
+      // this.$apply()
+      // console.log(this.gymList, '-----')
     // }).catch(() => {
 
     // })
