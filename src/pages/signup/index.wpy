@@ -1,5 +1,6 @@
 <template>
   <view class="signup-page">
+    <checkbox />特殊活动
     <view class="change-info" @tap="handleBackToChangeInfo">
       <text>修改场馆信息</text>
       <image src="/assets/icon_green_arrow.png" />
@@ -27,7 +28,7 @@
     <view class="default-btn" @tap="handleSignup">报名</view>
     <view class="disclaimer">
       <image class="check-box" src="{{ checked ? '/assets/icon_checkbox_checked.png' : '/assets/icon_checkbox.png' }}" @tap="handleCheckBox" />
-      我已阅读并同意<navigator>免责声明</navigator>
+      我已阅读并同意<navigator url="/pages/signup/disclaimer">免责声明</navigator>
     </view>
     <view class="gift-alert" wx:if="{{ showGift }}">
       <view class="alert-content">
