@@ -13,7 +13,7 @@
         <image src="/assets/icon_share_timeline.png" />
         <view class="lineHeight">分享至朋友圈</view>
       </view>
-      <button open-type="share" class="activity-btn share-btn">
+      <button open-type="share" class="activity-btn clean-btn">
         <image src="/assets/icon_share_moment.png" />
         <view class="lineHeight">分享给微信好友</view>
       </button>

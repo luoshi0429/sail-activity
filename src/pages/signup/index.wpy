@@ -25,7 +25,7 @@
         <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
       </view>
     </view>
-    <view class="default-btn" @tap="handleSignup">报名</view>
+    <view class="default-btn {{ checked ? '' : 'disable-btn' }}" @tap="handleSignup">报名</view>
     <view class="disclaimer">
       <image class="check-box" src="{{ checked ? '/assets/icon_checkbox_checked.png' : '/assets/icon_checkbox.png' }}" @tap="handleCheckBox" />
       我已阅读并同意<navigator url="/pages/signup/disclaimer">免责声明</navigator>
@@ -35,7 +35,7 @@
         <image src="/assets/icon_alert.png" />
         <view class="lineHeight title">恭喜您获得发布会大礼包</view>
         <view class="subtitle">8月8日活动当天参与 10:00 社区线下跑公益活动，即可领取发布会大礼包</view>
-        <view class="default-btn recieve-btn" @tap="handleRecieveGift">立即领取</view>
+        <view class="default-btn" @tap="handleRecieveGift">立即领取</view>
         <view class="deny-btn" @tap="handleDenyGift">不好意思，10:00没空</view>
       </view>
     </view>
@@ -114,6 +114,7 @@ export default class Index extends wepy.page {
     },
     // 报名
     handleSignup () {
+      if (!this.checked) return
       const params = {
         gender: this.genders[this.genderIndex].id,
         gymId: '',
@@ -265,5 +266,8 @@ export default class Index extends wepy.page {
   border: 2rpx solid rgba(5, 5, 5, 0.1);
   border-radius: 88rpx;
   margin-top: 20rpx;
+}
+.disable-btn {
+  background: #ddd;
 }
 </style>

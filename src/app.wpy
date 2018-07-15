@@ -24,7 +24,7 @@ page {
   line-height: 1;
 }
 
-.share-btn {
+.clean-btn {
   padding: 0;
   background: none;
   &:after {
