@@ -1,12 +1,16 @@
 <template>
   <view class="signup-page">
     <PopBox />
-    <view wx:if="{{ isShowSpecial }}">
-      <checkbox checked="{{ specialCheck }}" />特殊活动
-    </view>
     <view class="change-info" @tap="handleBackToChangeInfo">
       <text>修改场馆信息</text>
       <image src="/assets/icon_gray_arrow.png" />
+    </view>
+    <view class="special-panel" wx:if="{{ true }}">
+      <view class="special-info">
+        <view>参与8月8日当日10：00社区现场活动</view>
+        <image @tap="handleCheckSpecial" src="{{ specialCheck ? '/assets/icon_special_checked.png' : '/assets/icon_special_check.png' }}" />
+      </view>
+      <view class="special-tip">请您保证手机号码通话畅通，工作人员会在活动日前联系你</view>
     </view>
     <view class="panel">
       <view class="lineHeight title">个人信息</view>
@@ -151,6 +155,10 @@ export default class Index extends wepy.page {
           title: err.msg
         })
       })
+    },
+    handleCheckSpecial () {
+      this.specialCheck = !this.specialCheck
+      this.$apply()
     }
   }
 
@@ -200,6 +208,46 @@ export default class Index extends wepy.page {
   background: #fafafa;
   padding: 20rpx 30rpx 0;
   height: 100%;
+}
+.special-panel {
+  margin-top: 40rpx;
+  .special-info {
+    height: 116rpx;
+    background: #fff;
+    box-shadow: 0 4rpx 8rpx 0 rgba(0,0,0,0.04);
+    border-radius: 8rpx;
+    font-size: 28rpx;
+    padding: 0 30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    view {
+      flex: 1;
+    }
+    image {
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+  .special-tip {
+    margin-top: 18rpx;
+    margin-bottom: 38rpx;
+    font-size: 22rpx;
+    color: #999;
+    position: relative;
+    padding-left: 46rpx;
+    &:before {
+      content: '';
+      width: 8rpx;
+      height: 8rpx;
+      background: #B2B2B2;
+      border-radius: 50%;
+      position: absolute;
+      left: 28rpx;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }
 .panel {
   width: 690rpx;

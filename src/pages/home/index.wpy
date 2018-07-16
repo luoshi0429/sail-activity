@@ -3,14 +3,13 @@
     home page
     
     <view class="footer">
-      <button open-type="share" class="clean-btn">
-        <image src="/assets/icon_share.png" />
+      <button open-type="share" class="clean-btn share-btn">
+        <image src="/assets/icon_share.svg" />
+        <view class="lineHeight">分享</view>
       </button>
-      
-      
-      <view wx:if="{{ hasJoined }}" class="btn-yellow check-btn" @tap="handlePushToDetail">已报名，点击查看</view>
+      <view wx:if="{{ hasJoined }}" class="default-btn check-btn" @tap="handlePushToDetail">已报名，点击查看</view>
       <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
-        <view slot="userinfo" class="btn-yellow join-in-btn">立即参加</view>
+        <view slot="userinfo" class="default-btn join-in-btn">立即参加</view>
       </FormIdButton>
     </view>
   </view>
@@ -86,16 +85,22 @@ export default class Index extends wepy.page {
   display: flex;
   align-items: center;
   padding: 0 30rpx;
-  .clean-btn {
-    margin-right: 10rpx;
-    background: none;
-    padding: 0;
+  .share-btn {
+    width: 92rpx;
+    height: 92rpx;
+    margin-right: 18rpx;
+    display: flex!important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     image {
-      width: 96rpx;
-      height: 96rpx;
+      width: 48rpx;
+      height: 48rpx;
     }
-    &:after {
-      border: none;
+    view {
+      font-size: 24rpx;
+      color: #939A99;
+      margin-top: 6rpx;
     }
   }
   .btn-yellow {

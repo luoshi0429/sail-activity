@@ -19,20 +19,30 @@
                 </view>
                 <view class='area'>
                     <repeat for='{{list.infos}}' key="itemIndex" index="itemIndex" item="item">
-                        <view class='area-block' @tap="handleSaveGymData({{ item.isSpecialGym }}, {{ item.gymId }})">
+                        <!-- <view class='area-block' @tap="handleSaveGymData({{ item.isSpecialGym }}, {{ item.gymId }})">
                             <image src="{{item.smallIcon || '/assets/liangbing.png'}}" mode="aspectFill" />
                             <view class="name">{{ item.gymName }}</view>
-                        </view> 
+                        </view>  -->
+                        <view wx:if="{{ user.mobile !== null }}" class='area-item' @tap="handlePushToSignup({{ item.isSpecialGym }}, {{ item.gymId }})">
+                            <image src="/assets/icon-address.png" mode="aspectFill" />
+                            <view class="name">{{ item.gymName }}</view>
+                        </view>
+                        <view wx:else @tap="handleSaveGymData({{ item.isSpecialGym }}, {{ item.gymId }})">
+                          <button open-type="getPhoneNumber" class='clean-btn area-item' @getphonenumber="handleGetPhoneNum">
+                            <image src="/assets/icon-address.png" mode="aspectFill" />
+                            <view class="name">{{ item.gymName }}</view>
+                          </button>
+                        </view>
                     </repeat>
                 </view>
             </repeat>
             </view>
         </view>
     </view>
-    <view class='footer'>
+    <!-- <view class='footer'>
         <button wx:if="{{user.mobile !== null}}" class='button' @tap="handlePushToSignup" >确定1</button>
         <button wx:else open-type="getPhoneNumber" class='button' @getphonenumber="handleGetPhoneNum">确定</button>
-    </view>
+    </view> -->
   </view>
 </template>
 
@@ -141,10 +151,7 @@ export default class Index extends wepy.page {
   components = {};
 
   methods = {
-    handlePushToSignup () {
-      if (!this.gymId) {
-        return
-      }
+    handlePushToSignup (isSpecialGym, gymId) {
       this.$navigate(`/pages/signup/index?isSpecialGym=${this.isSpecialGym}&gymId=${this.gymId}`)
     },
     handlePushToCity () {
@@ -158,10 +165,9 @@ export default class Index extends wepy.page {
         phoneEncryptedData: e.detail.encryptedData
       }).then(() => {
         Api.getUserInfo().then(r => {
-          this.methods.handlePushToSignup.call(this) 
+          this.methods.handlePushToSignup.call(this, this.isSpecialGym, this.gymId) 
         })
       })
-      // this.methods.handlePushToSignup.call(this)
     },
     handleSaveGymData (isSpecialGym, gymId) {
       this.isSpecialGym = isSpecialGym
@@ -333,6 +339,32 @@ export default class Index extends wepy.page {
               color: #fff;
               background-image: linear-gradient(82deg, rgba(245, 185, 87, 0.7) 0%, rgba(251,227,159,0.00) 100%);
             }
+          }
+        }
+        .area-item {
+          border: 2rpx solid #CACACA;
+          width: 330rpx;
+          height: 72rpx;
+          border-radius: 36rpx;
+          display: flex;
+          align-items: center;
+          padding: 0 10rpx;
+          margin-bottom: 20rpx;
+          image {
+            width: 52rpx;
+            height: 52rpx;
+          }
+          .name {
+            margin-left: 10rpx;
+            flex: 1;
+            font-size: 28rpx;
+            font-weight: 500;
+            line-height: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            color: #000;
+            text-align: left;
           }
         }
       }
