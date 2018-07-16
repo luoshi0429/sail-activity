@@ -1,6 +1,10 @@
 <template>
   <view class="signup-page">
     <PopBox />
+    <view class="activity-info">
+      <image src="/assets/bg_signup.png" />
+      <view>北京市海淀区互联网创新中心</view>
+    </view>
     <view class="change-info" @tap="handleBackToChangeInfo">
       <text>修改场馆信息</text>
       <image src="/assets/icon_gray_arrow.png" />
@@ -187,6 +191,35 @@ export default class Index extends wepy.page {
 }
 </script>
 <style lang="less" scoped>
+.activity-info {
+  width: 690rpx;
+  height: 346rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  view {
+    position: relative;
+    z-index: 1;
+    width: 440rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    font-weight: 500;
+    font-size: 26rpx;
+    color: #fff;
+    text-align: center;
+    background:linear-gradient(#ACD050, #5BC562);
+    border-radius: 12rpx;
+  }
+}
 .change-info {
   width: 100%;
   display: flex;
