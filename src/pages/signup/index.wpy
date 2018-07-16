@@ -1,6 +1,8 @@
 <template>
   <view class="signup-page">
-    <checkbox />特殊活动
+    <view wx:if="{{ isShowSpecial }}">
+      <checkbox checked="{{ specialCheck }}" />特殊活动
+    </view>
     <view class="change-info" @tap="handleBackToChangeInfo">
       <text>修改场馆信息</text>
       <image src="/assets/icon_green_arrow.png" />
@@ -9,7 +11,7 @@
       <view class="lineHeight title">个人信息</view>
       <view class="input-wrapper">
         <view class="left">姓名</view>
-        <input value="{{ user.nickName }}" class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" @input="handleNameChange" />
+        <input value="{{ name }}" class="flex-1" disabled="{{ nameDisabled }}" focus="{{ !nameDisabled }}" @blur="handleNameBlur" @input="handleNameChange" />
         <image wx:if="{{ nameDisabled }}" src="/assets/icon_input.svg" @tap="handleNameFocus" />
       </view>
       <view class="input-wrapper">
@@ -21,7 +23,7 @@
       </view>
       <view class="input-wrapper">
         <view class="left">手机号码</view>
-        <input value="{{ user.mobile }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
+        <input value="{{ phone }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
         <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
       </view>
     </view>
@@ -68,7 +70,10 @@ export default class Index extends wepy.page {
     genders: [{ title: '男', id: 1 }, { title: '女', id: 2 }],
     genderIndex: 0,
     name: '',
-    phone: ''
+    phone: '',
+    specialCheck: false,
+    isShowSpecial: false,
+    gymId: ''
   }
 
   mixins = []
@@ -115,11 +120,13 @@ export default class Index extends wepy.page {
     // 立即领取
     handleRecieveGift () {
       this.showGift = false
+      this.specialCheck = true
       this.$apply()
     },
     // 没空
     handleDenyGift () {
       this.showGift = false
+      this.specialCheck = false
       this.$apply()
     },
     // 报名
@@ -127,16 +134,17 @@ export default class Index extends wepy.page {
       if (!this.checked) return
       const params = {
         gender: this.genders[this.genderIndex].id,
-        gymId: '',
+        gymId: this.gymId,
         mobile: this.phone,
         userName: this.name
       }
       console.log(params)
-      // Api.post('api/info/user/jion', params).then(r => {
-      //   console.log(r)
-      // }).catch(err => {
-      //   console.log(err)
-      // })
+      Api.post('api/info/user/jion', params).then(r => {
+        console.log(r, 'signup')
+        // this.$navigate(`/pages/signup/success?userJoinId=${r.userJoinId}`)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 
@@ -145,7 +153,11 @@ export default class Index extends wepy.page {
   onLoad (options) {
     console.log(options)
     this.genderIndex = Number(this.user.gender) === 1 ? 0 : 1
+    this.gymId = options.gymId
+    this.name = this.user.nickName
+    this.phone = this.user.mobile
     if (Number(options.isSpecialGym) === 1) {
+      this.isShowSpecial = true
       this.showGift = true
     }
     // console.log(options, 'options')
@@ -240,6 +252,7 @@ export default class Index extends wepy.page {
   }
 }
 .gift-alert {
+  z-index: 99;
   position: fixed;
   top: 0;
   left: 0;

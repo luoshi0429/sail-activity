@@ -19,7 +19,7 @@
                 </view>
                 <view class='area'>
                     <repeat for='{{list.infos}}' key="itemIndex" index="itemIndex" item="item">
-                        <view class='area-block' @tap="handleSaveGymData({{ item.isSpecialGym }})">
+                        <view class='area-block' @tap="handleSaveGymData({{ item.isSpecialGym }}, {{ item.gymId }})">
                             <image src="{{item.smallIcon || '/assets/liangbing.png'}}" mode="aspectFill" />
                             <view class="name">{{ item.gymName }}</view>
                         </view> 
@@ -59,6 +59,7 @@ export default class Index extends wepy.page {
   };
   data = {
     isSpecialGym: '',
+    gymId: '',
     gymList: [
       {
         regionName: '天河区',
@@ -141,7 +142,7 @@ export default class Index extends wepy.page {
 
   methods = {
     handlePushToSignup () {
-      this.$navigate(`/pages/signup/index?isSpecialGym=${this.isSpecialGym}`)
+      this.$navigate(`/pages/signup/index?isSpecialGym=${this.isSpecialGym}&gymId=${this.gymId}`)
     },
     handlePushToCity () {
       console.log('tap')
@@ -151,8 +152,9 @@ export default class Index extends wepy.page {
       console.log('get phone number', e)
       this.methods.handlePushToSignup.call(this)
     },
-    handleSaveGymData (isSpecialGym) {
+    handleSaveGymData (isSpecialGym, gymId) {
       this.isSpecialGym = isSpecialGym
+      this.gymId = gymId
     }
   }
   onRoute () {
