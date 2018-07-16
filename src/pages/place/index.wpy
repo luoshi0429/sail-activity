@@ -2,8 +2,8 @@
   <view class="city-page">
     <view class='header'>
         <view class="activity-card">
-            <image src="{{user.headIcon}}" mode="aspectFill" />
-            <view class="activity-title">全民健身 益童奔跑</view>
+            <image src="{{activeInfo.activityIcon}}" mode="aspectFill" />
+            <view class="activity-title">{{activeInfo.name}}</view>
             <view class="activity-subtitle">活动时间：04-12 至 08-09</view>
             <view class="current-city" @tap="handlePushToCity">{{app.cityName}} >
               <!-- <image src="" /> -->
@@ -68,6 +68,7 @@ export default class Index extends wepy.page {
     navigationBarTitleText: '小象运动'
   };
   data = {
+    activeInfo: {},
     isSpecialGym: '',
     gymId: '',
     gymList: [
@@ -144,6 +145,7 @@ export default class Index extends wepy.page {
       }
     ],
     isLoading: false
+
   };
 
   mixins = [];
@@ -172,7 +174,7 @@ export default class Index extends wepy.page {
     handleSaveGymData (isSpecialGym, gymId) {
       this.isSpecialGym = isSpecialGym
       this.gymId = gymId
-    }
+    },
   }
   onRoute () {
     if (!this.isLoading) {
@@ -190,6 +192,14 @@ export default class Index extends wepy.page {
     }
     this.handleGetLocation(data)
   }
+  handelGetActicveInfo () {
+    Api.post('/api/info/about/activity').then(r => {
+      this.activeInfo = r
+      console.log(r, '=====')
+    }).catch((err) => {
+      console.log(err, 'err')
+    })
+  }
   handleGetLocation (data) {
     this.isLoading = true
     Api.post('api/info/about/gym', data).then(r => {
@@ -204,6 +214,7 @@ export default class Index extends wepy.page {
   }
   onLoad () {
     this.handleInitLocation()
+    this.handelGetActicveInfo()
     console.log(this.user, '-0000000000')
     // const defaultCityId = {
       // cityId: 440100
