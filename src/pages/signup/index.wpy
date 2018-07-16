@@ -1,11 +1,12 @@
 <template>
   <view class="signup-page">
+    <PopBox />
     <view wx:if="{{ isShowSpecial }}">
       <checkbox checked="{{ specialCheck }}" />特殊活动
     </view>
     <view class="change-info" @tap="handleBackToChangeInfo">
       <text>修改场馆信息</text>
-      <image src="/assets/icon_green_arrow.png" />
+      <image src="/assets/icon_gray_arrow.png" />
     </view>
     <view class="panel">
       <view class="lineHeight title">个人信息</view>
@@ -23,7 +24,7 @@
       </view>
       <view class="input-wrapper">
         <view class="left">手机号码</view>
-        <input value="{{ phone }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
+        <input value="{{ phone || '' }}" class="flex-1" disabled="{{ phoneDisabled }}" focus="{{ !phoneDisabled }}" @blur="handlePhoneBlur" @input="handlePhoneChange" />
         <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
       </view>
     </view>
@@ -48,6 +49,8 @@
 import wepy from 'wepy'
 import Api from '@/helper/api'
 import { connect } from 'wepy-redux'
+import PopBox from '@/components/pop-box'
+
 @connect({
   app (state) {
     return state.app
@@ -78,7 +81,7 @@ export default class Index extends wepy.page {
 
   mixins = []
 
-  components = {}
+  components = { PopBox }
 
   methods = {
     // 修改场馆信息
@@ -139,11 +142,14 @@ export default class Index extends wepy.page {
         userName: this.name
       }
       console.log(params)
-      Api.post('api/info/user/jion', params).then(r => {
+      Api.post('api/info/user/join', params).then(r => {
         console.log(r, 'signup')
-        // this.$navigate(`/pages/signup/success?userJoinId=${r.userJoinId}`)
+        this.$navigate(`/pages/signup/success?userJoinId=${r.userJoinId}`)
       }).catch(err => {
-        console.log(err)
+        console.log('err', err)
+        this.$broadcast('toast', {
+          title: err.msg
+        })
       })
     }
   }
@@ -155,17 +161,20 @@ export default class Index extends wepy.page {
     this.genderIndex = Number(this.user.gender) === 1 ? 0 : 1
     this.gymId = options.gymId
     this.name = this.user.nickName
+    console.log(this.user, '----')
     this.phone = this.user.mobile
     if (Number(options.isSpecialGym) === 1) {
       this.isShowSpecial = true
       this.showGift = true
     }
     // console.log(options, 'options')
-    // Api.post('api/info/about/user/join/info', {userJoinId: options.id}).then(r => {
-      // console.log(r, 'gym detail')
-    // }).catch(err => {
-      // console.log(err, 'get gym detail err')
-    // })
+    // Api.post('api/info/about/user/join/info', { userJoinId: options.gymId })
+    //   .then(r => {
+    //     console.log(r, 'gym detail')
+    //   })
+    //   .catch(err => {
+    //     console.log(err, 'get gym detail err')
+    //   })
   }
 }
 </script>
@@ -183,7 +192,7 @@ export default class Index extends wepy.page {
   }
   text {
     font-size: 32rpx;
-    color: #4BC337;
+    color: #939A99;
     text-decoration: underline;
   }
 }

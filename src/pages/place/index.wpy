@@ -31,7 +31,7 @@
     </view>
     <view class='footer'>
         <button wx:if="{{user.mobile !== null}}" class='button' @tap="handlePushToSignup" >确定1</button>
-        <button wx:else open-type="getPhoneNumber" class='button' @getphonenumber="handleGetPhoneNum" >确定</button>
+        <button wx:else open-type="getPhoneNumber" class='button' @getphonenumber="handleGetPhoneNum">确定</button>
     </view>
   </view>
 </template>
@@ -142,15 +142,26 @@ export default class Index extends wepy.page {
 
   methods = {
     handlePushToSignup () {
+      if (!this.gymId) {
+        return
+      }
       this.$navigate(`/pages/signup/index?isSpecialGym=${this.isSpecialGym}&gymId=${this.gymId}`)
     },
     handlePushToCity () {
-      console.log('tap')
       this.$navigate('/pages/place/province')
     },
     handleGetPhoneNum (e) {
       console.log('get phone number', e)
-      this.methods.handlePushToSignup.call(this)
+      Api.saveUserInfo({
+        type: 2,
+        phoneIv: e.detail.iv,
+        phoneEncryptedData: e.detail.encryptedData
+      }).then(() => {
+        Api.getUserInfo().then(r => {
+          this.methods.handlePushToSignup.call(this) 
+        })
+      })
+      // this.methods.handlePushToSignup.call(this)
     },
     handleSaveGymData (isSpecialGym, gymId) {
       this.isSpecialGym = isSpecialGym

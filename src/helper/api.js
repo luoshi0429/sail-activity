@@ -69,7 +69,7 @@ function post (url, params, config) {
 }
 
 let accessToken = ''
-const getAccessToken = () => {
+function getAccessToken () {
   return new Promise((resolve, reject) => {
     if (accessToken) {
       resolve(accessToken)
@@ -84,6 +84,25 @@ const getAccessToken = () => {
     }
   })
 }
+
+function saveUserInfo (data) {
+  return post('api/user/save/info', data).then(r => {
+    console.log(r, 'userinfo')
+    return r
+  })
+}
+
+function getUserInfo () {
+  return fetch('api/user/info').then(r => {
+    console.log(r, 'fetch userinfo')
+    store.dispatch({
+      type: UpdateUserInfoSuccess,
+      payload: r
+    })
+    return r
+  })
+}
+
 
 let sessionPromise = null
 function getSessionByLogin () {
@@ -272,5 +291,7 @@ export default {
   path,
   getQrConfig,
   _post,
-  _fetch
+  _fetch,
+  saveUserInfo,
+  getUserInfo
 }

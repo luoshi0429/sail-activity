@@ -41,9 +41,11 @@ export default class Index extends wepy.page {
       let data = {
         iv: res.iv,
         encryptedData: res.encryptedData,
-        ...res.userInfo
+        ...res.userInfo,
+        type: 1
       }
-      Api.post('api/user/save/info', data).then(r => {
+      
+      Api.saveUserInfo(data).then(r => {
         console.log(r, 'userinfo')
         this.$navigate('/pages/place/index')
       })

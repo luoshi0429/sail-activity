@@ -23,12 +23,8 @@ export default handleActions({
 }, {
   headIcon: '',
   city: '',
-  counselor: '',
   country: '',
   gender: '',
-  isCounselor: '',
-  language: '',
-  legionId: '',
   nickname: '',
   openId: '',
   mobile: null,
@@ -36,6 +32,5 @@ export default handleActions({
   unionId: '',
   wechatName: '',
   nickName: '',
-  newUser: 0,
   deny: true
 })

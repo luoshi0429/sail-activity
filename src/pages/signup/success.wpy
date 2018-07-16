@@ -1,6 +1,7 @@
 <template>
   <view class="signup-success-page">
     <PopBox />
+    <image class="success-icon" src="/assets/icon_signup_success.png" />
     <view class="lineHeight success-title">报名成功！</view>
     <view class="lineHeight game-countdown">距离比赛还有x天x时x分</view>
     <view class="game-banner"></view>
@@ -19,9 +20,10 @@
       </button>
     </view>
     <view class="footer">
-      <view class="lineHeight microdistrict">XX小区社群</view>
+      <image class="footer-bg" src="/assets/bg_treadmill.png" />
+      <view class="lineHeight microdistrict">{{ detail.commuityName }}</view>
       <view class="lineHeight tip">扫描二维码入群，获得更多活动信息</view>
-      <image src="/assets/icon_qrcode.png" />
+      <image class="qrcode-image" src="{{ detail.commuityIcon }}" mode="aspectFill" />
     </view>
     <!-- <image mode="aspectFit" class="preview" src="{{ previewUrl }}" wx:if="{{showPreview}}" /> -->
   </view>
@@ -30,15 +32,16 @@
 <script>
 import wepy from 'wepy'
 import PopBox from '@/components/pop-box'
+import Api from '@/helper/api'
 
 export default class Index extends wepy.page {
   config = {
-    enablePullDownRefresh: true,
-    navigationBarTitleText: '小象运动'
+    navigationBarTitleText: '小象运动报名'
   }
   data = {
     previewUrl: '',
-    showPreview: false
+    showPreview: false,
+    detail: {}
   }
 
   mixins = []
@@ -53,44 +56,51 @@ export default class Index extends wepy.page {
       wepy.showLoading({
         title: '正在生成门票'
       })
-      wepy.downloadFile({
-        url: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg'
-      }).then(res => {
-        wepy.hideLoading()
-        const tmpPath = res.tempFilePath
-        // wepy.previewImage({
-        //   content: tmpPath,
-        //   urls: [tmpPath]
-        // })
-        this.previewUrl = tmpPath
-        this.showPreview = true
-        this.$apply()
-        // wepy.saveImageToPhotosAlbum({
-        //   filePath: tmpPath
-        // }).then(() => {
-        //   // wepy.showToast({
-        //   //   title: '门票已保存至系统相册'
-        //   // })
-        //   this.$broadcast('toast', {
-        //     title: '门票已保存至系统相册'
-        //   })
-        // }).catch(() => {
-        //   // wepy.showToast({
-        //   //   title: '保存失败'
-        //   // })
-        //   this.$broadcast('toast', {
-        //     title: '保存失败'
-        //   })
-        // })
-      }).catch(() => {
-        wepy.hideLoading()
+      Api.fetch('api/info/share').then(r => {
+        console.log(r)
+        wepy.downloadFile({
+          url: r
+        }).then(res => {
+          wepy.hideLoading()
+          const tmpPath = res.tempFilePath
+          wepy.saveImageToPhotosAlbum({
+            filePath: tmpPath
+          }).then(() => {
+            this.$broadcast('toast', {
+              title: '门票已保存至系统相册',
+              duration: 1500,
+              onClose: () => {
+                wepy.previewImage({
+                  content: tmpPath,
+                  urls: [tmpPath]
+                })
+              }
+            })
+          }).catch(() => {
+            this.$broadcast('toast', {
+              title: '保存失败'
+            })
+          })
+        }).catch(() => {
+          wepy.hideLoading()
+        })
       })
     }
   }
 
   onRoute () {}
 
-  onLoad () {}
+  onLoad (options) {
+    Api.post('api/info/about/user/join/info', { userJoinId: options.userJoinId })
+      .then(r => {
+        console.log(r, 'gym detail')
+        this.detail = r
+        this.$apply()
+      })
+      .catch(err => {
+        console.log(err, 'get gym detail err')
+      })
+  }
 
   onShareAppMessage () {
     const params = {
@@ -109,10 +119,15 @@ export default class Index extends wepy.page {
   flex-direction: column;
   align-items: center;
 }
+.success-icon {
+  margin: 40rpx 0;
+  width: 260rpx;
+  height: 230rpx;
+}
 .success-title {
-  padding-top: 48rpx;
   font-weight: 500;
   font-size: 40rpx;
+  color: #F8AE27;
 }
 .game-countdown {
   font-size: 28rpx;
@@ -124,21 +139,31 @@ export default class Index extends wepy.page {
 
 }
 .footer {
+  width: 100%;
+  height: 480rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  .footer-bg {
+    position: absolute;
+    width: 636rpx;
+    height: 480rpx;
+    right: 0;
+    top: 0; 
+  }
   .microdistrict {
     font-size: 36rpx;
-    margin-bottom: 20rpx;
+    margin: 20rpx 0;
   }
   .tip {
     font-size: 26rpx;
     color: #999;
     margin-bottom: 48rpx;
   }
-  image {
-    width: 258rpx;
-    height: 258rpx;
+  .qrcode-image {
+    width: 280rpx;
+    height: 280rpx;
   }
 }
 .btn-wrapper {

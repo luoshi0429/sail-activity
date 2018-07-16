@@ -1,5 +1,5 @@
 {
-  "name": "mp_live_broadcast",
+  "name": "sail-activity",
   "version": "1.2.8",
   "description": "```\r     yarn mock // open local mock service \r ```\r ```\r     yarn dev  // open dev service\r ```\r ```\r     yarn build // build project\r ```",
   "main": "dist/app.js",
