@@ -3,8 +3,43 @@
     <PopBox />
     <image class="success-icon" src="/assets/icon_signup_success.png" />
     <view class="lineHeight success-title">报名成功！</view>
-    <view class="lineHeight game-countdown">距离比赛还有x天x时x分</view>
-    <view class="game-banner"></view>
+    <view class="lineHeight game-countdown">距离比赛还有{{ detail.diffTime }}</view>
+    <view class="game-ticket">
+      <image class="bg" src="/assets/bg_signup_success.png" />
+      <view class="ticket-content">
+        <view class="left">
+          <view>我的门票</view>
+          <view class="">My ticket</view>
+        </view>
+        <view class="right">
+          <view class="info-item">
+            <view>赛事</view>
+            <view>Event</view>
+            <view>全民健身 益童奔跑</view>
+            <image src="/assets/icon_ticket_event.png" />
+          </view>
+          <view class="info-item">
+            <view>赛事项目</view>
+            <view>Entry</view>
+            <view>5.2公里公益跑</view>
+            <image src="/assets/icon_ticket_entry.png" />
+          </view>
+          <view class="info-item">
+            <view>赛事时间</view>
+            <view>Event Time</view>
+            <view>2018/08/08</view>
+            <image src="/assets/icon_ticket_time.png" />
+          </view>
+
+          <view class="info-item">
+            <view>参赛者</view>
+            <view>Contestant</view>
+            <view>{{ user.nickName }}</view>
+            <image src="/assets/icon_ticket_event.png" />
+          </view>
+        </view>
+      </view>
+    </view>
     <view class="btn-wrapper">
       <view class="activity-btn" @tap="handleCheckGameDetail">
         <image src="/assets/icon_check_info.png" />
@@ -33,7 +68,13 @@
 import wepy from 'wepy'
 import PopBox from '@/components/pop-box'
 import Api from '@/helper/api'
+import { connect } from 'wepy-redux'
 
+@connect({
+  user (state) {
+    return state.user
+  }
+})
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '小象运动报名'
@@ -131,12 +172,101 @@ export default class Index extends wepy.page {
 }
 .game-countdown {
   font-size: 28rpx;
-  margin: 20rpx 0 36rpx;
+  margin: 20rpx 0 8rpx;
 }
-.game-banner {
-  width: 680rpx;
-  height: 206rpx;
-
+.game-ticket {
+  width: 100%;
+  height: 380rpx;
+  position: relative;
+  .bg {
+    width: 730rpx;
+    height: 380rpx;
+    position: absolute;
+    top: 0;
+    left: 10rpx;
+  }
+}
+.ticket-content {
+  position: absolute;
+  right: 30rpx;
+  bottom: 24rpx;
+  width: 580rpx;
+  height: 224rpx;
+  display: flex;
+  .left {
+    background-image: linear-gradient(-182deg, #268D9B 0%, #1FA08B 100%);
+    width: 106rpx;
+    height: 100%;
+    border-top-left-radius: 16rpx;
+    border-bottom-left-radius: 16rpx;
+    color: #fff;
+    font-size: 18rpx;
+    line-height: 26rpx;
+    padding-top: 22rpx;
+    text-align: center;
+    .english {
+      margin-top: 2rpx;
+      font-size: 12rpx;
+      line-height: 16rpx;
+    }
+  }
+  .right {
+    background: #F4F9FC;
+    flex: 1;
+    display: flex;
+    border-top-right-radius: 16rpx;
+    border-bottom-right-radius: 16rpx;
+  }
+  .info-item {
+    width: 112rpx;
+    position: relative;
+    &:after {
+      position: absolute;
+      right: 0;
+      top: 30rpx;
+      content: '';
+      height: 170rpx;
+      border-right: 2rpx dashed rgba(185, 190, 189, 0.4);
+    }
+    &:nth-of-type(1) {
+      width: 134rpx;
+    }
+    &:nth-of-type(3) {
+      width: 104rpx; 
+    }
+    &:nth-of-type(4) {
+      &:after {
+        border: none;
+      } 
+    }
+    padding-top: 28rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 500;
+    view:nth-of-type(1) {
+      font-size: 12rpx;
+      color: #2B2F3A;
+      line-height: 16rpx;
+    }
+    view:nth-of-type(2) {
+      font-size: 10rpx;
+      color: #B9BEBD;
+      line-height: 14rpx;
+    }
+    view:nth-of-type(3) {
+      font-size: 14rpx;
+      color: #268E9B;
+      line-height: 18rpx;
+      height: 18rpx;
+      margin-top: 6rpx;
+      margin-bottom: 34rpx;
+    }
+    image {
+      width: 48rpx;
+      height: 48rpx;
+    }
+  }
 }
 .footer {
   width: 100%;

@@ -7,10 +7,12 @@
         <image src="/assets/icon_share.svg" />
         <view class="lineHeight">分享</view>
       </button>
-      <view wx:if="{{ hasJoined }}" class="default-btn check-btn" @tap="handlePushToDetail">已报名，点击查看</view>
-      <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
-        <view slot="userinfo" class="default-btn join-in-btn">立即参加</view>
-      </FormIdButton>
+      <view class="join-btn">
+        <view wx:if="{{ hasJoined }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
+        <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
+          <view slot="userinfo" class="default-btn">立即参加</view>
+        </FormIdButton>
+      </view>
     </view>
   </view>
 </template>
@@ -88,6 +90,7 @@ export default class Index extends wepy.page {
   .share-btn {
     width: 92rpx;
     height: 92rpx;
+    background: #D8D8D8;
     margin-right: 18rpx;
     display: flex!important;
     flex-direction: column;
@@ -103,7 +106,7 @@ export default class Index extends wepy.page {
       margin-top: 6rpx;
     }
   }
-  .btn-yellow {
+  .join-btn {
     flex: 1;
   }
 }

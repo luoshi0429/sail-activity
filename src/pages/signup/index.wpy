@@ -9,7 +9,7 @@
       <text>修改场馆信息</text>
       <image src="/assets/icon_gray_arrow.png" />
     </view>
-    <view class="special-panel" wx:if="{{ true }}">
+    <view class="special-panel" wx:if="{{ isShowSpecial }}">
       <view class="special-info">
         <view>参与8月8日当日10：00社区现场活动</view>
         <image @tap="handleCheckSpecial" src="{{ specialCheck ? '/assets/icon_special_checked.png' : '/assets/icon_special_check.png' }}" />
@@ -58,6 +58,7 @@ import wepy from 'wepy'
 import Api from '@/helper/api'
 import { connect } from 'wepy-redux'
 import PopBox from '@/components/pop-box'
+import Util from '@/components/util'
 
 @connect({
   app (state) {
@@ -142,7 +143,10 @@ export default class Index extends wepy.page {
     },
     // 报名
     handleSignup () {
-      if (!this.checked) return
+      if (Util.validatePhone(this.phone)) {
+        this.$broadcast('toast', { title: '请输入正确手机号' })
+        return
+      }
       const params = {
         gender: this.genders[this.genderIndex].id,
         gymId: this.gymId,
@@ -331,6 +335,7 @@ export default class Index extends wepy.page {
   font-size: 24rpx;
   color: #999;
   margin-top: 28rpx;
+  margin-bottom: 64rpx;
   .check-box {
     width: 24rpx;
     height: 24rpx;

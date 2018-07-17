@@ -25,6 +25,12 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const validatePhone = (phone) => {
+  // 手机号码校验规则
+  let valid_rule = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/
+  return valid_rule.test(phone)
+}
+
 /* 获取当前页url */
 function getCurrentPageUrl () {
   var pages = getCurrentPages() // 获取加载的页面
@@ -110,5 +116,6 @@ export default {
   parseUrlToArgs,
   qrCodeUrl,
   ASSETS_PREFIX,
-  createComparionFun
+  createComparionFun,
+  validatePhone
 }
