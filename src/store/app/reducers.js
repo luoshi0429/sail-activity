@@ -14,6 +14,7 @@ export default handleActions({
     lat: '',
     lng: ''
   },
-  cityId: '440100',
+  cityId: null,
+  defaultCityId: '440100',
   cityName: '广州'
 })

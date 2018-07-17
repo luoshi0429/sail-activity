@@ -176,18 +176,25 @@ export default class Index extends wepy.page {
     },
   }
   onRoute () {
-    if (!this.isLoading) {
-      this.handleGetLocation({
-        cityId: this.app.cityId
-      })
-    }
+    // console.log(this.isLoading, 'isLoading')
+    // console.log(456)
+    // if (!this.isLoading) {
+      // this.handleGetLocation({
+        // cityId: this.app.cityId
+      // })
+    // }
   }
   handleInitLocation () {
     let data = {
-      cityId: this.app.cityId
+      cityId: this.app.defaultCityId
     }
     if (this.app.location.lat) {
       data = this.app.location
+    }
+    if (this.app.cityId !== null) {
+      data = {
+        cityId: this.app.cityId
+      }
     }
     this.handleGetLocation(data)
   }
@@ -195,6 +202,7 @@ export default class Index extends wepy.page {
     Api.post('/api/info/about/activity').then(r => {
       this.activeInfo = r
       console.log(r, '=====')
+      console.log(this.activeInfo, '----a')
     }).catch((err) => {
       console.log(err, 'err')
     })
@@ -212,6 +220,7 @@ export default class Index extends wepy.page {
     })
   }
   onLoad () {
+    console.log(123)
     this.handleInitLocation()
     this.handelGetActicveInfo()
     console.log(this.user, '-0000000000')

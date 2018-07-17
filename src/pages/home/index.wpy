@@ -21,13 +21,22 @@
 import wepy from 'wepy'
 import FormIdButton from '@/components/form-id-button'
 import Api from '@/helper/api'
-
+import { connect } from 'wepy-redux'
+@connect({
+  app (state) {
+    return state.app
+  },
+  user (state) {
+    return state.user
+  }
+})
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '小象运动报名'
   }
   data = {
-    hasJoined: false
+    hasJoined: false,
+    isAuth: false
   }
 
   mixins = []
@@ -45,7 +54,6 @@ export default class Index extends wepy.page {
         ...res.userInfo,
         type: 1
       }
-      
       Api.saveUserInfo(data).then(r => {
         console.log(r, 'userinfo')
         this.$navigate('/pages/place/index')
@@ -53,6 +61,12 @@ export default class Index extends wepy.page {
     },
     cancelSaveUserInfo () {
       console.log('用户拒绝')
+    },
+    handlePushToDetail () {
+      this.$navigate(`/pages/signup/success?userJoinId=${this.user.memActivityId}`)
+    },
+    handelPushToPlace () {
+      this.$navigate('/pages/place/index')
     }
 
   }
@@ -60,7 +74,16 @@ export default class Index extends wepy.page {
   onRoute () {
   }
 
+  getUserInfo (cb) {
+    Api.getUserInfo(cb).catch(err => {
+      console.log(err, 'getUserInfo err')
+    })
+  }
   onLoad () {
+    this.getUserInfo(() => {
+      this.hasJoined = this.user.isJoinActivity === 1
+      this.$apply()
+    })
   }
 
   onShareAppMessage () {

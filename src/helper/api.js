@@ -92,13 +92,14 @@ function saveUserInfo (data) {
   })
 }
 
-function getUserInfo () {
+function getUserInfo (callback) {
   return fetch('api/user/info').then(r => {
     console.log(r, 'fetch userinfo')
     store.dispatch({
       type: UpdateUserInfoSuccess,
       payload: r
     })
+    callback && callback()
     return r
   })
 }

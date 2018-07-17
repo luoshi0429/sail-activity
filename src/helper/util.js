@@ -27,7 +27,9 @@ const formatNumber = n => {
 
 const validatePhone = (phone) => {
   // 手机号码校验规则
-  let valid_rule = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/
+  // let valid_rule = /^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$/
+  let valid_rule = /^1[0-9]\d{9}$/
+  console.log(phone, 'phone')
   return valid_rule.test(phone)
 }
 

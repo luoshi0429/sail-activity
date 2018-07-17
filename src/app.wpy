@@ -242,31 +242,7 @@ export default class extends wepy.app {
       navigationBarTitleText: '小象运动',
       navigationBarTextStyle: 'black'
     }
-    // tabBar: {
-    //   color: '#666',
-    //   selectedColor: '#dd1a22',
-    //   list: [
-    //     {
-    //       pagePath: 'pages/home/index',
-    //       text: '首页',
-    //       iconPath: '/assets/icon_home.png',
-    //       selectedIconPath: '/assets/icon_home_active.png'
-    //     },
-    //     {
-    //       pagePath: 'pages/superier/index',
-    //       text: '精品课',
-    //       iconPath: '/assets/icon_superier.png',
-    //       selectedIconPath: '/assets/icon_superier_active.png'
-    //     },
-    //     {
-    //       pagePath: 'pages/profile/index',
-    //       text: '我的',
-    //       iconPath: '/assets/icon_user.png',
-    //       selectedIconPath: '/assets/icon_user_active.png'
-    //     }
-    //   ]
-    // }
-  };
+  }
 
   globalData = {
     userInfo: null
@@ -279,38 +255,18 @@ export default class extends wepy.app {
   }
 
   onLaunch (options) {
-    // this.handleAuthUserInfo()
     this.getUserInfo()
   }
   onShow (options) {
     this.handleGetLocation()
   }
-
-  // 首次进入授权
-  handleAuthUserInfo () {
-    wepy.getUserInfo().then(r => {
-      console.log('user info: ', r)
-      // Api.post('api/user/save/info').then(r => {
-        // console.log(r, 'userinfo')
-      // })
-    }).catch(err => {
-      console.log('err user info: ', err)
-    })
-  }
   // 从后端获取用户信息
   getUserInfo () {
-    Api.fetch('api/user/info').then(r => {
-      console.log(r, 'fetch userinfo')
-      store.dispatch({
-        type: UpdateUserInfoSuccess,
-        payload: r
-      })
-    }).catch(err => {
-      console.log(err, 'getUserInfo err')
-    })
+    // Api.getUserInfo().catch(err => {
+      // console.log(err, 'getUserInfo err')
+    // })
   }
-
-  // 获取用户信息
+  获取用户信息
   handleGetLocation () {
     wepy.getLocation().then(r => {
       store.dispatch({

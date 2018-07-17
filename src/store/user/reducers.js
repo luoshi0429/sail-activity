@@ -32,5 +32,6 @@ export default handleActions({
   unionId: '',
   wechatName: '',
   nickName: '',
-  deny: true
+  deny: true,
+  isJoinActivity: 0
 })
