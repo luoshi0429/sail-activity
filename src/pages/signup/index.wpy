@@ -3,7 +3,7 @@
     <PopBox />
     <view class="activity-info">
       <image src="/assets/bg_signup.png" />
-      <view>北京市海淀区互联网创新中心</view>
+      <view>{{ gymName }}</view>
     </view>
     <view class="change-info" @tap="handleBackToChangeInfo">
       <text>修改场馆信息</text>
@@ -85,7 +85,8 @@ export default class Index extends wepy.page {
     phone: '',
     specialCheck: false,
     isShowSpecial: false,
-    gymId: ''
+    gymId: '',
+    gymName: ''
   }
 
   mixins = []
@@ -179,6 +180,7 @@ export default class Index extends wepy.page {
     this.genderIndex = Number(this.user.gender) === 1 ? 0 : 1
     this.gymId = options.gymId
     this.name = this.user.nickName
+    this.gymName = options.name
     console.log(this.user, '----')
     this.phone = this.user.mobile
     if (Number(options.isSpecialGym) === 1) {

@@ -22,11 +22,11 @@
                             <image src="{{item.smallIcon || '/assets/liangbing.png'}}" mode="aspectFill" />
                             <view class="name">{{ item.gymName }}</view>
                         </view>  -->
-                        <view wx:if="{{ user.mobile !== null }}" class='area-item' @tap="handlePushToSignup({{ item.isSpecialGym }}, {{ item.gymId }})">
+                        <view wx:if="{{ user.mobile !== null }}" class='area-item' @tap="handlePushToSignup({{ item.isSpecialGym }}, {{ item.gymId }}, {{ item.gymName }})">
                             <image src="/assets/icon-address.png" mode="aspectFill" />
                             <view class="name">{{ item.gymName }}</view>
                         </view>
-                        <view wx:else @tap="handleSaveGymData({{ item.isSpecialGym }}, {{ item.gymId }})">
+                        <view wx:else @tap="handleSaveGymData({{ item.isSpecialGym }}, {{ item.gymId }}, {{item.gymName}})">
                           <button open-type="getPhoneNumber" class='clean-btn area-item' @getphonenumber="handleGetPhoneNum">
                             <image src="/assets/icon-address.png" mode="aspectFill" />
                             <view class="name">{{ item.gymName }}</view>
@@ -143,7 +143,8 @@ export default class Index extends wepy.page {
         ]
       }
     ],
-    isLoading: false
+    isLoading: false,
+    gymName: ''
 
   };
 
@@ -152,8 +153,8 @@ export default class Index extends wepy.page {
   components = {};
 
   methods = {
-    handlePushToSignup (isSpecialGym, gymId) {
-      this.$navigate(`/pages/signup/index?isSpecialGym=${isSpecialGym}&gymId=${gymId}`)
+    handlePushToSignup (isSpecialGym, gymId, gymName) {
+      this.$navigate(`/pages/signup/index?isSpecialGym=${isSpecialGym}&gymId=${gymId}&name=${gymName}`)
     },
     handlePushToCity () {
       this.$navigate('/pages/place/province')
@@ -166,13 +167,14 @@ export default class Index extends wepy.page {
         phoneEncryptedData: e.detail.encryptedData
       }).then(() => {
         Api.getUserInfo().then(r => {
-          this.methods.handlePushToSignup.call(this, this.isSpecialGym, this.gymId) 
+          this.methods.handlePushToSignup.call(this, this.isSpecialGym, this.gymId, this.gymName)
         })
       })
     },
-    handleSaveGymData (isSpecialGym, gymId) {
+    handleSaveGymData (isSpecialGym, gymId, gymName) {
       this.isSpecialGym = isSpecialGym
       this.gymId = gymId
+      this.gymName = gymName
     },
   }
   onRoute () {

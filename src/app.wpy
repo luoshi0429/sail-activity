@@ -256,6 +256,7 @@ export default class extends wepy.app {
 
   onLaunch (options) {
     this.getUserInfo()
+    // Api.fetch('api/info/clear')
   }
   onShow (options) {
     this.handleGetLocation()
