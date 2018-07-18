@@ -40,20 +40,20 @@
         </view>
       </view>
     </view>
-    <view class="btn-wrapper">
-      <view class="activity-btn" @tap="handleCheckGameDetail">
-        <image src="/assets/icon_check_info.png" />
-        <view class="lineHeight">查看赛事详情</view>
-      </view>
-      <view class="activity-btn" @tap="handleShareToTimeline">
-        <image src="/assets/icon_share_timeline.png" />
-        <view class="lineHeight">分享至朋友圈</view>
-      </view>
-      <button open-type="share" class="activity-btn clean-btn">
-        <image src="/assets/icon_share_moment.png" />
-        <view class="lineHeight">分享给微信好友</view>
-      </button>
-    </view>
+    <!-- <view class="btn-wrapper"> -->
+    <!--   <view class="activity-btn" @tap="handleCheckGameDetail"> -->
+    <!--     <image src="/assets/icon_check_info.png" /> -->
+    <!--     <view class="lineHeight">查看赛事详情</view> -->
+    <!--   </view> -->
+    <!--   <view class="activity-btn" @tap="handleShareToTimeline"> -->
+    <!--     <image src="/assets/icon_share_timeline.png" /> -->
+    <!--     <view class="lineHeight">分享至朋友圈</view> -->
+    <!--   </view> -->
+    <!--   <button open-type="share" class="activity-btn clean-btn"> -->
+    <!--     <image src="/assets/icon_share_moment.png" /> -->
+    <!--     <view class="lineHeight">分享给微信好友</view> -->
+    <!--   </button> -->
+    <!-- </view> -->
     <view class="footer">
       <image class="footer-bg" src="/assets/bg_treadmill.png" />
       <view class="lineHeight microdistrict">{{ detail.commuityName }}</view>
