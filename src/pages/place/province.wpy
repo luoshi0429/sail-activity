@@ -78,8 +78,9 @@ export default class Index extends wepy.page {
           cityId
         }
       })
-      console.log(this.app, 'this.app')
-      this.$navigate('/pages/place/index')
+      // this.$navigate('/pages/place/index')
+      // 返回
+      wepy.navigateBack()
     }
   }
   handelGetActicveInfo () {

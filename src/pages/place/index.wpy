@@ -178,6 +178,7 @@ export default class Index extends wepy.page {
     },
   }
   onRoute () {
+    this.handleInitLocation()
     // console.log(this.isLoading, 'isLoading')
     // console.log(456)
     // if (!this.isLoading) {

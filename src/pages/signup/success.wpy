@@ -4,7 +4,8 @@
     <image class="success-icon" src="/assets/icon_signup_success.png" />
     <view class="lineHeight success-title">报名成功！</view>
     <view class="lineHeight game-countdown">距离比赛还有{{ detail.diffTime }}</view>
-    <view class="game-ticket">
+    <image class="game-ticket" src="{{ detail.pictureUrl }}" />
+    <!-- <view class="game-ticket">
       <image class="bg" src="/assets/bg_signup_success.png" />
       <view class="ticket-content">
         <view class="left">
@@ -39,7 +40,7 @@
           </view>
         </view>
       </view>
-    </view>
+    </view> -->
     <view class="btn-wrapper">
       <view class="activity-btn" @tap="handleCheckGameDetail">
         <image src="/assets/icon_check_info.png" />
@@ -77,7 +78,8 @@ import { connect } from 'wepy-redux'
 })
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: '小象运动报名'
+    navigationBarTitleText: '小象运动报名',
+    navigationStyle: 'custom'
   }
   data = {
     previewUrl: '',
@@ -91,13 +93,29 @@ export default class Index extends wepy.page {
 
   methods = {
     handleCheckGameDetail () {
-      this.$redirect('/pages/home/index')
+      // this.$redirect('/pages/home/index')
+      wepy.reLaunch({
+        url: '/pages/home/index'
+      })
     },
     handleShareToTimeline () {
-      wx.getSetting({
-        success: (res) => {
+      console.log('timeline.....')
+      wepy.getSetting().then((res) => {
+          console.log(res, '11111---')
           if (!res.authSetting['scope.writePhotosAlbum'] && typeof res.authSetting['scope.writePhotosAlbum'] === 'boolean') {
-            wx.openSetting({})
+            this.$broadcast('confirm', {
+              title: '提示',
+              subTitle: '',
+              confirm: {
+                title: '去设置',
+                onTap: (close) => {
+                  close()
+                  wepy.openSetting()
+                }
+                // type: 'setting'
+              },
+              cancel: {}
+            })
           } else {
             wepy.showLoading({
               title: '正在生成门票'
@@ -124,7 +142,7 @@ export default class Index extends wepy.page {
                   })
                 }).catch((err) => {
                   console.log(err, 'err')
-                  wx.showToast({
+                  this.$broadcast.call(this, 'toast', {
                     title: '保存失败',
                     duration: 2000
                   })
@@ -132,9 +150,11 @@ export default class Index extends wepy.page {
               }).catch(() => {
                 wepy.hideLoading()
               })
+            }).catch((err) => {
+              wepy.hideLoading()
+              this.$broadcast('toast', { title: err.msg })
             })
           }
-        }
       })
       
     }
@@ -157,7 +177,7 @@ export default class Index extends wepy.page {
   onShareAppMessage () {
     const params = {
       title: '我已报名参加了 XXX ，你也一起来参加吧',
-      imageUrl: 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg',
+      imageUrl: '/assets/share_ticket.svg',// 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg',
       path: '/pages/home/index'
     }
     return params
@@ -186,8 +206,9 @@ export default class Index extends wepy.page {
   margin: 20rpx 0 8rpx;
 }
 .game-ticket {
-  width: 100%;
+  width: 690rpx;
   height: 380rpx;
+  margin: 24rpx 30rpx 0;
   position: relative;
   .bg {
     width: 730rpx;

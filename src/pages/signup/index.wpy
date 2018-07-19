@@ -158,6 +158,10 @@ export default class Index extends wepy.page {
       console.log(params)
       Api.post('api/info/user/join', params).then(r => {
         console.log(r, 'signup')
+        // 跳转到报名成功页面，但是从报名成功页面后退需要回到首页
+      wepy.navigateBack({
+        delta: 2
+      })
         this.$navigate(`/pages/signup/success?userJoinId=${r.userJoinId}`)
       }).catch(err => {
         console.log('err', err)

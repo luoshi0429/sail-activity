@@ -1,56 +1,57 @@
 <template>
   <view>
-    <view class="toast" wx:if="{{isToast}}">
-      <image wx:if="{{item.icon ==='fail'}}" src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/icon_fail.png' />
+    <view class="toast" wx:if="{{ isToast }}">
+      <image wx:if="{ item.icon ==='fail' }}" src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/icon_fail.png' />
       <view>{{ item.title }}</view>
     </view>
     <view class="alert confirm" wx:if="{{isConfirm || isAlert}}">
       <view class="box">
-        <view class='content {{item.theme}}'>
-          <view class='title' wx:if="{{item.title}}">{{ item.title }}</view>
-          <view class='image' wx:if="{{item.image}}">
-            <image src="{{item.image}}" />
+        <view class='content {{ item.theme }}'>
+          <view class='title' wx:if="{{ item.title }}">{{ item.title }}</view>
+          <view class='image' wx:if="{{ item.image }}">
+            <image src="{{ item.image }}" />
           </view>
-          <view class='subTitle' style="{{ item.subtitleStyle }}"  wx:if="{{item.subTitle}}"><text decode>{{ item.subTitle }}</text></view>
+          <view class='subTitle' style="{{ item.subtitleStyle }}"  wx:if="{{ item.subTitle }}"><text decode>{{ item.subTitle }}</text></view>
         </view>
-        <block wx:if='{{item.extra && item.extra.length}}'>
-          <view class='extra' style='{{item.extra.wrapperStyle}}' wx:for='{{item.extra}}' wx:for-item='extra' wx:key='extraIndex'>
-            <view class='bg {{extra.theme}}'>
+        <block wx:if='{{ item.extra && item.extra.length }}'>
+          <view class='extra' style='{{ item.extra.wrapperStyle }}' wx:for='{{ item.extra }}' wx:for-item='extra' wx:key='extraIndex'>
+            <view class='bg {{ extra.theme }}'>
               <block wx:for="{{ extra.list }}" wx:for-item='extraItem' wx:key='extraItemIndex'>
-                <text wx:if="{{extraItem.type ==='text'}}" style="{{extraItem.style}}">{{extraItem.text}}</text>
-                <image wx:if="{{extraItem.type ==='image'}}" src="{{extraItem.src}}" style="{{extraItem.style}}" />
+                <text wx:if="{{ extraItem.type ==='text' }}" style="{{ extraItem.style }}">{{extraItem.text}}</text>
+                <image wx:if="{{ extraItem.type ==='image' }}" src="{{ extraItem.src }}" style="{{ extraItem.style }}" />
               </block>
             </view>
           </view>
         </block>
-        <view class='buttons' wx:if="{{item.cancel || item.confirm}}">
-            <view class='cancel-button {{item.cancel.theme}}' @tap='cancelConfirm' wx:if='{{item.cancel && isConfirm}}'>
+        <view class='buttons' wx:if="{{ item.cancel || item.confirm }}">
+            <view class='cancel-button {{ item.cancel.theme }}' @tap='cancelConfirm' wx:if='{{ item.cancel && isConfirm }}'>
               <CancelConfirmFormIdButton>
-                <view class='btn-inner' slot='common'>{{item.cancel.text ||'取消'}}</view>
+                <view class='btn-inner' slot='common'>{{ item.cancel.text ||'取消' }}</view>
               </CancelConfirmFormIdButton>
             </view>
             <view class='confirm-button'>
-              <block wx:if="{{item.confirm.type === 'userinfo' && item.confirm.type !=='share'}}">
+              <block wx:if="{{ item.confirm.type === 'userinfo' && item.confirm.type !=='share' }}">
                 <OkConfirmFormIdButton :type='userinfo' @saveUserInfo.user='onSave' @cancelSaveUserInfo.user='onCancelSave'>
-                  <view class='btn-inner' slot='userinfo'>{{item.confirm.text || '确认'}}</view>
+                  <view class='btn-inner' slot='userinfo'>{{ item.confirm.text || '确认' }}</view>
                 </OkConfirmFormIdButton>
               </block>
-              <block wx:if="{{item.confirm.type !== 'userinfo' && item.confirm.type === 'share'}}">
+              <block wx:if="{{ item.confirm.type !== 'userinfo' && item.confirm.type === 'share' }}">
                 <view @tap="onConfirm">
-                  <block wx:if="{{item.confirm.shareType === 'unlock'}}">
+                  <block wx:if="{{ item.confirm.shareType === 'unlock' }}">
                     <shareConfirmFormIdButton shareType='unlock' :type='share'>
-                      <view class='btn-inner' slot='share'>{{item.confirm.text || '确认'}}</view>
+                      <view class='btn-inner' slot='share'>{{ item.confirm.text || '确认' }}</view>
                     </shareConfirmFormIdButton>
                   </block>
                   <block wx:else>
                     <shareConfirmFormIdButton :type='share'>
-                      <view class='btn-inner' slot='share'>{{item.confirm.text || '确认'}}</view>
+                      <view class='btn-inner' slot='share'>{{ item.confirm.text || '确认' }}</view>
                     </shareConfirmFormIdButton>
                   </block>
                 </view>
               </block>
-              <block wx:if="{{item.confirm.type !== 'userinfo' && item.confirm.type !== 'share'}}">
-                  <view class='btn-inner' slot='userinfo' @tap='onConfirm'>{{item.confirm.text || '确认'}}</view>
+              <block wx:if="{{ item.confirm.type !== 'userinfo' && item.confirm.type !== 'share' }}">
+                <button wx:if="{{ item.confirm.type === 'setting' }}" class="btn-inner" open-type='openSetting'>去设置</button>
+                <view wx:else class='btn-inner' slot='userinfo' @tap='onConfirm'>{{item.confirm.text || '确认'}}</view>
               </block>
             </view>
         </view>
@@ -115,6 +116,7 @@ export default class extends wepy.component {
     confirm (item) {
       clearTimeout(this.timer)
       this.item = item
+      console.log('confirm: ', item)
       this.resetOtherPop('isConfirm')
     },
     notification (item) {
@@ -421,5 +423,8 @@ export default class extends wepy.component {
     color: #060606;
     margin-top: 16rpx;
   }
+}
+.btn-setting {
+
 }
 </style>
