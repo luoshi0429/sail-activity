@@ -1,6 +1,6 @@
 <template>
   <view class="home-page">
-    home page
+    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532008367120.jpg" />
     
     <view class="footer">
       <button open-type="share" class="clean-btn share-btn">
@@ -8,10 +8,13 @@
         <view class="lineHeight">分享</view>
       </button>
       <view class="join-btn">
-        <view wx:if="{{ hasJoined }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
-        <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
-          <view slot="userinfo" class="default-btn">立即参加</view>
-        </FormIdButton>
+        <block wx:if="{{ !isLoading }}">
+          <view wx:if="{{ user.isJoinActivity }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
+          <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
+            <view slot="userinfo" class="default-btn">立即参加</view>
+          </FormIdButton>
+        </block>
+        <view class="loading"></view>
       </view>
     </view>
   </view>
@@ -22,6 +25,7 @@ import wepy from 'wepy'
 import FormIdButton from '@/components/form-id-button'
 import Api from '@/helper/api'
 import { connect } from 'wepy-redux'
+
 @connect({
   app (state) {
     return state.app
@@ -35,8 +39,8 @@ export default class Index extends wepy.page {
     navigationBarTitleText: '小象运动报名'
   }
   data = {
-    hasJoined: false,
-    isAuth: false
+    isAuth: false,
+    isLoading: true
   }
 
   mixins = []
@@ -72,34 +76,45 @@ export default class Index extends wepy.page {
   }
 
   onRoute () {
-  }
-
-  getUserInfo (cb) {
-    Api.getUserInfo(cb).catch(err => {
-      console.log(err, 'getUserInfo err')
+    if (this.isLoading) return
+    this.isLoading = true
+    this.$apply()
+    Api.getUserInfo().then(r => {
+      this.isLoading = false
+      this.$apply()
     })
   }
-  onLoad () {
-    this.getUserInfo(() => {
-      this.hasJoined = this.user.isJoinActivity === 1
+
+  onLoad (options) {
+    Api.gotUserInfo().then(r => {
+      this.isLoading = false
+      this.$apply()
+    }).catch(() => {
+      this.isLoading = false
       this.$apply()
     })
   }
 
   onShareAppMessage () {
     const params = {}
-    if (this.hasJoined) {
-      params.title = '我已报名参加了xxx，你也一起来参加吧'
+    if (this.user.isJoinActivity) {
+      params.imageUrl = '/assets/share_ticket.jpg'
+      params.title = '送你一张报名门票，和我一起参加全民健身 益童奔跑'
     } else {
-      params.title = '我正在报名参加了xxx，你也一起来参加吧'
+      params.imageUrl = '/assets/share_app.jpg'
+      params.title = '我正在参加全民健身 益童奔跑，快来和我一起参与'
     }
     return params
   }
 }
 </script>
 <style lang="less" scoped>
-.home-page {}
-
+.home-page {
+  padding-bottom: 108rpx;
+}
+.activity-image {
+  width: 100%;
+}
 .footer {
   background: #fff;
   position: fixed;

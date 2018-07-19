@@ -104,8 +104,8 @@ export default class Index extends wepy.page {
           console.log(res, '11111---')
           if (!res.authSetting['scope.writePhotosAlbum'] && typeof res.authSetting['scope.writePhotosAlbum'] === 'boolean') {
             this.$broadcast('confirm', {
-              title: '提示',
-              subTitle: '',
+              title: '未开启权限',
+              subTitle: '请先前往"设置"开启相册权限',
               confirm: {
                 title: '去设置',
                 onTap: (close) => {
@@ -176,8 +176,8 @@ export default class Index extends wepy.page {
 
   onShareAppMessage () {
     const params = {
-      title: '我已报名参加了 XXX ，你也一起来参加吧',
-      imageUrl: '/assets/share_ticket.svg',// 'http://pic34.photophoto.cn/20150202/0005018384491898_b.jpg',
+      title: '送你一张报名门票，和我一起参加全民健身 益童奔跑',
+      imageUrl: '/assets/share_ticket.jpg',
       path: '/pages/home/index'
     }
     return params

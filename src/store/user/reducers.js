@@ -33,5 +33,6 @@ export default handleActions({
   wechatName: '',
   nickName: '',
   deny: true,
-  isJoinActivity: 0
+  isJoinActivity: 0,
+  memActivityId: ''
 })

@@ -59,6 +59,8 @@ import Api from '@/helper/api'
 import { connect } from 'wepy-redux'
 import PopBox from '@/components/pop-box'
 import Util from '@/helper/util'
+import { UpdateUserInfoSuccess } from '@/store/actions'
+import store from '@/store/index'
 
 @connect({
   app (state) {
@@ -144,7 +146,6 @@ export default class Index extends wepy.page {
     },
     // 报名
     handleSignup () {
-      console.log(this.phone, '0000000000000')
       if (!Util.validatePhone(this.phone)) {
         this.$broadcast('toast', { title: '请输入正确手机号' })
         return
@@ -155,16 +156,16 @@ export default class Index extends wepy.page {
         mobile: this.phone,
         userName: this.name
       }
-      console.log(params)
       Api.post('api/info/user/join', params).then(r => {
-        console.log(r, 'signup')
-        // 跳转到报名成功页面，但是从报名成功页面后退需要回到首页
-      wepy.navigateBack({
-        delta: 2
-      })
+        store.dispatch({
+          type: UpdateUserInfoSuccess,
+          payload: {
+            isJoinActivity: 1,
+            memActivityId: r.userJoinId
+          }
+        })
         this.$navigate(`/pages/signup/success?userJoinId=${r.userJoinId}`)
       }).catch(err => {
-        console.log('err', err)
         this.$broadcast('toast', {
           title: err.msg
         })
@@ -177,7 +178,13 @@ export default class Index extends wepy.page {
     }
   }
 
-  onRoute () {}
+  onRoute () {
+    if (this.user.isJoinActivity) {
+      wepy.reLaunch({
+        url: '/pages/home/index'
+      })
+    }
+  }
 
   onLoad (options) {
     console.log(options)

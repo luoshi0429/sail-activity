@@ -204,8 +204,7 @@ export default class Index extends wepy.page {
   handelGetActicveInfo () {
     Api.post('/api/info/about/activity').then(r => {
       this.activeInfo = r
-      console.log(r, '=====')
-      console.log(this.activeInfo, '----a')
+      this.$apply()
     }).catch((err) => {
       console.log(err, 'err')
     })
@@ -215,11 +214,12 @@ export default class Index extends wepy.page {
     Api.post('api/info/about/gym', data).then(r => {
       console.log(r, 'gym')
       this.gymList = r
-      this.$apply()
       this.isLoading = false
+      this.$apply()
       console.log(this.gymList, '-----')
     }).catch(() => {
       this.isLoading = false
+      this.$apply()
     })
   }
   onLoad () {

@@ -210,6 +210,10 @@ page {
 .fadeOutDown{
     animation: fadeOutDown ease .4s forwards;
 }
+
+.loading {
+
+}
 </style>
 
 <script>
@@ -218,7 +222,7 @@ import 'wepy-async-function'
 import { setStore, connect } from 'wepy-redux'
 import store from '@/store'
 import Api from '@/helper/api'
-import { SaveLocation, UpdateUserInfoSuccess } from '@/store/actions'
+import { SaveLocation } from '@/store/actions'
 
 setStore(store)
 @connect({
@@ -255,7 +259,9 @@ export default class extends wepy.app {
   }
 
   onLaunch (options) {
-    this.getUserInfo()
+    // this.handleAuthUserInfo()
+    // this.getUserInfo()
+    Api.getUserInfo()
     // Api.fetch('api/info/clear')
   }
   onShow (options) {
@@ -267,7 +273,7 @@ export default class extends wepy.app {
       // console.log(err, 'getUserInfo err')
     // })
   }
-  获取用户信息
+  // 获取用户信息
   handleGetLocation () {
     wepy.getLocation().then(r => {
       store.dispatch({
