@@ -99,64 +99,62 @@ export default class Index extends wepy.page {
       })
     },
     handleShareToTimeline () {
-      console.log('timeline.....')
       wepy.getSetting().then((res) => {
-          console.log(res, '11111---')
-          if (!res.authSetting['scope.writePhotosAlbum'] && typeof res.authSetting['scope.writePhotosAlbum'] === 'boolean') {
-            this.$broadcast('confirm', {
-              title: '未开启权限',
-              subTitle: '请先前往"设置"开启相册权限',
-              confirm: {
-                title: '去设置',
-                onTap: (close) => {
-                  close()
-                  wepy.openSetting()
-                }
+        console.log(res, '11111---')
+        if (!res.authSetting['scope.writePhotosAlbum'] && typeof res.authSetting['scope.writePhotosAlbum'] === 'boolean') {
+          this.$broadcast('confirm', {
+            title: '未开启权限',
+            subTitle: '请先前往"设置"开启相册权限',
+            confirm: {
+              title: '去设置',
+              onTap: (close) => {
+                close()
+                wepy.openSetting()
+              }
                 // type: 'setting'
-              },
-              cancel: {}
-            })
-          } else {
-            wepy.showLoading({
-              title: '正在生成门票'
-            })
-            Api.fetch('api/info/share').then(r => {
-              console.log(r)
-              wepy.downloadFile({
-                url: r
-              }).then(res => {
-                wepy.hideLoading()
-                const tmpPath = res.tempFilePath
-                wepy.saveImageToPhotosAlbum({
-                  filePath: tmpPath
-                }).then(() => {
-                  this.$broadcast.call(this, 'toast', {
-                    title: '门票已保存至系统相册',
-                    duration: 1500,
-                    onClose: () => {
-                      wepy.previewImage({
-                        content: tmpPath,
-                        urls: [tmpPath]
-                      })
-                    }
-                  })
-                }).catch((err) => {
-                  console.log(err, 'err')
-                  this.$broadcast.call(this, 'toast', {
-                    title: '保存失败',
-                    duration: 2000
-                  })
-                })
-              }).catch(() => {
-                wepy.hideLoading()
-              })
-            }).catch((err) => {
+            },
+            cancel: {}
+          })
+        } else {
+          wepy.showLoading({
+            title: '正在生成门票'
+          })
+          Api.fetch('api/info/share').then(r => {
+            console.log(r)
+            wepy.downloadFile({
+              url: r
+            }).then(res => {
               wepy.hideLoading()
-              this.$broadcast('toast', { title: err.msg })
+              const tmpPath = res.tempFilePath
+              wepy.saveImageToPhotosAlbum({
+                filePath: tmpPath
+              }).then(() => {
+                this.$broadcast('toast', {
+                  title: '门票已保存至系统相册',
+                  duration: 1500,
+                  onClose: () => {
+                    wepy.previewImage({
+                      content: tmpPath,
+                      urls: [tmpPath]
+                    })
+                  }
+                })
+              }).catch((err) => {
+                console.log(err, 'err')
+                this.$broadcast('toast', {
+                  title: '保存失败',
+                  duration: 2000
+                })
+              })
+            }).catch(() => {
+              wepy.hideLoading()
             })
-          }
+          }).catch((err) => {
+            wepy.hideLoading()
+            this.$broadcast('toast', { title: err.msg })
+          })
+        }
       })
-      
     }
   }
 

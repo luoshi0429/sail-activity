@@ -36,7 +36,9 @@
         <image wx:if="{{ phoneDisabled }}" src="/assets/icon_input.svg" @tap="handlePhoneFocus" />
       </view>
     </view>
-    <view class="default-btn {{ checked ? '' : 'disable-btn' }}" @tap="handleSignup">报名</view>
+    <FormIdButton @saveFormId.user="handleSignup">
+      <view slot="common" class="default-btn {{ checked ? '' : 'disable-btn' }}">报名</view>
+    </FormIdButton>
     <view class="disclaimer">
       <image class="check-box" src="{{ checked ? '/assets/icon_checkbox_checked.png' : '/assets/icon_checkbox.png' }}" @tap="handleCheckBox" />
       我已阅读并同意<navigator url="/pages/signup/disclaimer">免责声明</navigator>
@@ -61,6 +63,7 @@ import PopBox from '@/components/pop-box'
 import Util from '@/helper/util'
 import { UpdateUserInfoSuccess } from '@/store/actions'
 import store from '@/store/index'
+import FormIdButton from '@/components/form-id-button'
 
 @connect({
   app (state) {
@@ -93,7 +96,7 @@ export default class Index extends wepy.page {
 
   mixins = []
 
-  components = { PopBox }
+  components = { PopBox, FormIdButton }
 
   methods = {
     // 修改场馆信息
@@ -146,6 +149,7 @@ export default class Index extends wepy.page {
     },
     // 报名
     handleSignup () {
+      if (!this.checked) return
       if (!Util.validatePhone(this.phone)) {
         this.$broadcast('toast', { title: '请输入正确手机号' })
         return
