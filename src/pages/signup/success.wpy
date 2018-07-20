@@ -99,9 +99,7 @@ export default class Index extends wepy.page {
       })
     },
     handleShareToTimeline () {
-      console.log('timeline.....')
       wepy.getSetting().then((res) => {
-          console.log(res, '11111---')
           if (!res.authSetting['scope.writePhotosAlbum'] && typeof res.authSetting['scope.writePhotosAlbum'] === 'boolean') {
             this.$broadcast('confirm', {
               title: '未开启权限',
@@ -130,7 +128,7 @@ export default class Index extends wepy.page {
                 wepy.saveImageToPhotosAlbum({
                   filePath: tmpPath
                 }).then(() => {
-                  this.$broadcast.call(this, 'toast', {
+                  this.$broadcast('toast', {
                     title: '门票已保存至系统相册',
                     duration: 1500,
                     onClose: () => {
@@ -142,7 +140,7 @@ export default class Index extends wepy.page {
                   })
                 }).catch((err) => {
                   console.log(err, 'err')
-                  this.$broadcast.call(this, 'toast', {
+                  this.$broadcast('toast', {
                     title: '保存失败',
                     duration: 2000
                   })
@@ -156,7 +154,6 @@ export default class Index extends wepy.page {
             })
           }
       })
-      
     }
   }
 

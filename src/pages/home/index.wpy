@@ -3,19 +3,19 @@
     <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532008367120.jpg" />
     
     <view class="footer">
-      <button open-type="share" class="clean-btn share-btn">
-        <image src="/assets/icon_share.svg" />
-        <view class="lineHeight">分享</view>
-      </button>
-      <view class="join-btn">
-        <block wx:if="{{ !isLoading }}">
+      <block wx:if="{{ !isLoading }}">
+        <button open-type="share" class="clean-btn share-btn">
+          <image src="/assets/icon_share.svg" />
+          <view class="lineHeight">分享</view>
+        </button>
+        <view class="join-btn">
           <view wx:if="{{ user.isJoinActivity }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
           <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
             <view slot="userinfo" class="default-btn">立即参加</view>
           </FormIdButton>
-        </block>
-        <view class="loading"></view>
-      </view>
+        </view>
+      </block>
+      <view wx:else class="loading"></view>
     </view>
   </view>
 </template>
@@ -116,7 +116,7 @@ export default class Index extends wepy.page {
   width: 100%;
 }
 .footer {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
   position: fixed;
   bottom: 0;
   left: 0;

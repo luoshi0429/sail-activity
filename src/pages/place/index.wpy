@@ -70,83 +70,10 @@ export default class Index extends wepy.page {
     activeInfo: {},
     isSpecialGym: '',
     gymId: '',
-    gymList: [
-      {
-        regionName: '天河区',
-        infos: [
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          },
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          },
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          }
-        ]
-      },
-      {
-        regionName: '黄浦区',
-        infos: [
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          },
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          }
-        ]
-      },
-      {
-        regionName: '萝岗区',
-        infos: [
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          },
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          },
-          {
-            gymId: '1',
-            gymName: '保利城花园',
-            isSpecialGym: 0,
-            normalIcon: '',
-            smallIcon: '/assets/liangbing.png'
-          }
-        ]
-      }
-    ],
+    gymList: [],
     isLoading: false,
     gymName: ''
-
-  };
+  }
 
   mixins = [];
 

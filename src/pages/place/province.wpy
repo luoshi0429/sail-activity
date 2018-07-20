@@ -47,22 +47,7 @@ export default class Index extends wepy.page {
   }
   data = {
     activeInfo: {},
-    cityList: [
-      {
-        provinceName: '北京',
-        cities: [
-          {
-            cityId: '11111',
-            cityName: '房山区'
-          },
-          {
-            cityId: '222',
-            cityName: '海淀区区',
-            selected: false
-          }
-        ]
-      }
-    ]
+    cityList: []
   }
 
   mixins = []

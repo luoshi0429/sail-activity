@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="toast" wx:if="{{ isToast }}">
-      <image wx:if="{ item.icon ==='fail' }}" src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/icon_fail.png' />
+      <!-- <image wx:if="{ item.icon ==='fail' }}" src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/icon_fail.png' /> -->
       <view>{{ item.title }}</view>
     </view>
     <view class="alert confirm" wx:if="{{isConfirm || isAlert}}">
@@ -306,23 +306,23 @@ export default class extends wepy.component {
       border-radius: 80rpx;
       .btn-inner {
         background: #FFFFFF;
-        border: 2rpx solid #CE0000;
-        color: #CE0000;
+        border: 2rpx solid #555;
+        color: #555;
         font-size: 32rpx;
       }
     }
     .cancel-button.red{
       .btn-inner {
         color: #CE0000;
-        border: 1px solid #CE0000;
+        border: 1px solid #555;
       }
     }
     .confirm-button {
       flex: 4;
       border-radius: 80rpx;
-      box-shadow: 0 10rpx 14px 0 rgba(206,0,0,0.20);
+      // box-shadow: 0 10rpx 14px 0 rgba(206,0,0,0.20);
       .btn-inner {
-        background: #CE0000;
+        background-image: linear-gradient(24deg, #5BC562 0%, #ACD050 100%);
         color: #fff;
         font-size: 32rpx;
       }
