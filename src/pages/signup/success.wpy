@@ -58,7 +58,8 @@
     <view class="footer">
       <image class="footer-bg" src="/assets/bg_treadmill.png" />
       <view class="lineHeight microdistrict">{{ detail.commuityName }}</view>
-      <view class="lineHeight tip">截图并保存，打开微信中的扫一扫识别二维码</view>
+      <view class="lineHeight tip" style="margin-bottom:20rpx">截图并保存，打开微信中的扫一扫识别二维码</view>
+      <view class="lineHeight tip">或者加客服微信：xiaoxiangyundong001</view>
       <view class='qrcode-bg'>
         <image class="qrcode-image" src="{{ detail.commuityIcon }}" mode="aspectFill" />
       </view>

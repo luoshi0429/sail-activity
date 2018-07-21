@@ -156,12 +156,13 @@ export default class Index extends wepy.page {
       }
       if (this.isSignup) return
       this.isSignup = true
-      const params = {
+      let params = {
         gender: this.genders[this.genderIndex].id,
         gymId: this.gymId,
         mobile: this.phone,
         userName: this.name,
-        formId: formId
+        formId: formId,
+        type: this.specialCheck ? 1 : 0
       }
       Api.post('api/info/user/join', params).then(r => {
         store.dispatch({
