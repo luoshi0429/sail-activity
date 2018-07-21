@@ -59,7 +59,9 @@
       <image class="footer-bg" src="/assets/bg_treadmill.png" />
       <view class="lineHeight microdistrict">{{ detail.commuityName }}</view>
       <view class="lineHeight tip">截图并保存，打开微信中的扫一扫识别二维码</view>
-      <image @tap="handlePreviewQrcode" class="qrcode-image" src="{{ detail.commuityIcon }}" mode="aspectFill" />
+      <view class='qrcode-bg'>
+        <image class="qrcode-image" src="{{ detail.commuityIcon }}" mode="aspectFill" />
+      </view>
     </view>
     <!-- <image mode="aspectFit" class="preview" src="{{ previewUrl }}" wx:if="{{showPreview}}" /> -->
   </view>
@@ -92,13 +94,6 @@ export default class Index extends wepy.page {
   components = { PopBox }
 
   methods = {
-    handlePreviewQrcode () {
-      console.log('-----')
-      wepy.previewImage({
-        content: this.detail.commuityIcon,
-        urls: [this.detail.commuityIcon]
-      })
-    },
     handleCheckGameDetail () {
       // this.$redirect('/pages/home/index')
       wepy.reLaunch({
@@ -181,7 +176,7 @@ export default class Index extends wepy.page {
 
   onShareAppMessage () {
     return {
-      title: '送你一张报名门票，和我一起参加全民健身 益童奔跑',
+      title: '送你一张报名门票，和我一起参加 5.20 km 益童公益跑',
       imageUrl: '/assets/share_ticket.png',
       // imageUrl: '/assets/icon-address.png',
       path: '/pages/home/index'
@@ -211,6 +206,7 @@ export default class Index extends wepy.page {
   margin: 20rpx 0 8rpx;
 }
 .game-ticket {
+  box-shadow: 0 2rpx 20rpx 0 rgba(0, 0, 0, 0.1) ;
   width: 690rpx;
   height: 380rpx;
   margin: 24rpx 30rpx 0;
@@ -329,10 +325,15 @@ export default class Index extends wepy.page {
     color: #999;
     margin-bottom: 48rpx;
   }
-  .qrcode-image {
-    width: 280rpx;
-    height: 280rpx;
+  .qrcode-bg {
+    background: #fff;
+    padding: 20rpx;
+    .qrcode-image {
+      width: 280rpx;
+      height: 280rpx;
+    }
   }
+  
 }
 .btn-wrapper {
   width: 100%;

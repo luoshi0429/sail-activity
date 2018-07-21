@@ -35,7 +35,9 @@
 <script>
 import wepy from 'wepy'
 export default class extends wepy.page {
-
+  config = {
+    navigationBarTitleText: '免责声明'
+  }
 }
 </script>
 

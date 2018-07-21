@@ -41,7 +41,7 @@ import { UpdateUserInfoSuccess } from '@/store/actions'
 })
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: '小象运动报名'
+    navigationBarTitleText: '5.20 km 益童公益跑'
   };
   data = {
     isAuth: false,
@@ -120,10 +120,10 @@ export default class Index extends wepy.page {
     if (this.user.isJoinActivity) {
       params.imageUrl = '/assets/share_ticket.png'
       // params.imageUrl = '/assets/icon-address.png'
-      params.title = '送你一张报名门票，和我一起参加全民健身 益童奔跑'
+      params.title = '送你一张报名门票，和我一起参加 5.20 km 益童公益跑'
     } else {
       params.imageUrl = '/assets/share_app.jpg'
-      params.title = '我正在参加全民健身 益童奔跑，快来和我一起参与'
+      params.title = '我正在参加 5.20 km 益童公益跑，快来和我一起参与'
     }
     console.log(params)
     return params

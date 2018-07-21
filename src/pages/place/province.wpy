@@ -1,6 +1,7 @@
 <template>
   <view class="province-page {{user.isIphoneX ? 'iphonex' : ''}}">
     <view class="header">
+      <image class='header-bg' src="/assets/black_bg.png" />
       <view class="activity-card">
         <image class="avatar" src="{{activeInfo.activityIcon}}" />
         <view class="activity-title">{{activeInfo.name}}</view>
@@ -43,7 +44,7 @@ import store from '@/store'
 
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: '场地选择'
+    navigationBarTitleText: '城市选择'
   }
   data = {
     activeInfo: {},
@@ -104,6 +105,7 @@ export default class Index extends wepy.page {
   // flex-direction: column;
   // height: 100%;
   // overflow: hidden;
+  padding-bottom: 30rpx;
   .header {
     // background: #373737;
     height: 476rpx;
@@ -113,18 +115,27 @@ export default class Index extends wepy.page {
     left: 0;
     right: 0;
     // overflow: hidden;
-    &:after {
-      content: '123123';
-      width: 140%;
-      height: 416rpx;
+    .header-bg {
       position: absolute;
-      left: -20%;
-      top:0;
-      z-index: 0;
-      border-radius: 0 0 50% 50%;
-      // // background:linear-gradient(#2CBAF9,#04A9F4);
-      background: #373737;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 416rpx;
+      width: 100%;
+      z-index: -1;
     }
+    // &:after {
+      // content: '123123';
+      // width: 140%;
+      // height: 416rpx;
+      // position: absolute;
+      // left: -20%;
+      // top:0;
+      // z-index: 0;
+      // border-radius: 0 0 50% 50%;
+      // // // background:linear-gradient(#2CBAF9,#04A9F4);
+      // background: #373737;
+    // }
   }
   .activity-card {
     position: relative;
@@ -142,6 +153,7 @@ export default class Index extends wepy.page {
       width: 160rpx;
       height: 160rpx;
       border-radius: 50%;
+      border: 4rpx solid #E8E8E8;
     }
     .activity-title {
       font-size: 32rpx;

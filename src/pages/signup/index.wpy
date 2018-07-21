@@ -1,5 +1,5 @@
 <template>
-  <view class="signup-page {{user.isIphoneX ? 'iphonex' : ''}}">
+  <view class="signup-page {{user.isIphoneX ? 'iphonex' : ''}} {{ showGift ? 'stopScoll' : '' }}">
     <PopBox />
     <view class="activity-info">
       <image src="/assets/bg_signup.png" />
@@ -11,10 +11,10 @@
     </view>
     <view class="special-panel" wx:if="{{ isShowSpecial }}">
       <view class="special-info" @tap="handleCheckSpecial">
-        <view>参与8月8日当日10：00社区现场活动</view>
+        <view>参与 8 月 8 日 10 ：00 社区现场公益跑活动</view>
         <image  src="{{ specialCheck ? '/assets/icon_special_checked.png' : '/assets/icon_special_check.png' }}" />
       </view>
-      <view class="special-tip">请您保证手机号码通话畅通，工作人员会在活动日前联系你</view>
+      <view class="special-tip">请您保证手机号码通话畅通，工作人员会在活动日前与您联系确认</view>
     </view>
     <view class="panel">
       <view class="lineHeight title">个人信息</view>
@@ -46,9 +46,9 @@
     <view class="gift-alert" wx:if="{{ showGift }}">
       <view class="alert-content">
         <image src="/assets/icon_alert.png" />
-        <view class="lineHeight title">恭喜您获得发布会大礼包</view>
-        <view class="subtitle">8月8日活动当天参与 10:00 社区线下跑公益活动，即可领取发布会大礼包</view>
-        <view class="default-btn" @tap="handleRecieveGift">立即领取</view>
+        <view class="lineHeight title">恭喜你获得公益跑大礼包</view>
+        <view class="subtitle"> 8 月 8 日活动当天参与 10：00 社区线下公益跑活动，即可领取公益跑大礼包」</view>
+        <view class="default-btn" @tap="handleRecieveGift">确定参与</view>
         <view class="deny-btn" @tap="handleDenyGift">不好意思，10:00没空</view>
       </view>
     </view>
@@ -76,7 +76,7 @@ import FormIdButton from '@/components/form-id-button'
 
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: '小象运动报名'
+    navigationBarTitleText: '报名信息确认'
   }
   data = {
     isLoading: false,
@@ -274,6 +274,10 @@ export default class Index extends wepy.page {
   background: #fafafa;
   padding: 20rpx 30rpx 0;
   height: 100%;
+}
+.stopScoll {
+  overflow-y: hidden;
+  margin-bottom: 0;
 }
 .special-panel {
   margin-top: 40rpx;

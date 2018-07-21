@@ -1,6 +1,7 @@
 <template>
   <view class="city-page {{user.isIphoneX ? 'iphonex' : ''}}">
     <view class='header'>
+    <image class='header-bg' src="/assets/black_bg.png" />
         <view class="activity-card">
             <image class="avatar" src="{{activeInfo.activityIcon}}" mode="aspectFill" />
             <view class="activity-title">{{activeInfo.name}}</view>
@@ -64,7 +65,7 @@ import { SaveLocation } from '@/store/actions'
 export default class Index extends wepy.page {
   config = {
     enablePullDownRefresh: true,
-    navigationBarTitleText: '小象运动'
+    navigationBarTitleText: '场馆选择'
   };
   data = {
     activeInfo: {},
@@ -181,18 +182,27 @@ export default class Index extends wepy.page {
     top: 0;
     left: 0;
     right: 0;
-    &:after {
-      content: "";
-      width: 140%;
-      height: 416rpx;
+    .header-bg {
       position: absolute;
-      left: -20%;
       top: 0;
-      z-index: 0;
-      border-radius: 0 0 50% 50%;
-      // // background:linear-gradient(#2CBAF9,#04A9F4);
-      background: #373737;
+      left: 0;
+      right: 0;
+      height: 416rpx;
+      width: 100%;
+      z-index: -1;
     }
+    // &:after {
+      // content: "";
+      // width: 140%;
+      // height: 416rpx;
+      // position: absolute;
+      // left: -20%;
+      // top: 0;
+      // z-index: 0;
+      // border-radius: 0 0 50% 50%;
+      // // // background:linear-gradient(#2CBAF9,#04A9F4);
+      // background: #373737;
+    // }
     .activity-card {
       position: relative;
       z-index: 1;
@@ -209,6 +219,7 @@ export default class Index extends wepy.page {
         width: 160rpx;
         height: 160rpx;
         border-radius: 50%;
+        border: 4rpx solid #E8E8E8;
       }
       .activity-title {
         font-size: 32rpx;
@@ -237,7 +248,7 @@ export default class Index extends wepy.page {
     }
   }
   .content {
-    padding: 476rpx 30rpx 166rpx;
+    padding: 476rpx 30rpx 68rpx;
     .detail {
       .city-item {
         .title {
