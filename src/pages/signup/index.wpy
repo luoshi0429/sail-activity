@@ -1,5 +1,5 @@
 <template>
-  <view class="signup-page">
+  <view class="signup-page {{user.isIphoneX ? 'iphonex' : ''}}">
     <PopBox />
     <view class="activity-info">
       <image src="/assets/bg_signup.png" />
@@ -148,7 +148,8 @@ export default class Index extends wepy.page {
       this.$apply()
     },
     // 报名
-    handleSignup () {
+    handleSignup (formId) {
+      console.log('form id: ', formId)
       if (!this.checked) return
       if (!Util.validatePhone(this.phone)) {
         this.$broadcast('toast', { title: '请输入正确手机号' })
@@ -158,7 +159,8 @@ export default class Index extends wepy.page {
         gender: this.genders[this.genderIndex].id,
         gymId: this.gymId,
         mobile: this.phone,
-        userName: this.name
+        userName: this.name,
+        formId: formId
       }
       Api.post('api/info/user/join', params).then(r => {
         store.dispatch({
@@ -200,7 +202,10 @@ export default class Index extends wepy.page {
     this.phone = this.user.mobile
     if (Number(options.isSpecialGym) === 1) {
       this.isShowSpecial = true
-      this.showGift = true
+      setTimeout(() => {
+        this.showGift = true
+        this.$apply()
+      }, 1500)
     }
     // console.log(options, 'options')
     // Api.post('api/info/about/user/join/info', { userJoinId: options.gymId })

@@ -1,5 +1,5 @@
 <template>
-  <view class="signup-success-page">
+  <view class="signup-success-page {{user.isIphoneX ? 'iphonex' : ''}}">
     <PopBox />
     <image class="success-icon" src="/assets/icon_signup_success.png" />
     <view class="lineHeight success-title">报名成功！</view>
@@ -100,7 +100,6 @@ export default class Index extends wepy.page {
     },
     handleShareToTimeline () {
       wepy.getSetting().then((res) => {
-        console.log(res, '11111---')
         if (!res.authSetting['scope.writePhotosAlbum'] && typeof res.authSetting['scope.writePhotosAlbum'] === 'boolean') {
           this.$broadcast('confirm', {
             title: '未开启权限',
@@ -122,7 +121,8 @@ export default class Index extends wepy.page {
           Api.fetch('api/info/share').then(r => {
             console.log(r)
             wepy.downloadFile({
-              url: r
+                // url: r
+              url: 'https://ovj1az9fj.bkt.clouddn.com/1531917065138.png?watermark/3/image/aHR0cDovL292ajFhejlmai5ia3QuY2xvdWRkbi5jb20vMTUzMjA3Mjk4NzI0OS5qcGc=/gravity/West/dx/51/dy/15/text/5aWl54m55pu854ix5omT5bCP5oCq5YW94pyo/font/5b6u6L2v6ZuF6buR/fontsize/360/gravity/West/dx/140/dy/15/text/5aWl54m55pu854ix5omT5bCPLi4u/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/620/dy/-249/text/5YWo5rCR5YGl6LqrIOebiuerpeWBpei6qw==/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/260/dy/-249/text/NS4y5YWs6YeM5YWs55uK6LeR/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/400/dy/-249/text/MjAxOC8wNy8xMw==/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/523/dy/-249'
             }).then(res => {
               wepy.hideLoading()
               const tmpPath = res.tempFilePath
@@ -173,12 +173,12 @@ export default class Index extends wepy.page {
   }
 
   onShareAppMessage () {
-    const params = {
+    return {
       title: '送你一张报名门票，和我一起参加全民健身 益童奔跑',
-      imageUrl: '/assets/share_ticket.jpg',
+      // imageUrl: '/assets/share_ticket.jpg',
+      imageUrl: '/assets/icon-address.png',
       path: '/pages/home/index'
     }
-    return params
   }
 }
 </script>

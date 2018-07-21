@@ -1,5 +1,5 @@
 <template>
-  <view class="disclaimer-page">
+  <view class="disclaimer-page {{user.isIphoneX ? 'iphonex' : ''}}">
     <view class="title">小象运动跑步机赛事免责声明</view>
     <view class="text">
       本人自愿报名参加本次赛事（以下统称“比赛”），全面了解并同意遵守小象运动所制定的各项竞赛规则、规程、规定、要求及采取的措施。已为参加比赛做好充分准备，并确认自身身体和精神健康状况方面符合参加比赛的各项要求。

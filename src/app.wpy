@@ -1,4 +1,13 @@
 <style lang="less">
+.iphonex {
+  margin-bottom: 68rpx;
+}
+.iphonex.home-page {
+  .footer {
+    padding-bottom: 68rpx;
+    height: 176rpx;
+  }
+}
 view {
   box-sizing: border-box;
 }
@@ -212,7 +221,32 @@ page {
 }
 
 .loading {
-
+  width: 60rpx;
+  height: 60rpx;
+  margin: 0 auto;
+  background-color: #5BC562;
+  border-radius: 100%; 
+  -webkit-animation: scaleout 1.0s infinite ease-in-out;
+  animation: scaleout 1.0s infinite ease-in-out;
+}
+ 
+@-webkit-keyframes scaleout {
+  0% { -webkit-transform: scale(0.0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+ 
+@keyframes scaleout {
+  0% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 100% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
 }
 </style>
 
@@ -222,7 +256,7 @@ import 'wepy-async-function'
 import { setStore, connect } from 'wepy-redux'
 import store from '@/store'
 import Api from '@/helper/api'
-import { SaveLocation } from '@/store/actions'
+import { SaveLocation, UpdateUserInfoSuccess } from '@/store/actions'
 
 setStore(store)
 @connect({
@@ -263,6 +297,13 @@ export default class extends wepy.app {
     // this.getUserInfo()
     Api.getUserInfo()
     // Api.fetch('api/info/clear')
+    const systemInfo = wepy.getSystemInfoSync()
+    if (systemInfo.model.search('iPhone X') !== -1) {
+      store.dispatch({
+        type: UpdateUserInfoSuccess,
+        payload: { isIphoneX: true }
+      })
+    }
   }
   onShow (options) {
     this.handleGetLocation()

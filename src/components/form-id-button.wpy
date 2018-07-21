@@ -108,20 +108,6 @@ export default class extends wepy.component {
   methods = {
     formSubmit (e) {
       const { formId } = e.detail
-      if (
-        formId &&
-        formId !== 'the formId is a mock one' &&
-        this.businessType === 'common'
-      ) {
-        let params = {
-          formId,
-          businessType: (this.businessType || '').toUpperCase()
-        }
-        if (this.businessTypeId) {
-          params.businessTypeId = this.businessTypeId
-        }
-        Api.post('common/commitFormId', params)
-      }
       this.$emit('saveFormId', formId)
     },
     getPhoneNumber (e) {
@@ -132,64 +118,18 @@ export default class extends wepy.component {
           mask: true
         })
         this.$apply()
-        this.decryptCustomerData(encryptedData, iv)
       } else {
         this.$emit('cancelSavePhoneNumber')
       }
     },
     getUserInfo (e) {
+      console.log('1111111')
       if (e.detail.userInfo) {
         this.$emit('saveUserInfo', e.detail)
       } else {
         this.$emit('cancelSaveUserInfo')
       }
     }
-  };
-  decryptCustomerData (encryptedData, iv) {
-    const cb = function () {
-      wepy.hideLoading()
-    }
-    Api.getOpenIdPromise().then(({ openid, session_key }) => {
-      return Api.post('customer/decryptCustomerData', {
-        encryptedData,
-        iv,
-        sessionKey: session_key
-      }).then(data => {
-        cb()
-        const result = JSON.parse(data.decryptedData)
-        const { phoneNumber } = result
-        if (this.business === 'profileEvent') {
-          this.$emit('profileEvent', phoneNumber, this.app.recommendOpenId, this.businessType)
-        } else {
-          let realBusinessId = this.businessItem[this.businessId] || (this.businessId > 0 ? this.businessId : this.eventBusinessId)
-          let realBusinessMode = this.businessMode || 'common'
-          let realBusiness = this.business
-          // mk分享获取grant需要具体到分享的类别
-          if (realBusinessMode === 'mk_pull_new' && this.app.mkSecId && this.app.shareTicket) {
-            realBusiness = realBusiness + '_from_mk_share'
-          }
-
-          Api.post('customer/authPhone', Object.assign({
-            phoneNumber,
-            business: realBusiness,
-            businessId: realBusinessId,
-            businessMode: realBusinessMode,
-            shareTicket: this.app.shareTicket,
-            rOpenId: this.app.recommendOpenId
-          }, this.extra))
-            .then((data) => {
-              store.dispatch({
-                type: UpdateUserInfoSuccess,
-                payload: {
-                  ...data,
-                  phoneNumber
-                }
-              })
-              this.$emit('savePhoneNumber', phoneNumber, this.businessItem)
-            })
-        }
-      }, cb)
-    }, cb)
   }
 }
 </script>

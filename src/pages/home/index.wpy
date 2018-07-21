@@ -1,21 +1,21 @@
 <template>
-  <view class="home-page">
-    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532008367120.jpg" />
+  <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}}" >
+    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532089477976.jpg" />
     
     <view class="footer">
-      <button open-type="share" class="clean-btn share-btn">
-        <image src="/assets/icon_share.svg" />
-        <view class="lineHeight">分享</view>
-      </button>
-      <view class="join-btn">
-        <block wx:if="{{ !isLoading }}">
+      <block wx:if="{{ !isLoading }}">
+        <button open-type="share" class="clean-btn share-btn" hover-class="share-btn-hover">
+          <image src="/assets/icon_share.svg" />
+          <view class="lineHeight">分享</view>
+        </button>
+        <view class="join-btn">
           <view wx:if="{{ user.isJoinActivity }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
           <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
             <view slot="userinfo" class="default-btn">立即参加</view>
           </FormIdButton>
-        </block>
-        <view class="loading"></view>
-      </view>
+        </view>
+      </block>
+      <view wx:else class="loading"></view>
     </view>
   </view>
 </template>
@@ -37,43 +37,57 @@ import { connect } from 'wepy-redux'
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '小象运动报名'
-  }
+  };
   data = {
     isAuth: false,
     isLoading: true
-  }
+  };
 
-  mixins = []
+  mixins = [];
 
   components = {
     FormIdButton
-  }
+  };
 
   methods = {
     saveUserInfo (res) {
-      console.log(res, 'userInfo')
-      let data = {
-        iv: res.iv,
-        encryptedData: res.encryptedData,
-        ...res.userInfo,
-        type: 1
-      }
-      Api.saveUserInfo(data).then(r => {
-        console.log(r, 'userinfo')
-        this.$navigate('/pages/place/index')
-      })
+      this.timer = this.timer || -1
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        if (this.isSaving) return
+        this.isSaving = true
+        console.log('222222')
+        console.log(res, 'userInfo')
+        let data = {
+          iv: res.iv,
+          encryptedData: res.encryptedData,
+          ...res.userInfo,
+          type: 1
+        }
+        Api.saveUserInfo(data)
+          .then(r => {
+            console.log(r, 'userinfo')
+            this.$navigate('/pages/place/index').then(() => {
+              this.isSaving = false
+            })
+          })
+          .catch(() => {
+            this.isSaving = false
+          })
+      }, 1000)
     },
     cancelSaveUserInfo () {
       console.log('用户拒绝')
     },
     handlePushToDetail () {
-      this.$navigate(`/pages/signup/success?userJoinId=${this.user.memActivityId}`)
+      this.$navigate(
+        `/pages/signup/success?userJoinId=${this.user.memActivityId}`
+      )
     },
     handelPushToPlace () {
       this.$navigate('/pages/place/index')
     }
-
-  }
+  };
 
   onRoute () {
     if (this.isLoading) return
@@ -86,24 +100,29 @@ export default class Index extends wepy.page {
   }
 
   onLoad (options) {
-    Api.gotUserInfo().then(r => {
-      this.isLoading = false
-      this.$apply()
-    }).catch(() => {
-      this.isLoading = false
-      this.$apply()
-    })
+    Api.gotUserInfo()
+      .then(r => {
+        this.isLoading = false
+        this.$apply()
+      })
+      .catch(() => {
+        this.isLoading = false
+        this.$apply()
+      })
   }
 
   onShareAppMessage () {
     const params = {}
+    console.log(this.user.isJoinActivity, 'share ...')
     if (this.user.isJoinActivity) {
-      params.imageUrl = '/assets/share_ticket.jpg'
+      // params.imageUrl = '/assets/share_ticket.jpg'
+      params.imageUrl = '/assets/icon-address.png'
       params.title = '送你一张报名门票，和我一起参加全民健身 益童奔跑'
     } else {
       params.imageUrl = '/assets/share_app.jpg'
       params.title = '我正在参加全民健身 益童奔跑，快来和我一起参与'
     }
+    console.log(params)
     return params
   }
 }
@@ -116,7 +135,7 @@ export default class Index extends wepy.page {
   width: 100%;
 }
 .footer {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -128,9 +147,8 @@ export default class Index extends wepy.page {
   .share-btn {
     width: 92rpx;
     height: 92rpx;
-    background: #D8D8D8;
     margin-right: 18rpx;
-    display: flex!important;
+    display: flex !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -140,9 +158,12 @@ export default class Index extends wepy.page {
     }
     view {
       font-size: 24rpx;
-      color: #939A99;
+      color: #939a99;
       margin-top: 6rpx;
     }
+  }
+  .share-btn-hover {
+    background: #d8d8d8;
   }
   .join-btn {
     flex: 1;

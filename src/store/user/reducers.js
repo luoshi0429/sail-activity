@@ -34,5 +34,6 @@ export default handleActions({
   nickName: '',
   deny: true,
   isJoinActivity: 0,
-  memActivityId: ''
+  memActivityId: '',
+  isIphoneX: false
 })
