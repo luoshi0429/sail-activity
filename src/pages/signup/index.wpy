@@ -79,6 +79,7 @@ export default class Index extends wepy.page {
     navigationBarTitleText: '小象运动报名'
   }
   data = {
+    isLoading: false,
     checked: true,
     nameDisabled: true,
     genderDisabled: true,
@@ -155,6 +156,8 @@ export default class Index extends wepy.page {
         this.$broadcast('toast', { title: '请输入正确手机号' })
         return
       }
+      if (this.isSignup) return
+      this.isSignup = true
       const params = {
         gender: this.genders[this.genderIndex].id,
         gymId: this.gymId,
@@ -170,11 +173,13 @@ export default class Index extends wepy.page {
             memActivityId: r.userJoinId
           }
         })
+        this.isSignup = false
         this.$navigate(`/pages/signup/success?userJoinId=${r.userJoinId}`)
       }).catch(err => {
         this.$broadcast('toast', {
           title: err.msg
         })
+        this.isSignup = false
       })
     },
     handleCheckSpecial () {

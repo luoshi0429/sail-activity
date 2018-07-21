@@ -8,6 +8,12 @@
     height: 176rpx;
   }
 }
+.iphonex.province-page {
+  margin-bottom: 0;
+  .province-list {
+    padding: 476rpx 30rpx 68rpx !important;
+  }
+}
 view {
   box-sizing: border-box;
 }

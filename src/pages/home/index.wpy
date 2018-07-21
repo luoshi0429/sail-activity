@@ -10,9 +10,13 @@
         </button>
         <view class="join-btn">
           <view wx:if="{{ user.isJoinActivity }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
-          <FormIdButton wx:else @saveUserInfo.user="saveUserInfo" @cancelSaveUserInfo.user="cancelSaveUserInfo">
+          <view wx:else @tap="handleStopDoubleClick">
+<FormIdButton   @saveUserInfo.user="handleSaveUserInfo" @cancelSaveUserInfo.user="handleCancelSaveUserInfo">
             <view slot="userinfo" class="default-btn">立即参加</view>
           </FormIdButton>
+
+          </view>
+          
         </view>
       </block>
       <view wx:else class="loading"></view>
@@ -25,7 +29,8 @@ import wepy from 'wepy'
 import FormIdButton from '@/components/form-id-button'
 import Api from '@/helper/api'
 import { connect } from 'wepy-redux'
-
+import store from '@/store'
+import { UpdateUserInfoSuccess } from '@/store/actions'
 @connect({
   app (state) {
     return state.app
@@ -50,34 +55,32 @@ export default class Index extends wepy.page {
   };
 
   methods = {
-    saveUserInfo (res) {
-      this.timer = this.timer || -1
-      clearTimeout(this.timer)
-      this.timer = setTimeout(() => {
-        if (this.isSaving) return
-        this.isSaving = true
-        console.log('222222')
-        console.log(res, 'userInfo')
-        let data = {
-          iv: res.iv,
-          encryptedData: res.encryptedData,
-          ...res.userInfo,
-          type: 1
-        }
-        Api.saveUserInfo(data)
+    handleStopDoubleClick () {
+      this.isLoading = true
+    },
+    handleSaveUserInfo (res) {
+      let data = {
+        iv: res.iv,
+        encryptedData: res.encryptedData,
+        ...res.userInfo,
+        type: 1
+      }
+      Api.saveUserInfo(data)
           .then(r => {
-            console.log(r, 'userinfo')
+            store.dispatch({
+              type: UpdateUserInfoSuccess,
+              payload: data
+            })
             this.$navigate('/pages/place/index').then(() => {
-              this.isSaving = false
+              this.isLoading = false
             })
           })
           .catch(() => {
-            this.isSaving = false
+            this.isLoading = false
           })
-      }, 1000)
     },
-    cancelSaveUserInfo () {
-      console.log('用户拒绝')
+    handleCancelSaveUserInfo () {
+      console.log('用户接受授权')
     },
     handlePushToDetail () {
       this.$navigate(
@@ -115,8 +118,8 @@ export default class Index extends wepy.page {
     const params = {}
     console.log(this.user.isJoinActivity, 'share ...')
     if (this.user.isJoinActivity) {
-      // params.imageUrl = '/assets/share_ticket.jpg'
-      params.imageUrl = '/assets/icon-address.png'
+      params.imageUrl = '/assets/share_ticket.png'
+      // params.imageUrl = '/assets/icon-address.png'
       params.title = '送你一张报名门票，和我一起参加全民健身 益童奔跑'
     } else {
       params.imageUrl = '/assets/share_app.jpg'

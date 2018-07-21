@@ -46,10 +46,10 @@
         <image src="/assets/icon_check_info.png" />
         <view class="lineHeight">查看赛事详情</view>
       </view>
-      <view class="activity-btn" @tap="handleShareToTimeline">
+      <!-- <view class="activity-btn" @tap="handleShareToTimeline">
         <image src="/assets/icon_share_timeline.png" />
         <view class="lineHeight">分享至朋友圈</view>
-      </view>
+      </view> -->
       <button open-type="share" class="activity-btn clean-btn">
         <image src="/assets/icon_share_moment.png" />
         <view class="lineHeight">分享给微信好友</view>
@@ -58,8 +58,8 @@
     <view class="footer">
       <image class="footer-bg" src="/assets/bg_treadmill.png" />
       <view class="lineHeight microdistrict">{{ detail.commuityName }}</view>
-      <view class="lineHeight tip">扫描二维码入群，获得更多活动信息</view>
-      <image class="qrcode-image" src="{{ detail.commuityIcon }}" mode="aspectFill" />
+      <view class="lineHeight tip">截图并保存，打开微信中的扫一扫识别二维码</view>
+      <image @tap="handlePreviewQrcode" class="qrcode-image" src="{{ detail.commuityIcon }}" mode="aspectFill" />
     </view>
     <!-- <image mode="aspectFit" class="preview" src="{{ previewUrl }}" wx:if="{{showPreview}}" /> -->
   </view>
@@ -92,6 +92,13 @@ export default class Index extends wepy.page {
   components = { PopBox }
 
   methods = {
+    handlePreviewQrcode () {
+      console.log('-----')
+      wepy.previewImage({
+        content: this.detail.commuityIcon,
+        urls: [this.detail.commuityIcon]
+      })
+    },
     handleCheckGameDetail () {
       // this.$redirect('/pages/home/index')
       wepy.reLaunch({
@@ -134,7 +141,7 @@ export default class Index extends wepy.page {
                   duration: 1500,
                   onClose: () => {
                     wepy.previewImage({
-                      content: tmpPath,
+                      current: tmpPath,
                       urls: [tmpPath]
                     })
                   }
@@ -175,8 +182,8 @@ export default class Index extends wepy.page {
   onShareAppMessage () {
     return {
       title: '送你一张报名门票，和我一起参加全民健身 益童奔跑',
-      // imageUrl: '/assets/share_ticket.jpg',
-      imageUrl: '/assets/icon-address.png',
+      imageUrl: '/assets/share_ticket.png',
+      // imageUrl: '/assets/icon-address.png',
       path: '/pages/home/index'
     }
   }
@@ -311,6 +318,7 @@ export default class Index extends wepy.page {
     height: 480rpx;
     right: 0;
     top: 0; 
+    z-index: -1;
   }
   .microdistrict {
     font-size: 36rpx;
@@ -329,7 +337,8 @@ export default class Index extends wepy.page {
 .btn-wrapper {
   width: 100%;
   display: flex;
-  margin-bottom: 72rpx;
+  margin: 28rpx 0 72rpx;
+  padding: 0 60rpx;
   .activity-btn {
     flex: 1;
     display: flex;
