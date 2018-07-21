@@ -81,7 +81,7 @@ import { connect } from 'wepy-redux'
 })
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: '小象运动报名',
+    navigationBarTitleText: '5.20 km 益童公益跑',
     navigationStyle: 'custom'
   }
   data = {

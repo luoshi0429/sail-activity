@@ -1,6 +1,6 @@
 <template>
   <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}}" >
-    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532173665165.jpg" />
+    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532182367083.jpg" />
     
     <view class="footer">
       <block wx:if="{{ !isLoading }}">
