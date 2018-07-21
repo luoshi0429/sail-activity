@@ -89,8 +89,6 @@ export default class Index extends wepy.page {
     detail: {}
   }
 
-  mixins = []
-
   components = { PopBox }
 
   methods = {
@@ -207,6 +205,7 @@ export default class Index extends wepy.page {
 }
 .game-ticket {
   box-shadow: 0 2rpx 20rpx 0 rgba(0, 0, 0, 0.1) ;
+  border-radius: 40rpx;
   width: 690rpx;
   height: 380rpx;
   margin: 24rpx 30rpx 0;

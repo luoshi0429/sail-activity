@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="toast" wx:if="{{ isToast }}">
-      <!-- <image wx:if="{ item.icon ==='fail' }}" src='https://static.sunlands.com/wechat-management/prod/openCourse/assets/icon_fail.png' /> -->
+      <!-- <image wx:if="{ item.icon ==='fail' }}" src='' /> -->
       <view>{{ item.title }}</view>
     </view>
     <view class="alert confirm" wx:if="{{isConfirm || isAlert}}">

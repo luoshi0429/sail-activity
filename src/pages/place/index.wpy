@@ -5,7 +5,7 @@
         <view class="activity-card">
             <image class="avatar" src="{{activeInfo.activityIcon}}" mode="aspectFill" />
             <view class="activity-title">{{activeInfo.name}}</view>
-            <view class="activity-subtitle">活动时间：{{activeInfo.startTime}} 至 {{activeInfo.endTime}}</view>
+            <view class="activity-subtitle">报名时间：{{activeInfo.startTime}} 至 {{activeInfo.endTime}}</view>
             <view class="current-city" @tap="handlePushToCity">{{app.cityName}}<image src="/assets/icon_black_arrow.svg" />
             </view>
         </view>
@@ -66,7 +66,7 @@ export default class Index extends wepy.page {
   config = {
     enablePullDownRefresh: true,
     navigationBarTitleText: '场馆选择'
-  };
+  }
   data = {
     activeInfo: {},
     isSpecialGym: '',
@@ -76,9 +76,7 @@ export default class Index extends wepy.page {
     gymName: ''
   }
 
-  mixins = [];
-
-  components = {};
+  components = {}
 
   methods = {
     handlePushToSignup (isSpecialGym, gymId, gymName) {
@@ -88,7 +86,6 @@ export default class Index extends wepy.page {
       this.$navigate('/pages/place/province')
     },
     handleGetPhoneNum (e) {
-      console.log('get phone number', e)
       Api.saveUserInfo({
         type: 2,
         phoneIv: e.detail.iv,
@@ -140,34 +137,17 @@ export default class Index extends wepy.page {
   handleGetLocation (data) {
     this.isLoading = true
     Api.post('api/info/about/gym', data).then(r => {
-      console.log(r, 'gym')
       this.gymList = r
       this.isLoading = false
       this.$apply()
-      console.log(this.gymList, '-----')
     }).catch(() => {
       this.isLoading = false
       this.$apply()
     })
   }
   onLoad () {
-    console.log(123)
     this.handleInitLocation()
     this.handelGetActicveInfo()
-    console.log(this.user, '-0000000000')
-    // const defaultCityId = {
-      // cityId: 440100
-    // }
-    // const location = this.app.location.lat || null
-    // const data = location || defaultCityId
-    // Api.post('api/info/about/gym', data).then(r => {
-      // console.log(r, 'gym')
-      // this.gymList = r
-      // this.$apply()
-      // console.log(this.gymList, '-----')
-    // }).catch(() => {
-
-    // })
   }
 }
 </script>
@@ -191,18 +171,6 @@ export default class Index extends wepy.page {
       width: 100%;
       z-index: -1;
     }
-    // &:after {
-      // content: "";
-      // width: 140%;
-      // height: 416rpx;
-      // position: absolute;
-      // left: -20%;
-      // top: 0;
-      // z-index: 0;
-      // border-radius: 0 0 50% 50%;
-      // // // background:linear-gradient(#2CBAF9,#04A9F4);
-      // background: #373737;
-    // }
     .activity-card {
       position: relative;
       z-index: 1;

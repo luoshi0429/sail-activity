@@ -1,6 +1,6 @@
 <template>
   <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}}" >
-    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532089477976.jpg" />
+    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532166978546.png" />
     
     <view class="footer">
       <block wx:if="{{ !isLoading }}">
@@ -11,12 +11,10 @@
         <view class="join-btn">
           <view wx:if="{{ user.isJoinActivity }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
           <view wx:else @tap="handleStopDoubleClick">
-<FormIdButton   @saveUserInfo.user="handleSaveUserInfo" @cancelSaveUserInfo.user="handleCancelSaveUserInfo">
-            <view slot="userinfo" class="default-btn">立即参加</view>
-          </FormIdButton>
-
+            <FormIdButton @saveUserInfo.user="handleSaveUserInfo" @cancelSaveUserInfo.user="handleCancelSaveUserInfo">
+              <view slot="userinfo" class="default-btn">立即参加</view>
+            </FormIdButton>
           </view>
-          
         </view>
       </block>
       <view wx:else class="loading"></view>
@@ -42,21 +40,20 @@ import { UpdateUserInfoSuccess } from '@/store/actions'
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '5.20 km 益童公益跑'
-  };
+  }
   data = {
     isAuth: false,
     isLoading: true
-  };
-
-  mixins = [];
+  }
 
   components = {
     FormIdButton
-  };
+  }
 
   methods = {
     handleStopDoubleClick () {
       this.isLoading = true
+      this.$apply()
     },
     handleSaveUserInfo (res) {
       let data = {
@@ -73,19 +70,21 @@ export default class Index extends wepy.page {
             })
             this.$navigate('/pages/place/index').then(() => {
               this.isLoading = false
+              this.$apply()
             })
           })
           .catch(() => {
             this.isLoading = false
+            this.$apply()
           })
     },
     handleCancelSaveUserInfo () {
-      console.log('用户接受授权')
+      console.log('用户取消授权')
+      this.isLoading = false
+      this.$apply()
     },
     handlePushToDetail () {
-      this.$navigate(
-        `/pages/signup/success?userJoinId=${this.user.memActivityId}`
-      )
+      this.$navigate(`/pages/signup/success?userJoinId=${this.user.memActivityId}`)
     },
     handelPushToPlace () {
       this.$navigate('/pages/place/index')
@@ -116,16 +115,13 @@ export default class Index extends wepy.page {
 
   onShareAppMessage () {
     const params = {}
-    console.log(this.user.isJoinActivity, 'share ...')
     if (this.user.isJoinActivity) {
       params.imageUrl = '/assets/share_ticket.png'
-      // params.imageUrl = '/assets/icon-address.png'
       params.title = '送你一张报名门票，和我一起参加 5.20 km 益童公益跑'
     } else {
       params.imageUrl = '/assets/share_app.jpg'
       params.title = '我正在参加 5.20 km 益童公益跑，快来和我一起参与'
     }
-    console.log(params)
     return params
   }
 }

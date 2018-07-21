@@ -33,36 +33,6 @@ const validatePhone = (phone) => {
   return valid_rule.test(phone)
 }
 
-/* 获取当前页url */
-function getCurrentPageUrl () {
-  var pages = getCurrentPages() // 获取加载的页面
-  var currentPage = pages[pages.length - 1]    // 获取当前页面的对象
-  var url = currentPage.route    // 当前页面url
-  return url
-}
-
-/*获取当前页带参数的url */
-function getCurrentPageUrlWithArgs () {
-  var app = getApp()
-  var pages = getCurrentPages() // 获取加载的页面
-  var currentPage = pages[pages.length - 1] // 获取当前页面的对象
-  var url = currentPage.route // 当前页面url
-  var options = currentPage.options // 如果要获取url中所带的参数可以查看options
-
-  if (!options.siteId) {
-    options.siteId = app.globalData.siteId
-  }
-  // 拼接url的参数
-  var urlWithArgs = url + '?'
-  for (var key in options) {
-    var value = options[key]
-    urlWithArgs += key + '=' + value + '&'
-  }
-  urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length - 1)
-
-  return urlWithArgs
-}
-
 /**
  * 只保留中文英文数字, 删除字符
  */
@@ -93,31 +63,10 @@ function parseUrlToArgs (url) {
   return args
 }
 
-function createComparionFun (propertyName) {
-  return function (object1, object2) {
-    var value1 = object1[propertyName]
-    var value2 = object2[propertyName]
-    if (value1 < value2) {
-      return -1
-    } else if (value1 > value2) {
-      return 1
-    } else {
-      return 0
-    }
-  }
-}
-
-const qrCodeUrl = 'http://static.sunlands.com/wechat-management/gzmp/mplive'
-const ASSETS_PREFIX = 'https://static.sunlands.com/wechat-management/prod/openCourse'
 export default {
   formatTime,
   formatNumber,
-  getCurrentPageUrl,
-  getCurrentPageUrlWithArgs,
   removeCharacter,
   parseUrlToArgs,
-  qrCodeUrl,
-  ASSETS_PREFIX,
-  createComparionFun,
   validatePhone
 }

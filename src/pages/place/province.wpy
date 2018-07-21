@@ -5,7 +5,7 @@
       <view class="activity-card">
         <image class="avatar" src="{{activeInfo.activityIcon}}" />
         <view class="activity-title">{{activeInfo.name}}</view>
-        <view class="activity-subtitle">活动时间：{{activeInfo.startTime}} 至 {{activeInfo.endTime}}</view>
+        <view class="activity-subtitle">报名时间：{{activeInfo.startTime}} 至 {{activeInfo.endTime}}</view>
         <view class="current-city">{{app.cityName}}<image src="/assets/icon_black_arrow.svg" />
         </view>
       </view>
@@ -51,8 +51,6 @@ export default class Index extends wepy.page {
     cityList: []
   }
 
-  mixins = []
-
   components = {}
 
   methods = {
@@ -72,7 +70,6 @@ export default class Index extends wepy.page {
   handelGetActicveInfo () {
     Api.post('/api/info/about/activity').then(r => {
       this.activeInfo = r
-      console.log(r, '=====')
     }).catch((err) => {
       console.log(err, 'err')
     })
@@ -83,7 +80,6 @@ export default class Index extends wepy.page {
   onLoad () {
     this.handelGetActicveInfo()
     Api.post('api/info/about/city').then(r => {
-      console.log(r, 'city')
       r.forEach((item) => {
         item.cities.forEach((city) => {
           city.newCityName = city.cityName.split('市')[0]
@@ -91,7 +87,6 @@ export default class Index extends wepy.page {
       })
       this.cityList = r
       this.$apply()
-      console.log(this.gymList, '-----')
     }).catch(() => {
 
     })

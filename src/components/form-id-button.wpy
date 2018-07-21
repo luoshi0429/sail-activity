@@ -1,4 +1,4 @@
-<style lang="less">
+<style lang="less" scoped>
 .form {
   display: block;
   width: 100%;
@@ -55,56 +55,8 @@
 </template>
 <script>
 import wepy from 'wepy'
-import Api from '@/helper/api.js'
-import store from '@/store/index.js'
-import { UpdateUserInfoSuccess } from '@/store/actions'
-import { connect } from 'wepy-redux'
-
-@connect({
-  app (state) {
-    return state.app
-  }
-})
 
 export default class extends wepy.component {
-  props = {
-    business: {
-      type: String,
-      default: 'syllabus_reserve'
-    },
-    businessId: {
-      type: Number,
-      default: -1
-    },
-    businessMode: {
-      type: String,
-      default: 'common'
-    },
-    businessType: {
-      type: String,
-      default: 'common'
-    },
-    businessItem: {
-      type: Object,
-      default: {}
-    },
-    shareType: {
-      type: String,
-      default: ''
-    },
-    extra: {
-      type: Object,
-      default: {}
-    }
-  };
-  data = {
-    eventBusinessId: -1
-  }
-  events = {
-    authorizePhone (businessId) {
-      this.eventBusinessId = businessId
-    }
-  }
   methods = {
     formSubmit (e) {
       const { formId } = e.detail
@@ -117,13 +69,12 @@ export default class extends wepy.component {
           title: '正在确认授权',
           mask: true
         })
-        this.$apply()
+        // 需要后台解析
       } else {
         this.$emit('cancelSavePhoneNumber')
       }
     },
     getUserInfo (e) {
-      console.log('1111111')
       if (e.detail.userInfo) {
         this.$emit('saveUserInfo', e.detail)
       } else {
