@@ -60,7 +60,8 @@ export default class Index extends wepy.page {
         iv: res.iv,
         encryptedData: res.encryptedData,
         ...res.userInfo,
-        type: 1
+        type: 1,
+        source: this.user.source
       }
       Api.saveUserInfo(data)
           .then(r => {

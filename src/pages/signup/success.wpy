@@ -46,10 +46,10 @@
         <image src="/assets/icon_check_info.png" />
         <view class="lineHeight">查看赛事详情</view>
       </view>
-      <!-- <view class="activity-btn" @tap="handleShareToTimeline">
+      <view class="activity-btn" @tap="handleShareToTimeline">
         <image src="/assets/icon_share_timeline.png" />
         <view class="lineHeight">分享至朋友圈</view>
-      </view> -->
+      </view>
       <button open-type="share" class="activity-btn clean-btn">
         <image src="/assets/icon_share_moment.png" />
         <view class="lineHeight">分享给微信好友</view>
@@ -122,8 +122,8 @@ export default class Index extends wepy.page {
           Api.fetch('api/info/share').then(r => {
             console.log(r)
             wepy.downloadFile({
-                // url: r
-              url: 'https://ovj1az9fj.bkt.clouddn.com/1531917065138.png?watermark/3/image/aHR0cDovL292ajFhejlmai5ia3QuY2xvdWRkbi5jb20vMTUzMjA3Mjk4NzI0OS5qcGc=/gravity/West/dx/51/dy/15/text/5aWl54m55pu854ix5omT5bCP5oCq5YW94pyo/font/5b6u6L2v6ZuF6buR/fontsize/360/gravity/West/dx/140/dy/15/text/5aWl54m55pu854ix5omT5bCPLi4u/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/620/dy/-249/text/5YWo5rCR5YGl6LqrIOebiuerpeWBpei6qw==/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/260/dy/-249/text/NS4y5YWs6YeM5YWs55uK6LeR/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/400/dy/-249/text/MjAxOC8wNy8xMw==/font/5b6u6L2v6ZuF6buR/fill/IzI2OEU5Qg==/gravity/West/dx/523/dy/-249'
+              url: r
+              // url: 'https://imgdata1.healthmall.cn/xiaoxiang/xiaoxiang_xiaochengxu_menpiao_template_0.png'
             }).then(res => {
               wepy.hideLoading()
               const tmpPath = res.tempFilePath
@@ -339,7 +339,7 @@ export default class Index extends wepy.page {
   width: 100%;
   display: flex;
   margin: 28rpx 0 72rpx;
-  padding: 0 60rpx;
+  // padding: 0 60rpx;
   .activity-btn {
     flex: 1;
     display: flex;

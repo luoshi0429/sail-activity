@@ -2,8 +2,8 @@ import wepy from 'wepy'
 import store from '@/store/index'
 import { UpdateUserInfoSuccess } from '@/store/actions'
 
-// const path = 'https://beta-sdkhealth.healthmall.cn/activity-service' // 'https://sdkhealth.healthmall.cn'
-const path = 'https://sdkhealth.healthmall.cn/activity-service' // 'https://sdkhealth.healthmall.cn'
+const path = 'https://beta-sdkhealth.healthmall.cn/activity-service' // 'https://sdkhealth.healthmall.cn'
+// const path = 'https://sdkhealth.healthmall.cn/activity-service' // 'https://sdkhealth.healthmall.cn'
 
 function _fetch (url, params, config = {}) {
   console.log('fetch请求发起', url, params)

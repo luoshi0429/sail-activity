@@ -140,15 +140,20 @@ export default class extends wepy.app {
   }
 
   onLaunch (options) {
+    console.log('app launch: ', options)
+    options = { ...options, ...options.query }
+    const scene = Number(options.scene)
     Api.getUserInfo()
     // Api.fetch('api/info/clear')
+    const payload = { source: scene }
     const systemInfo = wepy.getSystemInfoSync()
     if (systemInfo.model.search('iPhone X') !== -1) {
-      store.dispatch({
-        type: UpdateUserInfoSuccess,
-        payload: { isIphoneX: true }
-      })
+      payload.isIphoneX = true
     }
+    store.dispatch({
+      type: UpdateUserInfoSuccess,
+      payload: payload
+    })
   }
   onShow (options) {
     this.handleGetLocation()
