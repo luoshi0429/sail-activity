@@ -1,24 +1,127 @@
 <template>
-  <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}}" >
-    <image class="activity-image" mode="widthFix" src="http://ovj1az9fj.bkt.clouddn.com/1532182367083.jpg" />
-    
-    <view class="footer">
-      <block wx:if="{{ !isLoading }}">
-        <button open-type="share" class="clean-btn share-btn" hover-class="share-btn-hover">
-          <image src="/assets/icon_share.svg" />
-          <view class="lineHeight">分享</view>
-        </button>
-        <view class="join-btn">
-          <view wx:if="{{ user.isJoinActivity }}" class="default-btn" @tap="handlePushToDetail">已报名，点击查看</view>
-          <view wx:else @tap="handleStopDoubleClick">
-            <FormIdButton @saveUserInfo.user="handleSaveUserInfo" @cancelSaveUserInfo.user="handleCancelSaveUserInfo">
-              <view slot="userinfo" class="default-btn">立即参加</view>
-            </FormIdButton>
+  <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}} {{ status === 0 ? 'normal' : 'joined-finished' }}">
+    <block wx:if="{{ status === 0 }}">
+      <image class="banner-bg" src="/assets/banner.png" />
+      <view class="banner-top">
+        <view class="countdown">
+          <view>离开团截止还有</view>
+          <view>12<text>天</text>7<text>时</text>34<text>分</text>23<text>秒</text></view>
+        </view>
+        <view class="panel join-panel">
+          <view class="headline">本团还差<text>23</text>人</view>
+          <view class="progress">
+            <view class="inner"></view>
+          </view>
+          <view class="people-donation">
+            <view class="item">
+              <view>已成功参团人数</view>
+              <view><text>889</text>人</view>
+            </view>
+            <view class="item">
+              <view>累计捐赠</view>
+              <view><text>12322.2</text>元</view>
+            </view>
+          </view>
+          <view class="run-btn">
+            <image src="/assets/btn_run.png" />
+            <view>立刻跑步</view>
+          </view>
+          <view class="finished-user">
+            <view class="total">已有<text>111</text>人完成跑步</view>
+            <view class="finished-item">
+              <image src="/assets/btn_run.png" />
+              <view>
+                <text>UserName</text>完成跑步
+              </view>
+            </view>
           </view>
         </view>
-      </block>
-      <view wx:else class="loading"></view>
-    </view>
+        <view class="panel process-panel">
+          <view class="title">流程介绍</view>
+          <view class="process-item">
+            <image src="/assets/icon_step_1.png" />
+            <view>
+              <view>参与跑步</view>
+              <view>点击立即跑步，扫描跑步机屏幕二维码</view>
+            </view>
+          </view>
+          <view class="process-item">
+            <image src="/assets/icon_step_2.png" />
+            <view>
+              <view>运动里程>5.20km</view>
+              <view>活动期间，单次运动里程大于5.20km</view>
+            </view>
+          </view>
+          <view class="process-item">
+            <image src="/assets/icon_step_3.png" />
+            <view>
+              <view>完成奖励</view>
+              <view>公益跑电子证书和留守儿童爱心礼包</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:if="{{ status === 1 || status === 2 }}">
+      <view wx:if="{{ status === 1 }}" class="panel joined-panel">
+        <view class="user-info">
+          <image src="/assets/icon-address.png" />
+          <view>
+            <view class="user-name">用户</view>
+            <view class="joined-status">已报名</view>
+          </view>
+        </view>
+        <view class="event-info">
+          <image src="/assets/icon-address.png" />
+          <view>
+            <view>预约的场馆信息</view>
+            <view>北京市海淀区互联网创新中心</view>
+          </view>
+        </view>
+        <view class="run-btn">
+          <image src="/assets/btn_run.png" />
+          <view>立刻开跑</view>
+        </view>
+        <view class="finished-user">
+          <view class="total">已有<text>111</text>人完成跑步</view>
+          <view class="finished-item">
+            <image src="/assets/btn_run.png" />
+            <view>
+              <text>UserName</text>完成跑步
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="panel finished-panel">
+        <view class="header">
+          <image />
+        </view>
+        <view class="content">
+          <view class="title">公益跑完成</view>
+          <view class="subtitle">本次活动将为留守儿童捐赠出一件运动服</view>
+          <view class="finished-people">
+            <view class="headline">感谢您与以下用户共同参与</view>
+            <view class="user-list">
+              <view></view>
+            </view>
+          </view>
+          <view class="tip">用跑步里程为留守儿童带去不一样的暑假</view>
+        </view>
+      </view>
+      <view class="panel share-panel {{ status === 1 ? 'bigger-top' : '' }}">
+        <view class="title">邀请好友</view>
+        <view class="btns">
+          <view class="share-btn">
+            <image src="/assets/icon_share_timeline.png" />
+            <view>分享至朋友圈</view>
+          </view>
+          <view class="share-btn">
+            <image src="/assets/icon_share_moment.png" />
+            <view>邀请好友一起参加</view>
+          </view>
+        </view>
+      </view>
+    </block>
   </view>
 </template>
 
@@ -43,7 +146,8 @@ export default class Index extends wepy.page {
   }
   data = {
     isAuth: false,
-    isLoading: true
+    isLoading: true,
+    status: 0 // 0: 未参加 1: 已参加 2: 已完成
   }
 
   components = {
@@ -51,10 +155,6 @@ export default class Index extends wepy.page {
   }
 
   methods = {
-    handleStopDoubleClick () {
-      this.isLoading = true
-      this.$apply()
-    },
     handleSaveUserInfo (res) {
       let data = {
         iv: res.iv,
@@ -77,11 +177,6 @@ export default class Index extends wepy.page {
             this.isLoading = false
             this.$apply()
           })
-    },
-    handleCancelSaveUserInfo () {
-      console.log('用户取消授权')
-      this.isLoading = false
-      this.$apply()
     },
     handlePushToDetail () {
       this.$navigate(`/pages/signup/success?userJoinId=${this.user.memActivityId}`)
@@ -130,42 +225,340 @@ export default class Index extends wepy.page {
 .home-page {
   padding-bottom: 108rpx;
 }
-.activity-image {
-  width: 100%;
+.joined-finished {
+  padding-top: 40rpx;
+  background: #f1f1f1;
+  min-height: 100vh;
 }
-.footer {
-  background: rgba(255, 255, 255, 0.95);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 108rpx;
-  display: flex;
-  align-items: center;
-  padding: 0 30rpx;
-  .share-btn {
-    width: 92rpx;
-    height: 92rpx;
-    margin-right: 18rpx;
-    display: flex !important;
-    flex-direction: column;
+.panel {
+  width: 690rpx;
+  margin: 0 auto;
+  background: #FFFFFF;
+  box-shadow: 0 0 20rpx 0 rgba(0,0,0,0.20);
+  border-radius: 40rpx;
+}
+.normal {
+  position: relative;
+  background: #fafafa;
+  padding-top: 422rpx;
+}
+.join-panel {
+  padding: 30rpx 36rpx 22rpx;
+  .headline {
+    font-weight: 500;
+    font-size: 40rpx;
+    text-align: center;
+    margin-bottom: 26rpx;
+    text {
+      color: #FF8F1E ;
+      margin: 0 10rpx;
+    } 
+  }
+  .progress {
+    margin: 0 auto;
+    width: 526rpx;
+    height: 20rpx;
+    border-radius: 16rpx;
+    background: #EFEFF4;
+    .inner {
+      width: 300rpx;
+      height: 20rpx;
+      border-radius: 16rpx;
+      background-image: linear-gradient(24deg, #ACD050 0%, #5BC562 100%);
+    }
+  }
+  .people-donation {
+    margin-top: 34rpx;
+    border: 2rpx solid #E2E2EA;
+    border-radius: 16rpx;
+    display: flex;
+    padding:  22rpx 0;
+    .item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 24rpx;
+      color: #999;
+      view:last-of-type {
+        font-weight: normal;
+        font-size: 24rpx;
+        color: #FF8F1E;
+        text {
+          font-weight: 500;
+          font-size: 48rpx;
+        }
+      }
+    }
+  }
+  .run-btn {
+    margin: 20rpx auto 22rpx;
+  }
+}
+.process-panel {
+  margin-top: 30rpx;
+  padding: 34rpx 52rpx 82rpx;
+  .title {
+    font-weight: 500;
+    font-size: 36rpx;
+    color: #2B2F3A;
+    text-align: center;
+  }
+  .process-item {
+    display: flex;
     align-items: center;
-    justify-content: center;
     image {
-      width: 48rpx;
-      height: 48rpx;
+      width: 160rpx;
+      height: 160rpx;
+      margin-right: 18rpx;
+    }
+    view:first-of-type {
+      font-size: 32rpx;
+      color: #2B2F3A;
+      line-height: 44rpx;
+      margin-bottom: 8rpx;
+    }
+    view:last-of-type {
+      font-size: 24rpx;
+      color: #6A6D6C;
+      line-height: 34rpx;
+    }
+  }
+}
+.banner-bg {
+  width: 750rpx;
+  height: 750rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.banner-top {
+  position: relative;
+  z-index: 1;
+}
+.countdown {
+  margin: 0 auto 26rpx;
+  background: rgba(21, 21, 21, 0.6);
+  border-radius: 30rpx;
+  width: 470rpx;
+  height: 106rpx;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  view:first-of-type {
+    font-size: 24rpx;
+    line-height: 34rpx;
+    font-weight: 500;
+  }
+  view:last-of-type {
+    line-height: 56rpx;
+    font-size: 40rpx;
+    text {
+      font-size: 24rpx;
+      margin-bottom: 12rpx;
+    }
+  }
+}
+.joined-panel {
+  padding: 40rpx 36rpx 32rpx 40rpx;
+  .user-info {
+    display: flex;
+    align-items: center;
+    image {
+      width: 122rpx;
+      height: 122rpx;
+      border-radius: 50%;
+      margin-right: 30rpx;
+    }
+    .user-name {
+      font-weight: 500;
+      font-size: 32rpx;
+      line-height: 44rpx;
+      color: #444A49;
+      margin-bottom: 10rpx;
+    }
+    .joined-status {
+      font-size: 24rpx;
+      color: #fff;
+      text-align: center;
+      font-weight: 500;
+      width: 128rpx;
+      height: 42rpx;
+      line-height: 42rpx;
+      background: #7CC95A;
+      border-radius: 21rpx;
+    }
+  }
+  .event-info {
+    margin-top: 38rpx;
+    background: #FFFFFF;
+    border: 2rpx solid #E2E2EA;
+    border-radius: 30rpx;
+    height: 120rpx;
+    display: flex;
+    align-items: center;
+    padding: 0 40rpx;
+    image {
+      width: 52rpx;
+      height: 52rpx;
+      margin-right: 30rpx;
+    }
+  }
+  .run-btn {
+    margin: 36rpx auto 26rpx;
+  }
+}
+
+.run-btn {
+  width: 432rpx;
+  height: 98rpx;
+  line-height: 98rpx;
+  text-align: center;
+  position: relative;
+  font-size: 36rpx;
+  color: #fff;
+  image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  view {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.finished-user {
+  margin: 0 4rpx;
+  background: #EFEFF4;
+  border: 2rpx solid #EFEFF4;
+  border-radius: 16rpx;
+  .total {
+    text-align: center;
+    font-weight: 500;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 26rpx;
+    color: #000019;
+    text {
+      color: #7CC95A;
+      margin: 0 10rpx;
+    }
+  }
+  .finished-item {
+    height: 100rpx;
+    display: flex;
+    align-items: center;
+    border-top: 2rpx solid rgba(255, 255, 255,0.5);
+    padding-left: 54rpx;
+    image {
+      width: 60rpx;
+      height: 60rpx;
+      margin-right: 20rpx;
+      border-radius: 50%;
     }
     view {
-      font-size: 24rpx;
-      color: #939a99;
-      margin-top: 6rpx;
+      font-weight: 500;
+      font-size: 26rpx;
+      color: #00001F;
+      text {
+        margin-right: 10rpx;
+        color: #68C65E;
+      }
     }
   }
-  .share-btn-hover {
-    background: #d8d8d8;
+}
+
+.finished-panel {
+  .header {
+    background-image: linear-gradient(-166deg, #FFD275 0%, #FFA641 100%);
+    border-radius: 40rpx 40rpx 0 0;
+    height: 400rpx;
+    image {
+      width: 240rpx;
+      height: 240rpx;
+    }
   }
-  .join-btn {
-    flex: 1;
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .title {
+      font-weight: 500;
+      font-size: 40rpx;
+      line-height: 56rpx;
+      margin: 18rpx 0 22rpx;
+      color: #FF8F1E;
+    }
+    .subtitle {
+      font-size: 28rpx;
+      color: #6A6D6C;
+      line-height: 40rpx;
+      text-align: center;
+      width: 366rpx;
+    }
+    .finished-people {
+      width: 600rpx;
+      background: #EFF7F9;
+      border: 2rpx solid #EFEFF4;
+      border-radius: 30rpx;
+      padding: 14rpx 0;
+      margin: 20rpx 0 36rpx;
+      .headline {
+        font-weight: 500;
+        font-size: 28rpx;
+        color: #6A6D6C;
+        text-align: center;
+        margin-bottom: 10rpx;
+      }
+      .user-list {
+
+      }
+    }
+    .tip {
+      font-weight: 500;
+      font-size: 24rpx;
+      color: #34CC9D;
+      text-align: center;
+    }
+  }
+}
+.share-panel {
+  margin-top: 20rpx;
+  &.bigger-top {
+    margin-top: 30rpx;
+  }
+  padding: 30rpx 0 44rpx;
+  .title {
+    font-weight: 500;
+    font-size: 36rpx;
+    text-align: center;
+  }
+  .btns {
+    font-size: 36rpx;
+    padding: 0 130rpx;
+    display: flex;
+    justify-content: space-between;
+    .share-btn {
+      image {
+        width: 136rpx;
+        height: 136rpx;
+        margin-bottom: 10rpx;
+      }
+      view {
+        font-size: 24rpx;
+        line-height: 24rpx;
+        text-align: center;
+      }
+    }
   }
 }
 </style>
