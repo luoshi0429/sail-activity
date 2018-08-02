@@ -1,25 +1,25 @@
 <template>
-  <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}} {{ status === 0 ? 'normal' : 'joined-finished' }}">
-    <block wx:if="{{ status === 0 }}">
-      <image class="banner-bg" src="/assets/banner.png" />
+  <view class="home-page {{user.isIphoneX ? 'iphonex' : ''}} {{ result.status === 2 ? 'normal' : 'joined-finished' }}">
+    <block wx:if="{{ result.status === 2 }}">
+      <image class="banner-bg" src="{{result.activityPic}}" />
       <view class="banner-top">
         <view class="countdown">
           <view>离开团截止还有</view>
           <view>12<text>天</text>7<text>时</text>34<text>分</text>23<text>秒</text></view>
         </view>
         <view class="panel join-panel">
-          <view class="headline">本团还差<text>23</text>人</view>
+          <view class="headline">本团还差<text>{{result.diffPeoNum}}</text>人</view>
           <view class="progress">
             <view class="inner"></view>
           </view>
           <view class="people-donation">
             <view class="item">
               <view>已成功参团人数</view>
-              <view><text>889</text>人</view>
+              <view><text>{{result.number}}</text>人</view>
             </view>
             <view class="item">
               <view>累计捐赠</view>
-              <view><text>12322.2</text>元</view>
+              <view><text>{{result.money}}</text>元</view>
             </view>
           </view>
           <view class="run-btn">
@@ -28,12 +28,14 @@
           </view>
           <view class="finished-user">
             <view class="total">已有<text>111</text>人完成跑步</view>
-            <view class="finished-item">
-              <image src="/assets/btn_run.png" />
-              <view>
-                <text>UserName</text>完成跑步
+            <repeat for='{{result.list}}' key="index" item="item">
+              <view class="finished-item">
+              <image src="{{item.headIcon ? item.headIcon : '/assets/btn_run.png'}}" />
+                <view>
+                <text>{{item.nickName}}</text>{{item.type === 0 ? '未完成跑步' : '完成跑步'}}
+                </view>
               </view>
-            </view>
+            </repeat>
           </view>
         </view>
         <view class="panel process-panel">
@@ -62,8 +64,8 @@
         </view>
       </view>
     </block>
-    <block wx:if="{{ status === 1 || status === 2 }}">
-      <view wx:if="{{ status === 1 }}" class="panel joined-panel">
+    <block wx:if="{{ result.status === 1 || result.status === 3 }}">
+      <view wx:if="{{ result.status === 1 }}" class="panel joined-panel">
         <view class="user-info">
           <image src="/assets/icon-address.png" />
           <view>
@@ -147,7 +149,8 @@ export default class Index extends wepy.page {
   data = {
     isAuth: false,
     isLoading: true,
-    status: 0 // 0: 未参加 1: 已参加 2: 已完成
+    status: 1, // 2: 未参加 1: 已参加 3: 已完成
+    result: {}
   }
 
   components = {
@@ -197,15 +200,15 @@ export default class Index extends wepy.page {
   }
 
   onLoad (options) {
-    Api.gotUserInfo()
-      .then(r => {
-        this.isLoading = false
+    wepy.login().then((res) => {
+      Api.post('/api/activity/join/data', {
+        code: res.code
+      }).then(r => {
+        console.log(r, 'r')
+        this.result = r
         this.$apply()
       })
-      .catch(() => {
-        this.isLoading = false
-        this.$apply()
-      })
+    })
   }
 
   onShareAppMessage () {
