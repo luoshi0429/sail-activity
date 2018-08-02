@@ -5,7 +5,7 @@
       <view class="banner-top">
         <view class="countdown">
           <view>离开团截止还有</view>
-          <view>12<text>天</text>7<text>时</text>34<text>分</text>23<text>秒</text></view>
+          <view>{{ dhms.day }}<text>天</text>{{ dhms.hour }}<text>时</text>{{ dhms.minute }}<text>分</text>{{ dhms.second }}<text>秒</text></view>
         </view>
         <view class="panel join-panel">
           <view class="headline">本团还差<text>23</text>人</view>
@@ -22,16 +22,38 @@
               <view><text>12322.2</text>元</view>
             </view>
           </view>
-          <view class="run-btn">
+          <view class="run-btn" @tap="handleJoin">
             <image src="/assets/btn_run.png" />
             <view>立刻跑步</view>
           </view>
           <view class="finished-user">
             <view class="total">已有<text>111</text>人完成跑步</view>
-            <view class="finished-item">
-              <image src="/assets/btn_run.png" />
-              <view>
-                <text>UserName</text>完成跑步
+            <view class="finished-list">
+              <view class="anim-inner">
+                <view class="finished-item">
+                  <image src="/assets/btn_run.png" />
+                  <view>
+                    <text>UserName</text>完成跑步
+                  </view>
+                </view>
+                <view class="finished-item">
+                  <image src="/assets/btn_run.png" />
+                  <view>
+                    <text>UserName</text>完成跑步
+                  </view>
+                </view>
+                <view class="finished-item">
+                  <image src="/assets/btn_run.png" />
+                  <view>
+                    <text>UserName</text>完成跑步
+                  </view>
+                </view>
+                <view class="finished-item">
+                  <image src="/assets/btn_run.png" />
+                  <view>
+                    <text>UserName</text>完成跑步
+                  </view>
+                </view>
               </view>
             </view>
           </view>
@@ -72,7 +94,7 @@
           </view>
         </view>
         <view class="event-info">
-          <image src="/assets/icon-address.png" />
+          <image src="/assets/icon_new_address.png" />
           <view>
             <view>预约的场馆信息</view>
             <view>北京市海淀区互联网创新中心</view>
@@ -84,10 +106,32 @@
         </view>
         <view class="finished-user">
           <view class="total">已有<text>111</text>人完成跑步</view>
-          <view class="finished-item">
-            <image src="/assets/btn_run.png" />
-            <view>
-              <text>UserName</text>完成跑步
+          <view class="finished-list">
+            <view class="anim-inner">
+              <view class="finished-item">
+                <image src="/assets/btn_run.png" />
+                <view>
+                  <text>UserName</text>完成跑步
+                </view>
+              </view>
+              <view class="finished-item">
+                <image src="/assets/btn_run.png" />
+                <view>
+                  <text>UserName</text>完成跑步
+                </view>
+              </view>
+              <view class="finished-item">
+                <image src="/assets/btn_run.png" />
+                <view>
+                  <text>UserName</text>完成跑步
+                </view>
+              </view>
+              <view class="finished-item">
+                <image src="/assets/btn_run.png" />
+                <view>
+                  <text>UserName</text>完成跑步
+                </view>
+              </view>
             </view>
           </view>
         </view>
@@ -102,7 +146,18 @@
           <view class="finished-people">
             <view class="headline">感谢您与以下用户共同参与</view>
             <view class="user-list">
-              <view></view>
+              <view class="user-item">
+                <image src="/assets/icon_share_timeline.png" />
+              </view>
+              <view class="user-item">
+                <image src="/assets/icon_share_timeline.png" />
+              </view>
+              <view class="user-item">
+                <image src="/assets/icon_share_timeline.png" />
+              </view>
+              <view class="user-item">
+                <image src="/assets/icon_share_timeline.png" />
+              </view>
             </view>
           </view>
           <view class="tip">用跑步里程为留守儿童带去不一样的暑假</view>
@@ -147,7 +202,9 @@ export default class Index extends wepy.page {
   data = {
     isAuth: false,
     isLoading: true,
-    status: 0 // 0: 未参加 1: 已参加 2: 已完成
+    countdown: 1533859200000,
+    dhms: { day: 0, hour: 0, minute: 0, second: 0 },
+    status: 1 // 0: 未参加 1: 已参加 2: 已完成
   }
 
   components = {
@@ -155,6 +212,10 @@ export default class Index extends wepy.page {
   }
 
   methods = {
+    // 立刻跑步
+    handleJoin () {
+      console.log('join...')
+    },
     handleSaveUserInfo (res) {
       let data = {
         iv: res.iv,
@@ -184,7 +245,34 @@ export default class Index extends wepy.page {
     handelPushToPlace () {
       this.$navigate('/pages/place/index')
     }
-  };
+  }
+
+  handleCountDown () {
+    this.timer = setTimeout(() => {
+      this.countdown -= 1
+      this.getDhms()
+      if (this.countdown > 0) {
+        this.handleCountDown()
+        this.$apply()
+      } else {
+        // 已经开团
+        clearTimeout(this.timer)
+      }
+    }, 1000)
+  }
+
+  getDhms () {
+    const now = new Date().getTime()
+    const delta = new Date(this.countdown - now)
+    const day = Math.floor(delta / (1000 * 60 * 60 * 24))
+    const deltaDay = delta % (1000 * 60 * 60 * 24)
+    const hour = Math.floor(deltaDay / (1000 * 60 * 60))
+    const deltaHour = deltaDay % (1000 * 60 * 60)
+    const minute = Math.floor(deltaHour / (1000 * 60))
+    const second = Math.floor(deltaHour % (1000 * 60) / 1000)
+    this.dhms = { day, hour, minute, second }
+    this.$apply()
+  }
 
   onRoute () {
     if (this.isLoading) return
@@ -197,6 +285,7 @@ export default class Index extends wepy.page {
   }
 
   onLoad (options) {
+    this.handleCountDown()
     Api.gotUserInfo()
       .then(r => {
         this.isLoading = false
@@ -453,6 +542,25 @@ export default class Index extends wepy.page {
       margin: 0 10rpx;
     }
   }
+  .finished-list {
+    height: 292rpx;
+    overflow-y: hidden;
+    position: relative;
+    .anim-inner {
+      transform: translate3d(0, 0, 0);
+      animation: 4s slide infinite linear backwards;
+      position: absolute;
+      top: 0;
+    }
+  }
+  @keyframes slide {
+    0% {
+      top: 0;
+    }
+    100% {
+      top: -100%;
+    }
+  }
   .finished-item {
     height: 100rpx;
     display: flex;
@@ -478,6 +586,7 @@ export default class Index extends wepy.page {
 }
 
 .finished-panel {
+  padding-bottom: 38rpx;
   .header {
     background-image: linear-gradient(-166deg, #FFD275 0%, #FFA641 100%);
     border-radius: 40rpx 40rpx 0 0;
@@ -520,7 +629,35 @@ export default class Index extends wepy.page {
         margin-bottom: 10rpx;
       }
       .user-list {
-
+        height: 60rpx;
+        position: relative;
+        display: flex;
+        justify-content: center;
+      }
+      .user-item {
+        position: absolute;
+        image {
+          width: 60rpx;
+          height: 60rpx;
+          border-radius: 50%;
+          border: 4rpx solid #fff;
+        }
+        &:first-of-type {
+          left: 208rpx;
+          z-index: 4;
+        }
+        &:nth-of-type(2) {
+          left: 248rpx;
+          z-index: 3;
+        }
+        &:nth-of-type(3) {
+          left: 288rpx;
+          z-index: 2;
+        }
+        &:nth-of-type(4) {
+          left: 326rpx;
+          z-index: 1;
+        }
       }
     }
     .tip {
