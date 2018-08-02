@@ -5,7 +5,7 @@
       <view class="banner-top">
         <view class="countdown">
           <view>离开团截止还有</view>
-          <view>{{ dhms.day }}<text>天</text>{{ dhms.hour }}<text>时</text>{{ dhms.minute }}<text>分</text>{{ dhms.second }}<text>秒</text></view>
+          <view>{{ dhms.d }}<text>天</text>{{ dhms.h }}<text>时</text>{{ dhms.m }}<text>分</text>{{ dhms.s }}<text>秒</text></view>
         </view>
         <view class="panel join-panel">
           <view class="headline">本团还差<text>{{result.diffPeoNum}}</text>人</view>
@@ -27,43 +27,19 @@
             <view>立刻跑步</view>
           </view>
           <view class="finished-user">
-            <view class="total">已有<text>111</text>人完成跑步</view>
-<<<<<<< HEAD
-            <repeat for='{{result.list}}' key="index" item="item">
-              <view class="finished-item">
-              <image src="{{item.headIcon ? item.headIcon : '/assets/btn_run.png'}}" />
-                <view>
-                <text>{{item.nickName}}</text>{{item.type === 0 ? '未完成跑步' : '完成跑步'}}
-=======
+            <view class="total">已有<text>{{result.number}}</text>人完成跑步</view>
             <view class="finished-list">
               <view class="anim-inner">
-                <view class="finished-item">
-                  <image src="/assets/btn_run.png" />
-                  <view>
-                    <text>UserName</text>完成跑步
+                <repeat for='{{result.list}}' key="index" item="item">
+                  <view class="finished-item">
+                    <image src="{{item.headIcon ? item.headIcon : '/assets/btn_run.png'}}" />
+                    <view>
+                      <text>{{item.nickName}}</text>{{item.type === 0 ? '未完成跑步' : '完成跑步'}}
+                    </view>
                   </view>
-                </view>
-                <view class="finished-item">
-                  <image src="/assets/btn_run.png" />
-                  <view>
-                    <text>UserName</text>完成跑步
-                  </view>
-                </view>
-                <view class="finished-item">
-                  <image src="/assets/btn_run.png" />
-                  <view>
-                    <text>UserName</text>完成跑步
-                  </view>
-                </view>
-                <view class="finished-item">
-                  <image src="/assets/btn_run.png" />
-                  <view>
-                    <text>UserName</text>完成跑步
-                  </view>
->>>>>>> 7a5cd317dffdf665e301e8bb90b86ef4c9a992c0
-                </view>
+                </repeat>
               </view>
-            </repeat>
+            </view>
           </view>
         </view>
         <view class="panel process-panel">
@@ -146,7 +122,7 @@
       </view>
       <view wx:else class="panel finished-panel">
         <view class="header">
-          <image />
+        <image src="{{result.giftImage}}" />
         </view>
         <view class="content">
           <view class="title">公益跑完成</view>
@@ -210,14 +186,10 @@ export default class Index extends wepy.page {
   data = {
     isAuth: false,
     isLoading: true,
-<<<<<<< HEAD
     status: 1, // 2: 未参加 1: 已参加 3: 已完成
-    result: {}
-=======
+    result: {},
     countdown: 1533859200000,
-    dhms: { day: 0, hour: 0, minute: 0, second: 0 },
-    status: 1 // 0: 未参加 1: 已参加 2: 已完成
->>>>>>> 7a5cd317dffdf665e301e8bb90b86ef4c9a992c0
+    dhms: { day: 0, hour: 0, minute: 0, second: 0 }
   }
 
   components = {
@@ -274,6 +246,12 @@ export default class Index extends wepy.page {
     }, 1000)
   }
 
+  coverNumberZero (num) {
+    if (num < 10) {
+      return '0' + num
+    }
+    return num
+  }
   getDhms () {
     const now = new Date().getTime()
     const delta = new Date(this.countdown - now)
@@ -283,43 +261,31 @@ export default class Index extends wepy.page {
     const deltaHour = deltaDay % (1000 * 60 * 60)
     const minute = Math.floor(deltaHour / (1000 * 60))
     const second = Math.floor(deltaHour % (1000 * 60) / 1000)
-    this.dhms = { day, hour, minute, second }
+    const d = this.coverNumberZero(day)
+    const h = this.coverNumberZero(hour)
+    const m = this.coverNumberZero(minute)
+    const s = this.coverNumberZero(second)
+    this.dhms = { d, h, m, s }
     this.$apply()
   }
 
   onRoute () {
-    if (this.isLoading) return
-    this.isLoading = true
-    this.$apply()
-    Api.getUserInfo().then(r => {
-      this.isLoading = false
-      this.$apply()
-    })
   }
 
   onLoad (options) {
-<<<<<<< HEAD
+    this.handleCountDown()
     wepy.login().then((res) => {
       Api.post('/api/activity/join/data', {
         code: res.code
       }).then(r => {
         console.log(r, 'r')
-        this.result = r
-=======
-    this.handleCountDown()
-    Api.gotUserInfo()
-      .then(r => {
-        this.isLoading = false
-        this.$apply()
-      })
-      .catch(() => {
-        this.isLoading = false
->>>>>>> 7a5cd317dffdf665e301e8bb90b86ef4c9a992c0
+        var result = r
+        result.name = result.nickName && result.nickName.length > 4 ? result.nickName.slice(0, 3) + '...' : result.nickName
+        this.result = result
         this.$apply()
       })
     })
   }
-
   onShareAppMessage () {
     const params = {}
     if (this.user.isJoinActivity) {
@@ -333,6 +299,7 @@ export default class Index extends wepy.page {
   }
 }
 </script>
+
 <style lang="less" scoped>
 .home-page {
   padding-bottom: 108rpx;
@@ -470,9 +437,11 @@ export default class Index extends wepy.page {
   view:last-of-type {
     line-height: 56rpx;
     font-size: 40rpx;
+    font-weight: 500;
     text {
       font-size: 24rpx;
-      margin-bottom: 12rpx;
+      margin-right: 10rpx;
+      font-weight: normal;
     }
   }
 }
@@ -573,15 +542,14 @@ export default class Index extends wepy.page {
       transform: translate3d(0, 0, 0);
       animation: 4s slide infinite linear backwards;
       position: absolute;
-      top: 0;
     }
   }
   @keyframes slide {
     0% {
-      top: 0;
+      transform: translate3d(0, 0, 0);
     }
     100% {
-      top: -100%;
+      transform: translate3d(0, -100%, 0);
     }
   }
   .finished-item {
