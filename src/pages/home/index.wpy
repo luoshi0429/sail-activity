@@ -122,23 +122,20 @@
       </view>
       <view wx:else class="panel finished-panel">
         <view class="header">
-        <image src="{{result.giftImage}}" />
+          <image src="/assets/pic_ornament.png" class="bg" />
+          <image src="{{result.giftImage}}" class="icon" />
         </view>
         <view class="content">
-          <view class="title">公益跑完成</view>
-          <view class="subtitle">本次活动将为留守儿童捐赠出一件运动服</view>
+          <view class="title">5.20km公益跑完成</view>
+          <view class="subtitle">本次运动里程将转化为公益金，助力留守儿童获得{{result.giftType.text}}</view>
           <view class="finished-people">
             <view class="headline">感谢您与以下用户共同参与</view>
             <view class="user-list">
-              <view class="user-item">
-                <image src="/assets/icon_share_timeline.png" />
-              </view>
-              <view class="user-item">
-                <image src="/assets/icon_share_timeline.png" />
-              </view>
-              <view class="user-item">
-                <image src="/assets/icon_share_timeline.png" />
-              </view>
+              <repeat for='{{result.headImage}}' key="index" item="url">
+                <view class="user-item">
+                  <image src="url" />
+                </view>
+              </repeat>
               <view class="user-item">
                 <image src="/assets/icon_share_timeline.png" />
               </view>
@@ -146,6 +143,7 @@
           </view>
           <view class="tip">用跑步里程为留守儿童带去不一样的暑假</view>
         </view>
+        <image src="/assets/icon_people.png" class="people-bg" />
       </view>
       <view class="panel share-panel {{ status === 1 ? 'bigger-top' : '' }}">
         <view class="title">邀请好友</view>
@@ -268,6 +266,18 @@ export default class Index extends wepy.page {
     this.dhms = { d, h, m, s }
     this.$apply()
   }
+  getGiftType (type) {
+    switch (type) {
+      case 1:
+        return {text: '铅笔', url: ''}
+      case 2:
+        return {text: '笔记本', url: ''}
+      case 3:
+        return {text: '运动服', url: ''}
+      case 4:
+        return {text: '毛巾', url: ''}
+    }
+  }
 
   onRoute () {
   }
@@ -281,6 +291,7 @@ export default class Index extends wepy.page {
         console.log(r, 'r')
         var result = r
         result.name = result.nickName && result.nickName.length > 4 ? result.nickName.slice(0, 3) + '...' : result.nickName
+        result.giftType = result.type && this.getGiftType(result.type)
         this.result = result
         this.$apply()
       })
@@ -529,6 +540,7 @@ export default class Index extends wepy.page {
     line-height: 80rpx;
     font-size: 26rpx;
     color: #000019;
+    border-bottom: 2rpx solid rgba(255, 255, 255,0.5);
     text {
       color: #7CC95A;
       margin: 0 10rpx;
@@ -556,7 +568,10 @@ export default class Index extends wepy.page {
     height: 100rpx;
     display: flex;
     align-items: center;
-    border-top: 2rpx solid rgba(255, 255, 255,0.5);
+    border-bottom: 2rpx solid rgba(255, 255, 255,0.5);
+    &:last-of-type {
+      border-bottom: none;
+    }
     padding-left: 54rpx;
     image {
       width: 60rpx;
@@ -577,14 +592,34 @@ export default class Index extends wepy.page {
 }
 
 .finished-panel {
+  position: relative;
+  .people-bg {
+    width: 198rpx;
+    height: 100rpx;
+    position: absolute;;
+    left: 0;
+    bottom: 0;
+  }
   padding-bottom: 38rpx;
   .header {
     background-image: linear-gradient(-166deg, #FFD275 0%, #FFA641 100%);
     border-radius: 40rpx 40rpx 0 0;
     height: 400rpx;
-    image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .bg {
+      width: 540rpx;
+      height: 228rpx;
+    }
+    .icon {
+      position: absolute;
       width: 240rpx;
       height: 240rpx;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
   .content {
@@ -635,19 +670,19 @@ export default class Index extends wepy.page {
         }
         &:first-of-type {
           left: 208rpx;
-          z-index: 4;
+          z-index: 1;
         }
         &:nth-of-type(2) {
           left: 248rpx;
-          z-index: 3;
+          z-index: 2;
         }
         &:nth-of-type(3) {
           left: 288rpx;
-          z-index: 2;
+          z-index: 3;
         }
         &:nth-of-type(4) {
           left: 326rpx;
-          z-index: 1;
+          z-index: 4;
         }
       }
     }
