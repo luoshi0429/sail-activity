@@ -25,7 +25,7 @@
           </view>
           <view class="run-btn">
             <image src="/assets/btn_run.png" />
-            <navigator target="miniProgram" open-type="navigate" app-id="wx36725fa6d77d6bd3" version="trial">立即跑步</navigator>
+            <navigator target="miniProgram" open-type="navigate" app-id="wx36725fa6d77d6bd3" version="trial">立刻跑步</navigator>
           </view>
           <view class="finished-user">
             <view class="total">已有<text>{{result.number}}</text>人完成跑步</view>
@@ -231,8 +231,20 @@ export default class Index extends wepy.page {
             cancel: {}
           })
         } else {
+          let text = {}
+          if (this.result.status === 1) {
+            text = {
+              tips: '正在生成门票',
+              title: '门票已保存至系统相册'
+            }
+          } else if (this.result.status === 3) {
+            text = {
+              tips: '正在生成分享卡片',
+              title: '分享卡片已保存至系统相册'
+            }
+          }
           wepy.showLoading({
-            title: '正在生成门票'
+            title: text.tips
           })
           Api.fetch('api/info/share').then(r => {
             console.log(r)
@@ -246,7 +258,7 @@ export default class Index extends wepy.page {
                 filePath: tmpPath
               }).then(() => {
                 this.$broadcast('toast', {
-                  title: '门票已保存至系统相册',
+                  title: text.title,
                   duration: 1500,
                   onClose: () => {
                     wepy.previewImage({
