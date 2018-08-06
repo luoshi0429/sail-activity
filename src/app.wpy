@@ -1,27 +1,10 @@
 <style lang="less">
 .iphonex {
-  margin-bottom: 68rpx;
 }
 .iphonex.home-page {
-  .footer {
-    padding-bottom: 68rpx;
-    height: 176rpx;
-  }
-  .activity-image {
-    padding-bottom: 68rpx;
-  }
+  padding-bottom: 116rpx !important;
 }
-.iphonex.province-page {
-  margin-bottom: 0;
-  .province-list {
-    padding: 476rpx 30rpx 68rpx !important;
-  }
-}
-.iphonex.city-page {
-  .content {
-    padding: 476rpx 30rpx 98rpx !important;
-  }
-}
+
 view {
   box-sizing: border-box;
 }
