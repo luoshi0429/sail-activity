@@ -4,6 +4,35 @@
       <!-- <image wx:if="{ item.icon ==='fail' }}" src='' /> -->
       <view>{{ item.title }}</view>
     </view>
+    <view class="toast-loading" wx:if="{{ isLoading }}">
+      <view class="spinner">
+        <view class="bar1">
+        </view>
+        <view class="bar2">
+        </view>
+        <view class="bar3">
+        </view>
+        <view class="bar4">
+        </view>
+        <view class="bar5">
+        </view>
+        <view class="bar6">
+        </view>
+        <view class="bar7">
+        </view>
+        <view class="bar8">
+        </view>
+        <view class="bar9">
+        </view>
+        <view class="bar10">
+        </view>
+        <view class="bar11">
+        </view>
+        <view class="bar12">
+        </view>
+      </view>
+      <text>{{ item.title }}</text>
+    </view>
     <view class="alert confirm" wx:if="{{isConfirm || isAlert}}">
       <view class="box">
         <view class='content {{ item.theme }}'>
@@ -73,6 +102,7 @@ export default class extends wepy.component {
     isAlert: false,
     isConfirm: false,
     isNotification: false,
+    isLoading: false,
     timer: null,
     item: {
       // title: '温馨提示',
@@ -125,6 +155,16 @@ export default class extends wepy.component {
       this.notificationStyle = 'showAnim'
       this.resetOtherPop('isNotification')
       this.showNotification()
+    },
+    loading (item) {
+      clearTimeout(this.timer)
+      this.item = item
+      this.resetOtherPop('isLoading')
+    },
+    hideLoading () {
+      clearTimeout(this.timer)
+      this.isLoading = false
+      this.$apply()
     }
   };
   methods = {
@@ -178,6 +218,7 @@ export default class extends wepy.component {
     this.$apply()
   }
   resetOtherPop (current) {
+    console.log(current, '0000')
     this.close()
     this[current] = true
     this.$apply()
@@ -220,6 +261,63 @@ export default class extends wepy.component {
     display: block;
     margin: 0 auto 20rpx auto;
   }
+}
+@-webkit-keyframes loading {
+  from {opacity: 1;width:1px;height:1px;}
+  to {opacity: 0.25;width:8px;height:8px;}
+}
+.toast-loading {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8rpx;
+  width: 290rpx;
+  min-height: 290rpx;
+  padding: 26rpx 30rpx;
+  z-index: 1999;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  text {
+    text-align: center;
+    color: #fff;
+    font-size: 28rpx;
+    position: absolute;
+    top: 186rpx;
+    left: 12rpx;
+    right: 12rpx;
+  }
+  .spinner {
+    position: absolute;
+    left:50%;
+    top: 98rpx;
+    display: inline-block;
+  }
+  .spinner view {
+    width:16rpx;
+    height:16rpx;
+    background: #a4a2a4;
+    border:1px solid #fff;
+    position: absolute;
+    left: 100%;
+    top: 100%;
+    opacity: 0;
+
+    animation: loading 2s linear infinite;
+    border-radius: 60rpx;
+  }
+  .spinner view.bar1 {-webkit-transform:rotate(0deg) translate(0, -48rpx); -webkit-animation-delay: -0s;}
+  .spinner view.bar2 {-webkit-transform:rotate(30deg) translate(0, -48rpx); -webkit-animation-delay: -1.8334s;}
+  .spinner view.bar3 {-webkit-transform:rotate(60deg) translate(0, -48rpx); -webkit-animation-delay: -1.6668s;}
+  .spinner view.bar4 {-webkit-transform:rotate(90deg) translate(0, -48rpx); -webkit-animation-delay: -1.5002s;}
+  .spinner view.bar5 {-webkit-transform:rotate(120deg) translate(0, -48rpx); -webkit-animation-delay: -1.3336s;}
+  .spinner view.bar6 {-webkit-transform:rotate(150deg) translate(0, -48rpx); -webkit-animation-delay: -1.167s;}
+  .spinner view.bar7 {-webkit-transform:rotate(180deg) translate(0, -48rpx); -webkit-animation-delay: -1.0004s;}
+  .spinner view.bar8 {-webkit-transform:rotate(210deg) translate(0, -48rpx); -webkit-animation-delay: -0.8338s;}
+  .spinner view.bar9 {-webkit-transform:rotate(240deg) translate(0, -48rpx); -webkit-animation-delay: -0.6672s;}
+  .spinner view.bar10 {-webkit-transform:rotate(270deg) translate(0, -48rpx); -webkit-animation-delay: -0.5006s;}
+  .spinner view.bar11 {-webkit-transform:rotate(300deg) translate(0, -48rpx); -webkit-animation-delay: -0.334s;}
+  .spinner view.bar12 {-webkit-transform:rotate(330deg) translate(0, -48rpx); -webkit-animation-delay: -0.1674s;}
+
 }
 
 .alert {

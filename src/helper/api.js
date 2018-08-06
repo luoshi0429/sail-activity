@@ -57,7 +57,9 @@ function fetch (url, params, config) {
 }
 
 function post (url, params, config) {
-  return _post(url, params, { ...config })
+  return getAccessToken().then(accessToken => {
+    return _post(url, params, { accessToken: accessToken, ...config })
+  })
 }
 
 let accessToken = ''

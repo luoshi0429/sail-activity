@@ -243,16 +243,18 @@ export default class Index extends wepy.page {
               title: '分享卡片已保存至系统相册'
             }
           }
-          wepy.showLoading({
-            title: text.tips
-          })
+          this.$broadcast('loading', { title: text.tips })
+          // wepy.showLoading({
+          //   title: text.tips
+          // })
           Api.fetch('api/info/share').then(r => {
             console.log(r)
             wepy.downloadFile({
                 // url: r
               url: this.result.shareImage
             }).then(res => {
-              wepy.hideLoading()
+              // wepy.hideLoading()
+              this.$broadcast('hideLoading')
               const tmpPath = res.tempFilePath
               wepy.saveImageToPhotosAlbum({
                 filePath: tmpPath
