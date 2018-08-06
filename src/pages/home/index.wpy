@@ -35,7 +35,7 @@
                   <view class="finished-item">
                     <image src="{{item.headIcon ? item.headIcon : '/assets/btn_run.png'}}" />
                     <view>
-                      <text>{{index}} {{item.name}}</text>{{item.type === 0 ? '正在跑步' : '完成跑步'}}
+                      <text>{{item.name}}</text>{{item.type === 0 ? '正在跑步' : '完成跑步'}}
                     </view>
                   </view>
                 </repeat>
